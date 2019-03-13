@@ -4,26 +4,30 @@
  */
 function parsePrice(priceString: string) {
 
-    if (priceString === '12.12') {
-        return {
-            coefficient: parseFloat(priceString) * 100,
-            exponent: -2,
-            currency: null
-        };
-    }
-
-    throw new Error('😱 Not implemented yet!');
+    return {
+        coefficient: parseFloat(priceString) * 100,
+        exponent: -2,
+        currency: null
+    };
 
 }
 
 describe('parsePrice', () => {
 
     it('should parse price without currency', () => {
+
         expect(parsePrice('12.12')).toEqual({
             coefficient: 1212,
             exponent: -2,
             currency: null
         });
+
+        expect(parsePrice('12.99')).toEqual({
+            coefficient: 1299,
+            exponent: -2,
+            currency: null
+        });
+
     });
 
     xit('should parse price with currency code', () => {
