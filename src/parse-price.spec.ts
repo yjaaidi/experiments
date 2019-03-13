@@ -31,7 +31,13 @@ describe('parsePrice', () => {
     });
 
     xit('should parse price with currency code', () => {
-        // @todo: parsePrice('12.12EUR') => {coefficient: 1212, exponent: -2, currency: 'EUR'}
+
+        expect(parsePrice('12.99EUR')).toEqual({
+            coefficient: 1299,
+            exponent: -2,
+            currency: 'EUR'
+        });
+        
     });
 
     xit('should parse price with currency symbol', () => {
