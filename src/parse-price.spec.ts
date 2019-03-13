@@ -10,7 +10,7 @@ describe('parsePrice', () => {
     });
 
     xit('should parse price with currency symbol', () => {
-
+        // @todo: parsePrice('12.12€') => {coefficient: 1212, exponent: -2, currency: 'EUR'}
     });
 
 });
