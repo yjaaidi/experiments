@@ -10,12 +10,16 @@ interface Price {
  * @param priceString
  */
 function parsePrice(priceString: string): Price {
-    throw new Error('😱 Not implemented yet!');
+    return {
+        coefficient: parseFloat(priceString) * 100,
+        exponent: -2,
+        currency: null
+    };
 }
 
 describe('parsePrice', () => {
 
-    xit('should parse price without currency', () => {
+    it('should parse price without currency', () => {
 
         expect(parsePrice('12.12')).toEqual({
             coefficient: 1212,
