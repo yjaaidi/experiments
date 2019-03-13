@@ -9,4 +9,8 @@ describe('parsePrice', () => {
 
     });
 
+    xit('should parse price with currency symbol', () => {
+
+    });
+
 });
