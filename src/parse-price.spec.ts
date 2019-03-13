@@ -6,7 +6,7 @@ function parsePrice(priceString: string) {
 
     if (priceString === '12.12') {
         return {
-            coefficient: 1212,
+            coefficient: parseFloat(priceString) * 100,
             exponent: -2,
             currency: null
         };
