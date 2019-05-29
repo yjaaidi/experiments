@@ -1,4 +1,7 @@
 // https://github.com/thymikee/jest-preset-angular#brief-explanation-of-config
+
+const tsJestPreset = require('jest-preset-angular/jest-preset').globals['ts-jest'];
+
 module.exports = {
   preset: 'jest-preset-angular',
   roots: ['src'],
@@ -11,5 +14,11 @@ module.exports = {
     '@src/(.*)': '<rootDir>/src/src/$1',
     '@state/(.*)': '<rootDir>/src/app/state/$1'
   },
-  transformIgnorePatterns: ['node_modules/(?!(jest-test))']
+  transformIgnorePatterns: ['node_modules/(?!(jest-test))'],
+  globals: {
+    'ts-jest': {
+      ...tsJestPreset,
+      tsConfig: 'tsconfig.spec.json'
+    }
+  }
 };
