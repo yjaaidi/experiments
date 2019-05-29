@@ -6,9 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "jest",
+    "test:tcr": "jest --config jest.config.tcr.js",
+    "test:watch": "jest --watch",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "test:watch": "jest --watch"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -31,6 +32,7 @@
     "@angular/language-service": "~8.0.0",
     "@types/jest": "^24.0.13",
     "@types/node": "~8.9.4",
+    "@wishtack/jest-tcr": "^0.1.1",
     "codelyzer": "^5.0.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
