@@ -10,17 +10,20 @@ class Cart {
     }
 
     getTotalPrice() {
-        return this._itemList.reduce((total, item) => total + item.price, 0);
+        return this._itemList.reduce(
+            (total, item) => total + item.priceAmount,
+            0
+        );
     }
 }
 
 class Item {
     public name: string;
 
-    public price: number;
+    public priceAmount: number;
 
     constructor({ name, priceAmount }: { name: string; priceAmount: number }) {
-        this.price = priceAmount;
+        this.priceAmount = priceAmount;
         this.name = name;
     }
 }
