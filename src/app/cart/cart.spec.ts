@@ -14,13 +14,8 @@ class Cart {
     }
 }
 
-/**
- * @deprecated 🚧 Work in progress.
- */
 class Item {
-    constructor(name: string, price: number) {
-        throw new Error('🚧 work in progress!');
-    }
+    constructor(public name: string, public price: number) {}
 }
 
 describe('Cart', () => {
