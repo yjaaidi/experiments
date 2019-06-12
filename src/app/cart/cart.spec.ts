@@ -1,9 +1,8 @@
 class Cart {
-    /**
-     * @deprecated 🚧 Work in progress.
-     */
+    private _itemList: Item[];
+
     addItem(item: Item) {
-        throw new Error('🚧 work in progress!');
+        this._itemList = [...this._itemList, item];
     }
 
     /**
