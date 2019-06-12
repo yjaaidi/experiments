@@ -17,10 +17,15 @@ class Cart {
     }
 }
 
-class Item {
-    public name: string;
+interface Price {
+    amount: number;
+    currency: string;
+}
 
-    public priceAmount: number;
+class Item {
+    name: string;
+    price: Price;
+    priceAmount: number;
 
     constructor({ name, priceAmount }: { name: string; priceAmount: number }) {
         this.priceAmount = priceAmount;
