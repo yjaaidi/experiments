@@ -11,7 +11,7 @@ class Cart {
 
     getTotalPrice() {
         return this._itemList.reduce(
-            (total, item) => total + item.priceAmount,
+            (total, item) => total + item.price.amount,
             0
         );
     }
