@@ -1,5 +1,5 @@
 class Cart {
-    private _itemList: Item[];
+    private _itemList: Item[] = [];
 
     addItem(item: Item) {
         this._itemList = [...this._itemList, item];
@@ -15,7 +15,7 @@ class Item {
 }
 
 describe('Cart', () => {
-    xit('🚧 should add items', () => {
+    it('should add items', () => {
         const cart = new Cart();
         const hummus = new Item('Hummus', 5);
         const shaskshouka = new Item('Shakshouka', 10);
