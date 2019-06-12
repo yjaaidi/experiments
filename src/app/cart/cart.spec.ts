@@ -15,7 +15,14 @@ class Cart {
 }
 
 class Item {
-    constructor(public name: string, public price: number) {}
+    public name: string;
+
+    public price: number;
+
+    constructor({ name, price }: { name: string; price: number }) {
+        this.price = price;
+        this.name = name;
+    }
 }
 
 describe('Cart', () => {
@@ -25,8 +32,8 @@ describe('Cart', () => {
 
     beforeEach(() => {
         cart = new Cart();
-        butter = new Item('Butter & Butter', 12);
-        hummus = new Item('Hummus', 5);
+        butter = new Item({ name: 'Butter & Butter', price: 12 });
+        hummus = new Item({ name: 'Hummus', price: 5 });
     });
 
     it('should add items', () => {
