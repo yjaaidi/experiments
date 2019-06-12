@@ -41,7 +41,7 @@ class Item {
     }) {
         this.priceAmount = priceAmount;
         this.name = name;
-        this.price = price;
+        this.price = price || { amount: priceAmount, currency: 'ILS' };
     }
 }
 
