@@ -5,11 +5,8 @@ class Cart {
         this._itemList = [...this._itemList, item];
     }
 
-    /**
-     * @deprecated 🚧 Work in progress.
-     */
     getItemList() {
-        throw new Error('🚧 work in progress!');
+        return this._itemList;
     }
 }
 
