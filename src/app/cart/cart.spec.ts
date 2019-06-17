@@ -30,7 +30,14 @@ class Item {
      */
     price: Price;
 
-    constructor({ name, priceAmount }: { name: string; priceAmount: number }) {
+    constructor({
+        name,
+        priceAmount
+    }: {
+        name: string;
+        price?: Price;
+        priceAmount?: number;
+    }) {
         this.priceAmount = priceAmount;
         this.name = name;
     }
