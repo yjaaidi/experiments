@@ -24,10 +24,10 @@ interface Price {
 
 class Item {
     name: string;
-    priceAmount: number;
     /**
-     * @deprecated 🚧 Work in progress.
+     * @deprecated Use {@link Item.price} instead.
      */
+    priceAmount: number;
     price: Price;
 
     constructor({
