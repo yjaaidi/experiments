@@ -8,6 +8,10 @@ class Cart {
     getItemList() {
         return this._itemList;
     }
+
+    getTotalPrice() {
+        return this._itemList.reduce((total, item) => total + item.price, 0);
+    }
 }
 
 class Item {
@@ -15,13 +19,27 @@ class Item {
 }
 
 describe('Cart', () => {
+    let cart: Cart;
+    let butter: Item;
+    let hummus: Item;
+
+    beforeEach(() => {
+        cart = new Cart();
+        butter = new Item('Butter & Butter', 12);
+        hummus = new Item('Hummus', 5);
+    });
+
     it('should add items', () => {
-        const cart = new Cart();
-        const burger = new Item('Burger', 12);
-        const butter = new Item('Double Beurre', 5);
-        cart.addItem(burger);
         cart.addItem(butter);
-        const itemList = cart.getItemList();
-        expect(itemList).toEqual([burger, butter]);
+        cart.addItem(hummus);
+
+        expect(cart.getItemList()).toEqual([butter, hummus]);
+    });
+
+    it('should get total price', () => {
+        cart.addItem(butter);
+        cart.addItem(hummus);
+
+        expect(cart.getTotalPrice()).toEqual(17);
     });
 });
