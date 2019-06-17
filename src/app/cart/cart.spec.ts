@@ -25,6 +25,9 @@ interface Price {
 class Item {
     name: string;
     priceAmount: number;
+    /**
+     * @deprecated 🚧 Work in progress.
+     */
     price: Price;
 
     constructor({ name, price }: { name: string; price: number }) {
