@@ -1,3 +1,6 @@
 describe('Cart', () => {
-    it.todo('🚧 should add items');
+    xit('🚧 should add items', () => {
+        // create new cart
+        throw new Error('🚧 work in progress!');
+    });
 });
