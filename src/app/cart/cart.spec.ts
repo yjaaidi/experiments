@@ -40,6 +40,7 @@ class Item {
         priceAmount?: number;
     }) {
         this.price = price || { amount: priceAmount, currency: 'EUR' };
+        this.priceAmount = this.price.amount;
         this.name = name;
     }
 }
