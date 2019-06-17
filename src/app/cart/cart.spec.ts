@@ -30,8 +30,8 @@ class Item {
      */
     price: Price;
 
-    constructor({ name, price }: { name: string; price: number }) {
-        this.priceAmount = price;
+    constructor({ name, priceAmount }: { name: string; priceAmount: number }) {
+        this.priceAmount = priceAmount;
         this.name = name;
     }
 }
@@ -43,8 +43,8 @@ describe('Cart', () => {
 
     beforeEach(() => {
         cart = new Cart();
-        butter = new Item({ name: 'Butter & Butter', price: 12 });
-        hummus = new Item({ name: 'Hummus', price: 5 });
+        butter = new Item({ name: 'Butter & Butter', priceAmount: 12 });
+        hummus = new Item({ name: 'Hummus', priceAmount: 5 });
     });
 
     it('should add items', () => {
