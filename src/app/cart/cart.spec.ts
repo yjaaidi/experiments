@@ -15,7 +15,13 @@ class Cart {
 }
 
 class Item {
-    constructor(public name: string, public price: number) {}
+    name: string;
+    price: number;
+
+    constructor(name: string, price: number) {
+        this.price = price;
+        this.name = name;
+    }
 }
 
 describe('Cart', () => {
