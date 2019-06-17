@@ -52,7 +52,13 @@ describe('Cart', () => {
 
     beforeEach(() => {
         cart = new Cart();
-        butter = new Item({ name: 'Butter & Butter', priceAmount: 12 });
+        butter = new Item({
+            name: 'Butter & Butter',
+            price: {
+                amount: 12,
+                currency: 'EUR'
+            }
+        });
         hummus = new Item({ name: 'Hummus', priceAmount: 5 });
     });
 
