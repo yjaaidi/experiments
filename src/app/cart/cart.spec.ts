@@ -1,11 +1,15 @@
 describe('Cart', () => {
     xit('🚧 should add items', () => {
-        // create new cart
-        // create new item: sandwich burger 12
-        // create new item: double beurre 5
-        // add items to cart with cart.addItem
-        // get item list
-        // check items
+        // const cart = new Cart();
+        // const burger = new Item('Burger', 12);
+        // const butter = new Item('Double Beurre', 5);
+        // cart.addItem(burger);
+        // cart.addItem(butter);
+        // const itemList = cart.getItemList();
+        // expect(itemList).toEqual([
+        //     burger,
+        //     butter
+        // ]);
         throw new Error('🚧 work in progress!');
     });
 });
