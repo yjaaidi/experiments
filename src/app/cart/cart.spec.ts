@@ -1,16 +1,18 @@
 class Cart {
+    private _itemList: Item[] = [];
+
     /**
      * @deprecated 🚧 Work in progress.
      */
     addItem(item: Item) {
-        throw new Error('🚧 work in progress!');
+        this._itemList = [...this._itemList, item];
     }
 
     /**
      * @deprecated 🚧 Work in progress.
      */
     getItemList() {
-        throw new Error('🚧 work in progress!');
+        return this._itemList;
     }
 }
 
@@ -26,9 +28,9 @@ describe('Cart', () => {
         const cart = new Cart();
         const burger = new Item('Burger', 12);
         const butter = new Item('Double Beurre', 5);
-        // cart.addItem(burger);
-        // cart.addItem(butter);
-        // const itemList = cart.getItemList();
-        // expect(itemList).toEqual([burger, butter]);
+        cart.addItem(burger);
+        cart.addItem(butter);
+        const itemList = cart.getItemList();
+        expect(itemList).toEqual([burger, butter]);
     });
 });
