@@ -32,6 +32,7 @@ class Item {
 
     constructor({
         name,
+        price,
         priceAmount
     }: {
         name: string;
@@ -39,6 +40,7 @@ class Item {
         priceAmount?: number;
     }) {
         this.priceAmount = priceAmount;
+        this.price = price || { amount: priceAmount, currency: 'EUR' };
         this.name = name;
     }
 }
