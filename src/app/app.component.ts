@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Terminal } from './child/child.component';
 
 @Component({
   selector: 'wt-root',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'demo';
+  isDisplayed = true;
+  messageList$ = this._terminal.messageList$;
+
+  constructor(private _terminal: Terminal) {
+  }
+
 }
