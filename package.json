@@ -11,6 +11,7 @@
     "gatsby-plugin-offline": "^3.0.17",
     "gatsby-plugin-react-helmet": "^3.1.13",
     "gatsby-plugin-sharp": "^2.2.34",
+    "gatsby-plugin-typescript": "^2.1.15",
     "gatsby-source-filesystem": "^2.1.35",
     "gatsby-transformer-sharp": "^2.3.1",
     "prop-types": "^15.7.2",
@@ -19,7 +20,17 @@
     "react-helmet": "^5.2.1"
   },
   "devDependencies": {
-    "prettier": "^1.18.2"
+    "@angular/animations": "9.0.0-rc.1",
+    "@angular/common": "9.0.0-rc.1",
+    "@angular/compiler": "9.0.0-rc.1",
+    "@angular/compiler-cli": "9.0.0-rc.1",
+    "@angular/core": "9.0.0-rc.1",
+    "@angular/platform-browser": "9.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "9.0.0-rc.1",
+    "@angular/platform-server": "9.0.0-rc.1",
+    "prettier": "^1.18.2",
+    "typescript": "~3.6.4",
+    "zone.js": "^0.10.2"
   },
   "keywords": [
     "gatsby"
@@ -31,7 +42,9 @@
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "_ng-build": "ngc -p src/components/tsconfig.json --watch",
+    "_ng-demo": "node src/components/demo.js"
   },
   "repository": {
     "type": "git",
