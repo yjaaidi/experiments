@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Mesh, MeshBasicMaterial, BoxGeometry, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
 
 @Component({
@@ -6,9 +6,11 @@ import { Mesh, MeshBasicMaterial, BoxGeometry, PerspectiveCamera, Scene, WebGLRe
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'three-benchmark';
 
+  @ViewChild('scene', {static: true})
+  sceneEl: ElementRef;
 
   ngOnInit() {
     const scene = new Scene();
@@ -16,7 +18,7 @@ export class AppComponent {
 
     const renderer = new WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
+    this.sceneEl.nativeElement.appendChild( renderer.domElement );
 
     const geometry = new BoxGeometry( 1, 1, 1 );
     const material = new MeshBasicMaterial( { color: 0x00ff00 } );
