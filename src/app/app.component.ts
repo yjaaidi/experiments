@@ -22,11 +22,6 @@ export class AppComponent implements OnInit {
     renderer.setSize( window.innerWidth, window.innerHeight );
     this.sceneEl.nativeElement.appendChild( renderer.domElement );
 
-    const geometry = new BoxGeometry( 1, 1, 1 );
-    const material = new MeshBasicMaterial( { color: 0xffffff * Math.random() } );
-    const cube = new Mesh( geometry, material );
-    scene.add( cube );
-
     const count = 1000;
     const boxes = Array(count).fill(null).map(() => [1, 1, 1]);
     
@@ -37,7 +32,7 @@ export class AppComponent implements OnInit {
       scene.add(_cube);
     });
 
-    camera.position.z = 5;
+    camera.position.z = 2;
 
     const animate = () => {
       requestAnimationFrame( animate );
