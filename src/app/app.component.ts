@@ -63,8 +63,8 @@ export class AppComponent implements OnInit {
         ...cubeInfo,
         rotation: {
           ...cubeInfo.rotation,
-          x: cubeInfo.rotation.x + 0.03 * Math.random(),
-          y: cubeInfo.rotation.y + 0.03 * Math.random()
+          x: cubeInfo.rotation.x + 0.01 * Math.random(),
+          y: cubeInfo.rotation.y + 0.01 * Math.random()
         }
       }))
     }));

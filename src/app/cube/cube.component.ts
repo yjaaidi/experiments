@@ -8,7 +8,7 @@ import {
   OnChanges
 } from '@angular/core';
 import { ThreeScene } from '../three-scene.service';
-import { Mesh, BoxGeometry, MeshBasicMaterial } from 'three';
+import { Mesh, BoxGeometry, MeshBasicMaterial, MeshNormalMaterial } from 'three';
 import { CubeInfo } from './cube-info';
 
 @Component({
@@ -40,7 +40,7 @@ export class CubeComponent implements OnChanges, OnDestroy, OnInit {
   private _createMesh() {
     const mesh = new Mesh(
       new BoxGeometry(1, 1, 1),
-      new MeshBasicMaterial({ color: 0xffffff * Math.random() })
+      new MeshNormalMaterial()
     );
 
     mesh.rotation.x = Math.random() * 360;
