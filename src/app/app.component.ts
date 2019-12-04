@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   cubeInfoList = Array(1000).fill(null);
+
+  setCount(count: number) {
+    this.cubeInfoList = Array(count).fill(null);
+  }
+
 }
 

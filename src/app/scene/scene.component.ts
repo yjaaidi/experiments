@@ -1,6 +1,6 @@
-import { AfterContentChecked, Component, ContentChildren, ElementRef, QueryList, NgZone, AfterContentInit } from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, ElementRef, NgZone, QueryList } from '@angular/core';
+import { map, pairwise, startWith } from 'rxjs/operators';
 import { BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import { startWith } from 'rxjs/operators';
 import { CubeComponent } from './../cube/cube.component';
 
 function createCamera() {
@@ -35,9 +35,15 @@ export class SceneComponent implements AfterContentInit {
   ngAfterContentInit() {
 
     this._cubeCmpList.changes
-      .pipe(startWith(this._cubeCmpList))
-      .subscribe(cubeCmpList => {
-        console.log(cubeCmpList);
+      .pipe(startWith(this._cubeCmpList), map(queryList => queryList.toArray()), pairwise())
+      .subscribe(([previousList, currentList]) => {
+        // console.log(currentList.filter(cube => !previousList.includes(cube)).length);
+
+        // const cube = new Mesh(new BoxGeometry(1, 1, 1), new MeshBasicMaterial( { color: 0xffffff * Math.random() } ));
+        // cube.rotation.x = Math.random() * 360;
+        // cube.rotation.y = Math.random() * 360;
+        // cube.rotation.z = Math.random() * 360;
+        
       });
 
     // this._cubeCmpList.forEach(cubeCmp => console.log(cubeCmp));
