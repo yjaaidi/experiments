@@ -26,10 +26,7 @@ export class AppComponent implements OnInit {
   cubeInfoList$: Observable<CubeInfo[]>;
   fps$: Observable<number>;
 
-  constructor(
-    private _changeDetectorRef: ChangeDetectorRef,
-    private _ngZone: NgZone
-  ) {
+  constructor() {
     this.cubeInfoList$ = this.state$.pipe(pluck('cubeInfoList'));
   }
 
