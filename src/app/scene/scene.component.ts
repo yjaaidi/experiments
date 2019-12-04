@@ -1,5 +1,6 @@
-import { AfterContentChecked, Component, ContentChildren, ElementRef, QueryList, NgZone } from '@angular/core';
+import { AfterContentChecked, Component, ContentChildren, ElementRef, QueryList, NgZone, AfterContentInit } from '@angular/core';
 import { BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import { startWith } from 'rxjs/operators';
 import { CubeComponent } from './../cube/cube.component';
 
 function createCamera() {
@@ -21,7 +22,7 @@ function createRenderer() {
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.css']
 })
-export class SceneComponent implements AfterContentChecked {
+export class SceneComponent implements AfterContentInit {
 
   @ContentChildren(CubeComponent)
   private _cubeCmpList: QueryList<CubeComponent>;
@@ -31,15 +32,21 @@ export class SceneComponent implements AfterContentChecked {
 
   constructor(private elementRef: ElementRef, private ngZone: NgZone) { }
 
-  ngAfterContentChecked() {
-    console.log(this._cubeCmpList);
-    this._cubeCmpList.forEach(cubeCmp => console.log(cubeCmp));
+  ngAfterContentInit() {
+
+    this._cubeCmpList.changes
+      .pipe(startWith(this._cubeCmpList))
+      .subscribe(cubeCmpList => {
+        console.log(cubeCmpList);
+      });
+
+    // this._cubeCmpList.forEach(cubeCmp => console.log(cubeCmp));
   }
 
   ngOnInit() {
     this.elementRef.nativeElement.appendChild( this._renderer.domElement );
 
-    const count = 1000;
+    const count = 500;
     const boxes = Array(count).fill(null).map(() => [1, 1, 1]);
     
     const cubes = boxes.map(box => new Mesh(new BoxGeometry(...box), new MeshBasicMaterial( { color: 0xffffff * Math.random() } )));
@@ -61,7 +68,7 @@ export class SceneComponent implements AfterContentChecked {
       this._renderer.render( this._scene, this._camera );
     };
 
-    this.ngZone.runOutsideAngular(animate);
+    animate();
 
   }
 
