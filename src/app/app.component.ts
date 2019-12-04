@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import {
   BehaviorSubject,
   Observable,
@@ -23,18 +23,23 @@ export class AppComponent implements OnInit {
   });
   cubeInfoList$: Observable<CubeInfo[]>;
 
-  constructor(private _ngZone: NgZone) {
+  constructor(private _changeDetectorRef: ChangeDetectorRef, private _ngZone: NgZone) {
     this.cubeInfoList$ = this.state$.pipe(pluck('cubeInfoList'));
   }
 
   ngOnInit() {
     this.setCount(100);
 
-    interval(0, animationFrameScheduler).subscribe(() => this._rotateCubes());
+    this._ngZone.runOutsideAngular(() => {
+      interval(0, animationFrameScheduler).subscribe(() => {
+        this._rotateCubes();
+        this._changeDetectorRef.detectChanges();
+      });
+    })
   }
 
   setCount(count: number) {
-    this._patchState(state => ({
+    this._patchState(() => ({
       cubeInfoList: Array(count).fill({
         rotation: {
           x: 0
