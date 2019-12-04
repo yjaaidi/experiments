@@ -30,10 +30,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.setCount(100);
 
-    interval(0, animationFrameScheduler)
-      .pipe(tap(() => this._rotateCubes()))
-      .subscribe();
-    
+    interval(0, animationFrameScheduler).subscribe(() => this._rotateCubes());
   }
 
   setCount(count: number) {
@@ -55,12 +52,11 @@ export class AppComponent implements OnInit {
           x: cubeInfo.rotation.x + 0.01
         }
       }))
-    }))
+    }));
   }
 
   private _patchState(patcher: (state: State) => Partial<State>) {
     const state = this.state$.value;
     this.state$.next({ ...state, ...patcher(state) });
   }
-
 }
