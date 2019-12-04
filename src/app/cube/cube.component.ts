@@ -15,7 +15,7 @@ export class CubeComponent implements OnChanges, OnDestroy, OnInit {
 
   private _mesh = this._createMesh();
 
-  constructor(private _threeScene: ThreeScene) {
+  constructor(private _threeScene: ThreeScene) {    
   }
 
   ngOnChanges() {

@@ -1,11 +1,12 @@
 import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import {
   BehaviorSubject,
   Observable,
   interval,
   animationFrameScheduler
 } from 'rxjs';
-import { pluck, tap } from 'rxjs/operators';
+import { pluck, startWith } from 'rxjs/operators';
 import { CubeInfo } from './cube/cube-info';
 
 export interface State {
@@ -18,24 +19,27 @@ export interface State {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  countControl = new FormControl(100);
   state$ = new BehaviorSubject<State>({
     cubeInfoList: []
   });
   cubeInfoList$: Observable<CubeInfo[]>;
 
-  constructor(private _changeDetectorRef: ChangeDetectorRef, private _ngZone: NgZone) {
+  constructor(
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _ngZone: NgZone
+  ) {
     this.cubeInfoList$ = this.state$.pipe(pluck('cubeInfoList'));
   }
 
   ngOnInit() {
-    this.setCount(100);
+    interval(0, animationFrameScheduler).subscribe(() => {
+      this._rotateCubes();
+    });
 
-    this._ngZone.runOutsideAngular(() => {
-      interval(0, animationFrameScheduler).subscribe(() => {
-        this._rotateCubes();
-        this._changeDetectorRef.detectChanges();
-      });
-    })
+    this.countControl.valueChanges
+      .pipe(startWith(this.countControl.value))
+      .subscribe(count => this.setCount(count));
   }
 
   setCount(count: number) {
@@ -46,6 +50,10 @@ export class AppComponent implements OnInit {
         }
       })
     }));
+  }
+
+  indexTracker(index) {
+    return index;
   }
 
   private _rotateCubes() {

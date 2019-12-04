@@ -1,8 +1,9 @@
-<button (click)="setCount(100)">100</button>
-<button (click)="setCount(1000)">1000</button>
+<input [formControl]="countControl" type="range" min="1" max="1000" value="100">
+
+<span>{{ countControl.value }}</span>
 
 <app-scene>
   <app-cube
-    *ngFor="let cubeInfo of cubeInfoList$ | async"
+    *ngFor="let cubeInfo of cubeInfoList$ | async; trackBy:indexTracker"
     [cubeInfo]="cubeInfo"></app-cube>
 </app-scene>
