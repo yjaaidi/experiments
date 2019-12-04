@@ -44,11 +44,12 @@ export class AppComponent implements OnInit {
 
   setCount(count: number) {
     this._patchState(() => ({
-      cubeInfoList: Array(count).fill({
+      cubeInfoList: Array(count).fill(null).map(() => ({
         rotation: {
-          x: 0
+          x: 360 * Math.random(),
+          y: 360 * Math.random()
         }
-      })
+      }))
     }));
   }
 
@@ -62,7 +63,8 @@ export class AppComponent implements OnInit {
         ...cubeInfo,
         rotation: {
           ...cubeInfo.rotation,
-          x: cubeInfo.rotation.x + 0.01
+          x: cubeInfo.rotation.x + 0.03 * Math.random(),
+          y: cubeInfo.rotation.y + 0.03 * Math.random()
         }
       }))
     }));

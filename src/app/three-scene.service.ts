@@ -10,10 +10,6 @@ export class ThreeScene {
   private _scene = new Scene();
   private _renderer = this._createRenderer();
 
-  constructor() {
-    this._renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-
   add(mesh: Mesh) {
     this._scene.add(mesh);
   }
@@ -32,7 +28,7 @@ export class ThreeScene {
 
   private _createCamera() {
     const camera = new PerspectiveCamera(
-      75,
+      50,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
