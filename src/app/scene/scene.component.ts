@@ -1,4 +1,4 @@
-import { Component, DoCheck, ElementRef, OnInit } from '@angular/core';
+import { Component, DoCheck, ElementRef, OnInit, NgZone } from '@angular/core';
 import { ThreeScene } from '../three-scene.service';
 
 @Component({
@@ -9,12 +9,13 @@ import { ThreeScene } from '../three-scene.service';
 })
 export class SceneComponent implements DoCheck, OnInit {
   constructor(
-    private elementRef: ElementRef,
+    private _elementRef: ElementRef,
+    private _ngZone: NgZone,
     private _threeScene: ThreeScene
   ) {}
 
   ngOnInit() {
-    this.elementRef.nativeElement.appendChild(this._threeScene.getDomElement());
+    this._elementRef.nativeElement.appendChild(this._threeScene.getDomElement());
 
     // const boxes = Array(count)
     //   .fill(null)
@@ -49,7 +50,7 @@ export class SceneComponent implements DoCheck, OnInit {
   }
 
   ngDoCheck() {
-    this._threeScene.render();
+    this._ngZone.runOutsideAngular(() => setTimeout(() => this._threeScene.render()));
   }
 
 }
