@@ -6,11 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  cubeInfoList = Array(1000).fill(null);
-
-  setCount(count: number) {
-    this.cubeInfoList = Array(count).fill(null);
-  }
-
+  count = 100;
 }
 

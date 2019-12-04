@@ -1,6 +1,6 @@
-<button (click)="setCount(100)">100</button>
-<button (click)="setCount(1000)">1000</button>
+<button (click)="count = 100">100</button>
+<button (click)="count = 1000">1000</button>
 
 <app-scene>
-  <app-cube *ngFor="let cubeInfo of cubeInfoList"></app-cube>
+  <app-cube *ngFor="let cubeInfo of [1,2,3]"></app-cube>
 </app-scene>
