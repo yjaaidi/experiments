@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ContentChildren, ElementRef, NgZone, QueryList } from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, ElementRef, NgZone, QueryList, Injectable } from '@angular/core';
 import { map, pairwise, startWith } from 'rxjs/operators';
 import { BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
 import { CubeComponent } from './../cube/cube.component';
@@ -17,6 +17,25 @@ function createRenderer() {
   return renderer;
 }
 
+@Injectable({
+  providedIn: 'root'
+})
+export class ThreeScene {
+
+  private _camera = createCamera();
+  private _scene = new Scene();
+  private _threeRenderer = createRenderer();
+
+  constructor() {
+    this._threeRenderer.setSize( window.innerWidth, window.innerHeight );
+  }
+  
+  render() {
+    this._threeRenderer.render(this._scene, this._camera);
+  }
+
+}
+
 @Component({
   selector: 'app-scene',
   templateUrl: './scene.component.html',
@@ -30,7 +49,7 @@ export class SceneComponent implements AfterContentInit {
   private _camera = createCamera();
   private _renderer = createRenderer();
 
-  constructor(private elementRef: ElementRef, private ngZone: NgZone) { }
+  constructor(private elementRef: ElementRef, private ngZone: NgZone, private _threeScene: ThreeScene) { }
 
   ngAfterContentInit() {
 
@@ -52,7 +71,7 @@ export class SceneComponent implements AfterContentInit {
   ngOnInit() {
     this.elementRef.nativeElement.appendChild( this._renderer.domElement );
 
-    const count = 500;
+    const count = 300;
     const boxes = Array(count).fill(null).map(() => [1, 1, 1]);
     
     const cubes = boxes.map(box => new Mesh(new BoxGeometry(...box), new MeshBasicMaterial( { color: 0xffffff * Math.random() } )));
