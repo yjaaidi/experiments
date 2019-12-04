@@ -6,7 +6,7 @@ import {
   interval,
   animationFrameScheduler
 } from 'rxjs';
-import { pluck, startWith } from 'rxjs/operators';
+import { bufferCount, pluck, startWith, shareReplay, map, pairwise, filter, tap, bufferTime } from 'rxjs/operators';
 import { CubeInfo } from './cube/cube-info';
 
 export interface State {
@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
     cubeInfoList: []
   });
   cubeInfoList$: Observable<CubeInfo[]>;
+  fps$: Observable<number>;
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
@@ -33,7 +34,21 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    interval(0, animationFrameScheduler).subscribe(() => {
+
+    const animationFrame$ = interval(0, animationFrameScheduler).pipe(
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+
+    this.fps$ = animationFrame$.pipe(
+      map(() => Date.now()),
+      bufferTime(1000, 100),
+      map((buffer) => {
+        const fps = buffer.length / 2;
+        return fps;
+      }),
+    );
+
+    animationFrame$.subscribe(() => {
       this._rotateCubes();
     });
 
@@ -44,12 +59,14 @@ export class AppComponent implements OnInit {
 
   setCount(count: number) {
     this._patchState(() => ({
-      cubeInfoList: Array(count).fill(null).map(() => ({
-        rotation: {
-          x: 360 * Math.random(),
-          y: 360 * Math.random()
-        }
-      }))
+      cubeInfoList: Array(count)
+        .fill(null)
+        .map(() => ({
+          rotation: {
+            x: 360 * Math.random(),
+            y: 360 * Math.random()
+          }
+        }))
     }));
   }
 

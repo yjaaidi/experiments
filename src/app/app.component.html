@@ -1,6 +1,8 @@
 <input class="count-selector" [formControl]="countControl" type="range" min="1" max="2000" value="100">
 
-<span>{{ countControl.value }}</span>
+<div>Count: {{ countControl.value }}</div>
+
+<div>FPS: {{ fps$ | async }}</div>
 
 <app-scene>
   <app-cube
