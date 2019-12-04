@@ -29,17 +29,20 @@ export class AppComponent implements OnInit {
     cubes.forEach(_cube => {
       _cube.rotation.x = Math.random() * 360;
       _cube.rotation.y = Math.random() * 360;
+      _cube.rotation.z = Math.random() * 360;
       scene.add(_cube);
     });
 
+    camera.position.x = 2;
     camera.position.z = 2;
+    camera.rotation.y = .8;
 
     const animate = () => {
       requestAnimationFrame( animate );
 
       cubes.forEach(cube => {
         cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
+        // cube.rotation.z += 0.01;
       })
 
       renderer.render( scene, camera );
