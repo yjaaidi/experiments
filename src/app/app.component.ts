@@ -1,5 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import { Mesh, MeshBasicMaterial, BoxGeometry, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import { DirectionalLight, DirectionalLightHelper, Mesh, MeshBasicMaterial, BoxGeometry, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+
+export const randomAngle = () => Math.random() * 360;
 
 @Component({
   selector: 'app-root',
@@ -21,22 +23,36 @@ export class AppComponent implements OnInit {
     this.sceneEl.nativeElement.appendChild( renderer.domElement );
 
     const geometry = new BoxGeometry( 1, 1, 1 );
-    const material = new MeshBasicMaterial( { color: 0x00ff00 } );
+    const material = new MeshBasicMaterial( { color: 0xffffff * Math.random() } );
     const cube = new Mesh( geometry, material );
     scene.add( cube );
+
+    const count = 1000;
+    const boxes = Array(count).fill(null).map(() => [1, 1, 1]);
+    
+    const cubes = boxes.map(box => new Mesh(new BoxGeometry(...box), new MeshBasicMaterial( { color: 0xffffff * Math.random() } )));
+    cubes.forEach(_cube => {
+      _cube.rotation.x = Math.random() * 360;
+      _cube.rotation.y = Math.random() * 360;
+      scene.add(_cube);
+    });
 
     camera.position.z = 5;
 
     const animate = () => {
       requestAnimationFrame( animate );
 
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
+      cubes.forEach(cube => {
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+      })
 
       renderer.render( scene, camera );
     };
 
     animate();
+
+
   }
 
 }
