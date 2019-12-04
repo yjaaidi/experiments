@@ -2,5 +2,7 @@
 <button (click)="setCount(1000)">1000</button>
 
 <app-scene>
-  <app-cube *ngFor="let cubeInfo of cubeInfoList$ | async"></app-cube>
+  <app-cube
+    *ngFor="let cubeInfo of cubeInfoList$ | async"
+    [cubeInfo]="cubeInfo"></app-cube>
 </app-scene>

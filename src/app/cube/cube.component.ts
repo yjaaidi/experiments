@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Input, OnChanges } from '@angular/core';
 import { ThreeScene } from '../three-scene.service';
 import { Mesh, BoxGeometry, MeshBasicMaterial } from 'three';
+import { CubeInfo } from './cube-info';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -8,11 +9,17 @@ import { Mesh, BoxGeometry, MeshBasicMaterial } from 'three';
   templateUrl: './cube.component.html',
   styleUrls: ['./cube.component.css']
 })
-export class CubeComponent implements OnDestroy, OnInit {
+export class CubeComponent implements OnChanges, OnDestroy, OnInit {
+
+  @Input() cubeInfo: CubeInfo;
 
   private _mesh = this._createMesh();
 
   constructor(private _threeScene: ThreeScene) {
+  }
+
+  ngOnChanges() {
+    this._mesh.rotation.x = this.cubeInfo.rotation.x;
   }
 
   ngOnInit() {
