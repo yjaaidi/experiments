@@ -22,7 +22,7 @@ const smoothen = <T extends number>() => (source$: Observable<T>) =>
         .map((_, index) => previous + (index + 1) * stepSize);
 
       return from([...stepList, current]).pipe(
-        concatMap(count => of(count).pipe(delay(100)))
+        concatMap(count => of(count).pipe(delay(10)))
       );
     })
   );
