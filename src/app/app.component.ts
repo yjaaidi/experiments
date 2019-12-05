@@ -1,13 +1,31 @@
-import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {
-  BehaviorSubject,
-  Observable,
-  interval,
-  animationFrameScheduler
-} from 'rxjs';
-import { bufferCount, pluck, startWith, shareReplay, map, pairwise, filter, tap, bufferTime } from 'rxjs/operators';
+import { animationFrameScheduler, BehaviorSubject, concat, from, interval, Observable, of } from 'rxjs';
+import { bufferTime, concatMap, delay, distinctUntilChanged, map, pairwise, pluck, startWith, switchMap } from 'rxjs/operators';
 import { CubeInfo } from './cube/cube-info';
+
+/*
+ * source: ab (where a=0 & b=350)
+ * result: a-b-c-d (where a=0, b=100, c=200, d=300, d=350)
+ */
+const smoothen = <T extends number>() => (source$: Observable<T>) =>
+  source$.pipe(
+    distinctUntilChanged(),
+    startWith(0),
+    pairwise(),
+    switchMap(([previous, current]) => {
+      const stepCount = Math.floor(Math.abs(current - previous) / 100);
+      const stepSize = Math.sign(current - previous) * 100;
+
+      const stepList = Array(stepCount)
+        .fill(null)
+        .map((_, index) => previous + (index + 1) * stepSize);
+
+      return from([...stepList, current]).pipe(
+        concatMap(count => of(count).pipe(delay(100)))
+      );
+    })
+  );
 
 export interface State {
   cubeInfoList: CubeInfo[];
@@ -31,26 +49,21 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    const animationFrame$ = interval(0, animationFrameScheduler).pipe(
-      shareReplay({ bufferSize: 1, refCount: true })
-    );
+    const animationFrame$ = interval(0, animationFrameScheduler);
 
     this.fps$ = animationFrame$.pipe(
-      map(() => Date.now()),
-      bufferTime(1000, 100),
-      map((buffer) => {
-        const fps = buffer.length / 2;
+      map(() => performance.now()),
+      bufferTime(1000, 10),
+      map(buffer => {
+        const fps = buffer.length;
         return fps;
-      }),
+      })
     );
 
-    animationFrame$.subscribe(() => {
-      this._rotateCubes();
-    });
+    animationFrame$.subscribe(() => this._rotateCubes());
 
-    this.countControl.valueChanges
-      .pipe(startWith(this.countControl.value))
+    concat(of(this.countControl.value), this.countControl.valueChanges)
+      .pipe(smoothen())
       .subscribe(count => this.setCount(count));
   }
 
