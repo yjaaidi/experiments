@@ -1,9 +1,7 @@
 import { WebGLRenderer, PerspectiveCamera, Scene, Mesh } from 'three';
 import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ThreeScene {
  
   private _camera = this._createCamera();
