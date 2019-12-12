@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'three-benchmark';
+  cmp;
+
+  constructor() {
+  }
+
+  async ngOnInit() {
+    this.cmp = await import('./a/a.component').then(m => m.AComponent);
+  }
+
 }
