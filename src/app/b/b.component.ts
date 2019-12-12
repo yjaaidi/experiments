@@ -9,6 +9,7 @@ export class BComponent {
 }
 
 @NgModule({
-  declarations: [BComponent]
+  declarations: [BComponent],
+  exports: [BComponent]
 })
 export class BModule {}

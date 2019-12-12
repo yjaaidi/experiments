@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { from, defer } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -6,13 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  cmp;
-
-  constructor() {
-  }
-
-  async ngOnInit() {
-    this.cmp = await import('./a/a.component').then(m => m.AComponent);
-  }
-
+  cmp$ = defer(() => import('./a/a.component').then(m => m.AComponent));
 }
