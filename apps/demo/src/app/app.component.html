@@ -3,10 +3,18 @@
     width="450"
     src="/assets/marmicode.png"
   />
+
+  <mat-form-field>
+    <input matInput placeholder="Keywords" [formControl]="keywordsControl">
+  </mat-form-field>
+
 </div>
 
-<mat-form-field>
-  <input matInput placeholder="Keywords">
-</mat-form-field>
-
-<div>Message: {{ searchResult$ | async | json }}</div>
+<code>
+  <div *ngIf="searchResult$ | async as searchResult">
+    <div *ngFor="let item of searchResult.items">
+      <span>{{ item.file }}:{{item.number}}</span>
+      <span>{{ item.content }}</span>
+    </div>
+  </div>
+</code>

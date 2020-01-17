@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { SearchResult } from '@demo/api-interfaces';
-import { timer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { startWith, switchMap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -11,9 +12,15 @@ import { environment } from '../environments/environment';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  searchResult$ = timer(0, 100).pipe(
-    switchMap(() => this.http.get<SearchResult>(`${environment.apiBaseUrl}/hello`))
-  );
-  constructor(private http: HttpClient) {}
-}
+  keywordsControl = new FormControl();
+  searchResult$: Observable<SearchResult>;
 
+  constructor(private _httpClient: HttpClient) {
+    this.searchResult$ = this.keywordsControl.valueChanges.pipe(
+      switchMap(() =>
+        this._httpClient.get<SearchResult>(`${environment.apiBaseUrl}/hello`)
+          .pipe(startWith(null))
+      )
+    );
+  }
+}

@@ -15,6 +15,7 @@ export function getFiles(path: string): Observable<string> {
       next();
     });
     walker.on('end', () => observer.complete());
+    return () => walker.pause()
   });
 }
 
@@ -32,6 +33,7 @@ export function readLines(filePath: string): Observable<Line> {
       })
     );
     reader.on('close', () => observer.complete());
+    return () => reader.close();
   });
 }
 
@@ -47,7 +49,7 @@ export class FileSearch {
 
     return lines$.pipe(
       filter(line => line.content.includes(keywords)),
-      bufferTime(5000),
+      bufferTime(1000),
       take(1),
       map(lines => ({
         items: lines
