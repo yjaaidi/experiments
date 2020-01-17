@@ -4,7 +4,7 @@ import { createReadStream } from 'fs';
 import { join } from 'path';
 import { createInterface } from 'readline';
 import { Observable } from 'rxjs';
-import { bufferTime, concatMap, filter, map, take } from 'rxjs/operators';
+import { bufferCount, bufferTime, concatMap, filter, map, take } from 'rxjs/operators';
 import { walk } from 'walk';
 
 export function getFiles(path: string): Observable<string> {
@@ -49,7 +49,7 @@ export class FileSearch {
 
     return lines$.pipe(
       filter(line => line.content.includes(keywords)),
-      bufferTime(1000),
+      bufferCount(Infinity),
       take(1),
       map(lines => ({
         items: lines
