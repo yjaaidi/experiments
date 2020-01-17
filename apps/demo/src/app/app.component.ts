@@ -27,9 +27,13 @@ export class AppComponent implements OnInit {
 
   constructor(private _httpClient: HttpClient) {
     this.searchResult$ = this.keywordsControl.valueChanges.pipe(
-      switchMap(() =>
+      switchMap(keywords =>
         this._httpClient
-          .get<SearchResult>(`${environment.apiBaseUrl}/hello`)
+          .get<SearchResult>(`${environment.apiBaseUrl}/files`, {
+            params: {
+              q: keywords
+            }
+          })
           .pipe(startWith(null))
       )
     );

@@ -42,14 +42,13 @@ export class FileSearch {
   private _file$ = getFiles(join(__dirname, '..', '..', '..', '..', '..', 'forks', 'angular'))
     .pipe(filter(file => file.endsWith('.ts')));
 
-  search(): Observable<SearchResult> {
-    const keywords = 'test';
+  search(keywords: string): Observable<SearchResult> {
 
     const lines$ = this._file$.pipe(concatMap(file => readLines(file)));
 
     return lines$.pipe(
       filter(line => line.content.includes(keywords)),
-      bufferCount(Infinity),
+      bufferCount(30),
       take(1),
       map(lines => ({
         items: lines
