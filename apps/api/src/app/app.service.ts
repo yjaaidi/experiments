@@ -1,17 +1,29 @@
-import { Injectable } from '@nestjs/common';
 import { SearchResult } from '@demo/api-interfaces';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@nestjs/common';
+import { join } from 'path';
+import { Observable } from 'rxjs';
+import { map, reduce } from 'rxjs/operators';
+import { walk } from 'walk';
 
 @Injectable()
 export class AppService {
-  getData(): Observable<SearchResult> {
-    return of({
-      files: [
-        {
-          fileName: 'test',
-          matchCount: 123
-        }
-      ]
+  private _files$ = new Observable(observer => {
+    const walker = walk(join(__dirname, '..', '..', '..', 'apps'));
+    walker.on('file', (_, fileStats, next) => {
+      observer.next(fileStats.name);
+      next();
     });
+    walker.on('end', () => observer.complete());
+  });
+
+  getData(): Observable<SearchResult> {
+    return this._files$.pipe(
+      reduce((acc, fileName) => [...acc, fileName], []),
+      map(fileNameList => {
+        return {
+          files: fileNameList.map(fileName => ({ fileName, matchCount: 0 }))
+        };
+      })
+    );
   }
 }
