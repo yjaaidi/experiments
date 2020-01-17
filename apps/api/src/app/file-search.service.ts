@@ -48,7 +48,7 @@ export class FileSearch {
 
     return lines$.pipe(
       filter(line => line.content.includes(keywords)),
-      bufferCount(30),
+      bufferTime(2000),
       take(1),
       map(lines => ({
         items: lines
