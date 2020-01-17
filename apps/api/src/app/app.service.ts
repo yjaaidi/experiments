@@ -1,9 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { Message } from '@demo/api-interfaces';
+import { SearchResult } from '@demo/api-interfaces';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class AppService {
-  getData(): Message {
-    return { message: 'Welcome to api!' };
+  getData(): Observable<SearchResult> {
+    return of({
+      files: [
+        {
+          fileName: 'test',
+          matchCount: 123
+        }
+      ]
+    });
   }
 }
