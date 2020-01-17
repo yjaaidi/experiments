@@ -2,16 +2,16 @@ import { SearchResult } from '@demo/api-interfaces';
 import { Controller, Get } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
-import { AppService } from './app.service';
+import { FileSearch } from './file-search.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {
+  constructor(private readonly appService: FileSearch) {
   }
 
   @Get('hello')
   getData(): Observable<SearchResult> {
-    return this.appService.getData();
+    return this.appService.search();
   }
 
 }

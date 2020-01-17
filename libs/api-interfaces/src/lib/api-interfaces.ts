@@ -1,8 +1,10 @@
-export interface FileStat {
-  fileName: string;
-  matchCount: number;
+
+export interface Line {
+  content: string;
+  file: string;
+  number: number;
 }
 
 export interface SearchResult {
-  files: FileStat[];
+  items: Line[];
 }
