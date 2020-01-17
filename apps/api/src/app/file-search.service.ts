@@ -4,7 +4,7 @@ import { createReadStream } from 'fs';
 import { join } from 'path';
 import { createInterface } from 'readline';
 import { Observable } from 'rxjs';
-import { bufferCount, concatMap, filter, map, reduce } from 'rxjs/operators';
+import { bufferTime, concatMap, filter, map, take } from 'rxjs/operators';
 import { walk } from 'walk';
 
 export function getFiles(path: string): Observable<string> {
@@ -37,7 +37,8 @@ export function readLines(filePath: string): Observable<Line> {
 
 @Injectable()
 export class FileSearch {
-  private _file$ = getFiles(join(__dirname, '..', '..', '..', 'apps'));
+  private _file$ = getFiles(join(__dirname, '..', '..', '..', '..', '..', 'forks', 'angular'))
+    .pipe(filter(file => file.endsWith('.ts')));
 
   search(): Observable<SearchResult> {
     const keywords = 'test';
@@ -46,7 +47,8 @@ export class FileSearch {
 
     return lines$.pipe(
       filter(line => line.content.includes(keywords)),
-      bufferCount(Infinity),
+      bufferTime(5000),
+      take(1),
       map(lines => ({
         items: lines
       }))
