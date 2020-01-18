@@ -39,8 +39,8 @@ export function readLines(filePath: string): Observable<Line> {
 
 @Injectable()
 export class FileSearch {
-  private _file$ = getFiles(join(__dirname, '..', '..', '..', '..', '..', 'forks', 'angular'))
-    .pipe(filter(file => file.endsWith('.ts')));
+  private _file$ = getFiles(join(__dirname, '..', '..', '..', 'node_modules'))
+    .pipe(filter(file => file.endsWith('.d.ts')));
 
   search(keywords: string): Observable<SearchResult> {
 

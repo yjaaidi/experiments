@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
     this._fillSearchInputEffect$ = this._sendKeys$.pipe(
       switchMap(() => {
         return from(
-          'remove the whole bootstrap file once the tests are Bazel and Windows compatible'
+          'Valid extensions are considered to be up to maxSize chars long, counting the dot (defaults to 7)'
         ).pipe(
           startWith(''),
           concatMap(character => of(character).pipe(delay(100))),
