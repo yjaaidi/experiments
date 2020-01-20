@@ -23,25 +23,34 @@ const mongoClient$ = defer(() => connect('mongodb://127.0.0.1:27017')).pipe(
   })
 );
 
+async function sleep(duration: number) {
+  return new Promise(resolve => setTimeout(resolve, duration));
+}
+
 export function cursorToObservable<T>(cursor: Cursor<T>): Observable<T> {
   return new Observable<T>(observer => {
+    let complete = false;
 
     async function emit() {
-      while (await cursor.hasNext()) {
+      while (await cursor.hasNext() && !complete) {
         observer.next(await cursor.next());
+        await sleep(10);
       }
       observer.complete();
     }
 
     emit().catch(err => observer.error());
 
+    return () => {
+      complete = true;
+      return cursor.close();
+    };
   });
 }
 
 @Injectable()
 export class FileSearchMongo {
   search(keywords: string): Observable<SearchResult> {
-
     return mongoClient$.pipe(
       switchMap(mongoClient => {
         const cursor = mongoClient
