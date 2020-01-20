@@ -14,7 +14,7 @@ export class StatsService implements OnApplicationBootstrap {
   }
 
   stat$: Observable<Stat> = timer(0, 50).pipe(
-    exhaustMap(() => fromPromise(find('port', 27017))),
+    exhaustMap(() => fromPromise(find('port', 3333))),
     map(processList => processList[0] && processList[0].pid),
     filter(pid => pid != null),
     exhaustMap(pid => bindNodeCallback(exec)(`ps -p ${pid} -o '%cpu,rss'`).pipe(onErrorResumeNext(EMPTY))),
