@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
           'A ZoneDelegate is needed because a child zone can\'t simply invoke a method on a parent zone.'
         ).pipe(
           startWith(''),
-          concatMap(character => of(character).pipe(delay(100))),
+          concatMap(character => of(character).pipe(delay(50))),
           scan((acc, character) => acc + character, '')
         );
       }),
