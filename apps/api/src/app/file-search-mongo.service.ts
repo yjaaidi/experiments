@@ -5,6 +5,7 @@ import { connect, Cursor, MongoClient } from 'mongodb';
 import { join } from 'path';
 import { defer, Observable, of } from 'rxjs';
 import {
+  bufferCount,
   bufferTime,
   filter,
   map,
@@ -41,12 +42,6 @@ export function cursorToObservable<T>(cursor: Cursor<T>): Observable<T> {
 export class FileSearchMongo {
   search(keywords: string): Observable<SearchResult> {
 
-    console.log({
-      content: {
-        $regex: `${escapeRegExp(keywords)}`
-      }
-    });
-
     return mongoClient$.pipe(
       switchMap(mongoClient => {
         const cursor = mongoClient
@@ -60,7 +55,7 @@ export class FileSearchMongo {
 
         return cursorToObservable<Line>(cursor);
       }),
-      bufferTime(5000),
+      bufferCount(1000),
       take(1),
       map(lines => ({
         items: lines
