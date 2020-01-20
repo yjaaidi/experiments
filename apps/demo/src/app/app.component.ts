@@ -2,15 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { SearchResult } from '@demo/api-interfaces';
-import { BehaviorSubject, from, Observable, of, Subject } from 'rxjs';
-import {
-  concatMap,
-  delay,
-  scan,
-  startWith,
-  switchMap,
-  tap
-} from 'rxjs/operators';
+import { EMPTY, from, Observable, of, Subject } from 'rxjs';
+import { concatMap, delay, onErrorResumeNext, scan, startWith, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -34,14 +27,17 @@ export class AppComponent implements OnInit {
               q: keywords
             }
           })
-          .pipe(startWith(null))
+          .pipe(
+            startWith(null),
+            onErrorResumeNext(EMPTY)
+          )
       )
     );
 
     this._fillSearchInputEffect$ = this._sendKeys$.pipe(
       switchMap(() => {
         return from(
-          'Valid extensions are considered to be up to maxSize chars long, counting the dot (defaults to 7)'
+          'A ZoneDelegate is needed because a child zone can\'t simply invoke a method on a parent zone.'
         ).pipe(
           startWith(''),
           concatMap(character => of(character).pipe(delay(100))),
