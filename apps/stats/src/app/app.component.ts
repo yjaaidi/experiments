@@ -50,7 +50,7 @@ export class AppComponent {
         })
       );
 
-    const bufferSize = 50;
+    const bufferSize = 100;
 
     const placeholderStat$ = from(
       Array.from(new Array(bufferSize)).map((_, i) => i)
@@ -72,7 +72,7 @@ export class AppComponent {
     this.memoryChartData$ = statWithInitialData$.pipe(
       map(stat => ({
         name: stat.date.toString(),
-        value: stat.memoryUsage
+        value: stat.memoryUsage / 1000
       })),
       bufferCount(bufferSize, 1),
       map(series => [{ name: 'Memory', series }])

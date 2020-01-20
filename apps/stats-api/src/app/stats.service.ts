@@ -12,7 +12,7 @@ import { Stat } from './stats.resolver';
 export class StatsService implements OnApplicationBootstrap {
   constructor(@Inject(pubSubServiceName) private _pubSub: PubSub) {}
 
-  stat$: Observable<Stat> = timer(0, 100).pipe(
+  stat$: Observable<Stat> = timer(0, 50).pipe(
     exhaustMap(() => fromPromise(find('port', 3333))),
     map(processList => processList[0] && processList[0].pid),
     exhaustMap(pid => bindNodeCallback(exec)(`ps -p ${pid} -o '%cpu,rss'`)),
