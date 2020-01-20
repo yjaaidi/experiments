@@ -1,0 +1,11 @@
+version: '3'
+services:
+  api:
+    image: node:13
+    user: "node"
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - "3333:3333"
+    command: npm start api
