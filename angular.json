@@ -232,7 +232,8 @@
         "serve": {
           "builder": "@nrwl/node:execute",
           "options": {
-            "buildTarget": "stats-api:build"
+            "buildTarget": "stats-api:build",
+            "inspect": false
           }
         },
         "lint": {
