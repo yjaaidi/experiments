@@ -22,6 +22,15 @@
     },
     "api-interfaces": {
       "tags": []
+    },
+    "stats-api": {
+      "tags": []
+    },
+    "stats-e2e": {
+      "tags": []
+    },
+    "stats": {
+      "tags": []
     }
   }
 }
