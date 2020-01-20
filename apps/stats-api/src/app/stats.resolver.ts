@@ -27,7 +27,8 @@ export class StatsResolver {
   }
 
   @Subscription(returns => Stat, {
-    nullable: true
+    nullable: true,
+    resolve: value => value
   })
   stat() {
     return this._pubSub.asyncIterator(statAdded);
