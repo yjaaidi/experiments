@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
+import { pubSubServiceName } from './pub-sub';
 import { StatsResolver } from './stats.resolver';
 import { StatsService } from './stats.service';
 
@@ -14,7 +15,7 @@ import { StatsService } from './stats.service';
     StatsService,
     StatsResolver,
     {
-      provide: 'PUB_SUB',
+      provide: pubSubServiceName,
       useValue: new PubSub()
     }
   ]

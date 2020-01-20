@@ -1,6 +1,8 @@
 import { Inject } from '@nestjs/common';
-import { Args, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { Query, Resolver, Subscription } from '@nestjs/graphql';
+import { PubSub } from 'graphql-subscriptions';
 import { Field, Int, ObjectType } from 'type-graphql';
+import { pubSubServiceName } from './pub-sub';
 
 @ObjectType()
 export class Stat {
@@ -16,11 +18,12 @@ export class Stat {
 
 @Resolver('Stats')
 export class StatsResolver {
-  constructor(@Inject('PUB_SUB') private _pubSub) {}
+  constructor(@Inject(pubSubServiceName) private _pubSub: PubSub) {
+  }
 
   @Query(returns => String)
   appName() {
-    return 'Stats'
+    return 'Stats';
   }
 
   @Subscription(returns => Stat, {
