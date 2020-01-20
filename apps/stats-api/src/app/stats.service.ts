@@ -1,5 +1,5 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import * as find from 'find-process';
+import find from 'find-process';
 
 @Injectable()
 export class StatsService implements OnApplicationBootstrap {
