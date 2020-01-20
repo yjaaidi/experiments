@@ -1,18 +1,23 @@
 import { join } from 'path';
 import { bindNodeCallback, defer, Observable } from 'rxjs';
 import { mergeMap, scan, switchMap, tap } from 'rxjs/operators';
-import { MongoClient } from 'mongodb';
+import { connect, MongoClient } from 'mongodb';
 import { Line } from '../../libs/api-interfaces/src/lib/api-interfaces';
 import { getFiles, readLines } from '../../libs/walker/src/lib/walker';
 
-export function getMongoClient(): Observable<MongoClient> {
-  const url = 'mongodb://localhost:27017';
+export function getMongoClient(): Promise<MongoClient> {
+  const uri = 'mongodb://127.0.0.1:27017';
 
-  return bindNodeCallback(MongoClient.connect)(url) as Observable<MongoClient>;
+  return connect(
+    uri,
+    {
+      useUnifiedTopology: true
+    }
+  );
 }
 
 export function insertLine(line: Line) {
-  return getMongoClient().pipe(
+  return defer(() => getMongoClient()).pipe(
     switchMap(client => {
       return defer(() =>
         client
