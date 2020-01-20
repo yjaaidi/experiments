@@ -1,23 +1,20 @@
 import { join } from 'path';
 import { bindNodeCallback, defer, Observable } from 'rxjs';
-import { mergeMap, scan, switchMap, tap } from 'rxjs/operators';
+import { concatMap, mergeMap, scan, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { connect, MongoClient } from 'mongodb';
 import { Line } from '../../libs/api-interfaces/src/lib/api-interfaces';
 import { getFiles, readLines } from '../../libs/walker/src/lib/walker';
 
-export function getMongoClient(): Promise<MongoClient> {
-  const uri = 'mongodb://127.0.0.1:27017';
+const mongoClient$ = defer(() => connect('mongodb://127.0.0.1:27017')).pipe(
+  shareReplay({
+    bufferSize: 1,
+    refCount: true
+  })
+);
 
-  return connect(
-    uri,
-    {
-      useUnifiedTopology: true
-    }
-  );
-}
 
 export function insertLine(line: Line) {
-  return defer(() => getMongoClient()).pipe(
+  return mongoClient$.pipe(
     switchMap(client => {
       return defer(() =>
         client
@@ -31,10 +28,14 @@ export function insertLine(line: Line) {
 
 export function indexFiles(path: string) {
   return getFiles(path).pipe(
-    mergeMap(filePath => readLines(filePath)),
-    mergeMap(line => insertLine(line)),
+    concatMap(filePath => readLines(filePath)),
+    concatMap(line => insertLine(line)),
     scan((acc, _: any) => acc + 1, 0),
-    tap(count => console.log(`Indexed ${count} lines`))
+    tap(count => {
+      if (count % 100 === 0) {
+        console.log(`Indexed ${count} lines`)
+      }
+    })
   );
 }
 
