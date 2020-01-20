@@ -44,6 +44,7 @@
     "@nestjs/graphql": "^6.5.3",
     "@nestjs/platform-express": "^6.8.3",
     "@nrwl/angular": "8.11.0",
+    "@swimlane/ngx-charts": "^13.0.2",
     "apollo-angular": "^1.8.0",
     "apollo-angular-link-http": "^1.9.0",
     "apollo-cache-inmemory": "^1.6.5",
