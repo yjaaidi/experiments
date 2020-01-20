@@ -19,5 +19,5 @@ type Stat {
 }
 
 type Subscription {
-  statAdded: Stat
+  stat: Stat!
 }

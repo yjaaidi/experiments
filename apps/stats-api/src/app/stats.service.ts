@@ -5,13 +5,12 @@ import { PubSub } from 'graphql-subscriptions';
 import { bindNodeCallback, Observable, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
 import { exhaustMap, map, tap } from 'rxjs/operators';
-import { pubSubServiceName } from './pub-sub';
-import { Stat, StatsResolver } from './stats.resolver';
+import { pubSubServiceName, statAdded } from './pub-sub';
+import { Stat } from './stats.resolver';
 
 @Injectable()
 export class StatsService implements OnApplicationBootstrap {
-  constructor(@Inject(pubSubServiceName) private _pubSub: PubSub) {
-  }
+  constructor(@Inject(pubSubServiceName) private _pubSub: PubSub) {}
 
   stat$: Observable<Stat> = timer(0, 100).pipe(
     exhaustMap(() => fromPromise(find('port', 3333))),
@@ -30,7 +29,6 @@ export class StatsService implements OnApplicationBootstrap {
 
   onApplicationBootstrap() {
     this.stat$
-      .pipe(tap(console.log))
-      .subscribe(stat => this._pubSub.publish('statAdded', stat));
+      .subscribe(stat => this._pubSub.publish(statAdded, stat));
   }
 }

@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import { Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { Field, Int, ObjectType } from 'type-graphql';
-import { pubSubServiceName } from './pub-sub';
+import { pubSubServiceName, statAdded } from './pub-sub';
 
 @ObjectType()
 export class Stat {
@@ -29,7 +29,7 @@ export class StatsResolver {
   @Subscription(returns => Stat, {
     nullable: true
   })
-  statAdded() {
-    return this._pubSub.asyncIterator('statAdded');
+  stat() {
+    return this._pubSub.asyncIterator(statAdded);
   }
 }

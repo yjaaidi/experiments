@@ -8,7 +8,8 @@ import { StatsService } from './stats.service';
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql'
+      autoSchemaFile: 'schema.graphql',
+      installSubscriptionHandlers: true
     })
   ],
   providers: [
