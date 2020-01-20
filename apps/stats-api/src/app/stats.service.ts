@@ -4,7 +4,7 @@ import find from 'find-process';
 import { PubSub } from 'graphql-subscriptions';
 import { bindNodeCallback, Observable, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal-compatibility';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { exhaustMap, filter, map, tap } from 'rxjs/operators';
 import { pubSubServiceName, statAdded } from './pub-sub';
 import { Stat } from './stats.resolver';
 
@@ -15,6 +15,7 @@ export class StatsService implements OnApplicationBootstrap {
   stat$: Observable<Stat> = timer(0, 50).pipe(
     exhaustMap(() => fromPromise(find('port', 3333))),
     map(processList => processList[0] && processList[0].pid),
+    filter(pid => pid != null),
     exhaustMap(pid => bindNodeCallback(exec)(`ps -p ${pid} -o '%cpu,rss'`)),
     map(([output]: [string, string]) => {
       const statLine = output.split('\n')[1].trim();
