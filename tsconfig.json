@@ -16,7 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@demo/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@demo/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@demo/walker": ["libs/walker/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

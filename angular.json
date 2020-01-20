@@ -372,6 +372,31 @@
           }
         }
       }
+    },
+    "walker": {
+      "root": "libs/walker",
+      "sourceRoot": "libs/walker/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/walker/tsconfig.lib.json",
+              "libs/walker/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/walker/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/walker/jest.config.js",
+            "tsConfig": "libs/walker/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {
