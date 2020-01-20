@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { concat, from, Observable } from 'rxjs';
+import { bufferCount, map, shareReplay } from 'rxjs/operators';
 
 export interface Stat {
   date: Date;
@@ -11,48 +11,71 @@ export interface Stat {
   memoryUsage: number;
 }
 
+export type Series = Array<{
+  name: string;
+  value: number;
+}>;
+
 @Component({
   selector: 'demo-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  title = 'stats';
+export class AppComponent {
 
-  private _stat$: Observable<Stat> = this._apollo
-    .subscribe({
-      query: gql`
-        subscription {
-          stat {
-            date
-            cpuUsage
-            memoryUsage
+  cpuChartData$: Observable<{ series: Series; name: string }[]>;
+  memoryChartData$: Observable<{ series: Series; name: string }[]>;
+
+  constructor(private _apollo: Apollo) {
+    const stat$: Observable<Stat> = this._apollo
+      .subscribe({
+        query: gql`
+          subscription {
+            stat {
+              date
+              cpuUsage
+              memoryUsage
+            }
           }
-        }
-      `
-    })
-    .pipe(
-      map(({ data }: { data: any }) => ({
-        date: new Date(data.stat.date),
-        ...data.stat
-      }))
+        `
+      })
+      .pipe(
+        map(({ data }: { data: any }) => ({
+          date: new Date(data.stat.date),
+          ...data.stat
+        })),
+        shareReplay({
+          bufferSize: 1,
+          refCount: true
+        })
+      );
+
+    const bufferSize = 50;
+
+    const placeholderStat$ = from(
+      Array.from(new Array(bufferSize)).map((_, i) => i)
+    ).pipe(map(i => ({ date: i, cpuUsage: 0, memoryUsage: 0 })));
+
+    const statWithInitialData$ = concat(placeholderStat$, stat$);
+
+    stat$.subscribe(console.log);
+
+    this.cpuChartData$ = statWithInitialData$.pipe(
+      map(stat => ({
+        name: stat.date.toString(),
+        value: stat.cpuUsage
+      })),
+      bufferCount(bufferSize, 1),
+      map(series => [{ name: 'CPU', series }])
     );
 
-  private _statsSubscription = gql`
-    subscription {
-      stat {
-        date
-        cpuUsage
-        memoryUsage
-      }
-    }
-  `;
-
-  constructor(private _apollo: Apollo) {}
-
-  ngOnInit() {
-    this._stat$.subscribe(stat => {
-      console.log(stat);
-    });
+    this.memoryChartData$ = statWithInitialData$.pipe(
+      map(stat => ({
+        name: stat.date.toString(),
+        value: stat.memoryUsage
+      })),
+      bufferCount(bufferSize, 1),
+      map(series => [{ name: 'Memory', series }])
+    );
   }
 }

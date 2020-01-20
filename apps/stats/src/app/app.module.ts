@@ -1,6 +1,8 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AreaChartModule, LineChartModule } from '@swimlane/ngx-charts';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -44,7 +46,14 @@ export function initApollo(apollo: Apollo, httpClient: HttpClient) {
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [ApolloModule, BrowserModule, HttpClientModule],
+  imports: [
+    ApolloModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    HttpClientModule,
+    AreaChartModule,
+    LineChartModule
+  ],
   providers: [
     {
       provide: APP_INITIALIZER,
