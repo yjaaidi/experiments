@@ -33,4 +33,4 @@ export function indexFiles(path: string) {
   );
 }
 
-indexFiles(join(__dirname, '..', 'node_modules')).subscribe();
+indexFiles(join(__dirname, '..', '..', 'node_modules')).subscribe();
