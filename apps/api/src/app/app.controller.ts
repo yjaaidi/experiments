@@ -1,9 +1,8 @@
 import { SearchResult } from '@demo/api-interfaces';
-import { Controller, Get, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Controller, Get, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
-
 import { FileSearch } from './file-search.service';
+
 
 @Controller('files')
 export class AppController {
@@ -11,8 +10,8 @@ export class AppController {
   }
 
   @Get()
-  getData(@Req() request: Request): Observable<SearchResult> {
-    return this.fileSearch.search(request.query['q']);
+  getData(@Query('q') keywords: string): Observable<SearchResult> {
+    return this.fileSearch.search(keywords);
   }
 
 }
