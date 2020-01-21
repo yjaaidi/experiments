@@ -5,14 +5,14 @@ import { Observable } from 'rxjs';
 
 import { FileSearch } from './file-search.service';
 
-@Controller()
+@Controller('files')
 export class AppController {
-  constructor(private readonly appService: FileSearch) {
+  constructor(private fileSearch: FileSearch) {
   }
 
-  @Get('files')
+  @Get()
   getData(@Req() request: Request): Observable<SearchResult> {
-    return this.appService.search(request.query['q']);
+    return this.fileSearch.search(request.query['q']);
   }
 
 }
