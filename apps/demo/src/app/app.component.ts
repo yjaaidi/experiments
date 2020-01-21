@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { SearchResult } from '@demo/api-interfaces';
 import { EMPTY, from, Observable, of, Subject } from 'rxjs';
-import { concatMap, delay, onErrorResumeNext, scan, startWith, switchMap, tap } from 'rxjs/operators';
+import { concatMap, delay, onErrorResumeNext, scan, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
 
   private _sendKeys$ = new Subject();
   private _fillSearchInputEffect$: Observable<any>;
+  private _stop$ = new Subject();
 
   constructor(private _httpClient: HttpClient) {
     this.searchResult$ = this.keywordsControl.valueChanges.pipe(
@@ -29,7 +30,8 @@ export class AppComponent implements OnInit {
           })
           .pipe(
             startWith(null),
-            onErrorResumeNext(EMPTY)
+            onErrorResumeNext(EMPTY),
+            takeUntil(this._stop$)
           )
       )
     );
@@ -41,7 +43,8 @@ export class AppComponent implements OnInit {
         ).pipe(
           startWith(''),
           concatMap(character => of(character).pipe(delay(50))),
-          scan((acc, character) => acc + character, '')
+          scan((acc, character) => acc + character, ''),
+          takeUntil(this._stop$)
         );
       }),
       tap(value => this.keywordsControl.setValue(value))
@@ -55,4 +58,9 @@ export class AppComponent implements OnInit {
   sendKeys() {
     this._sendKeys$.next();
   }
+
+  stop() {
+    this._stop$.next();
+  }
+
 }

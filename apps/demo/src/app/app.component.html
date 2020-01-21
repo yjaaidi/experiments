@@ -6,11 +6,17 @@
 
 <div style="text-align:center">
 
-  <button mat-button color="accent" (click)="sendKeys()">Send Keys</button>
+  <div>
+    <button mat-button color="accent" (click)="sendKeys()">SEND KEYS</button>
 
-  <mat-form-field class="mc-keywords">
-    <input matInput placeholder="Keywords" [formControl]="keywordsControl">
-  </mat-form-field>
+    <button mat-button color="warn" (click)="stop()">STOP</button>
+  </div>
+
+  <div>
+    <mat-form-field class="mc-keywords">
+      <input matInput placeholder="Keywords" [formControl]="keywordsControl">
+    </mat-form-field>
+  </div>
 
 </div>
 
