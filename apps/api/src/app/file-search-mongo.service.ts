@@ -2,7 +2,6 @@ import { Line, SearchResult } from '@demo/api-interfaces';
 import { Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { bufferTime, map, take } from 'rxjs/operators';
-import { escapeRegExp } from 'tslint/lib/utils';
 import { mongoFind } from './mongo-find';
 
 @Injectable()
@@ -11,19 +10,15 @@ export class FileSearchMongo {
     return mongoFind<Line>({
       collection: 'lines',
       query: {
-        content: {
-          $regex: `${escapeRegExp(keywords)}`
-        }
-        // $where: `function() {
-        //         return this.content.includes('${keywords.replace(/\\'/, '')}')
-        //       }`
-      },
-      options: {
-        batchSize: 1,
-        sort: {
-          content: 1
-        },
-        explain: true
+        /* @hack: Don't use this at home!!!
+         * We're just trying to slow down the query as much as possible.
+         * In addition to this, it's totally unsafe and can allow code injection. */
+        $where: `function() {
+          return this.content.includes('${keywords.replace(
+            /(['\\])/g,
+            '\\$1'
+          )}')
+        }`
       }
     }).pipe(
       bufferTime(5000),

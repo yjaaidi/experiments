@@ -10,10 +10,10 @@ const mongoClient$ = defer(() => connect('mongodb://127.0.0.1:27017')).pipe(
 );
 
 export function mongoFind<TSchema>({
-                                     collection,
-                                     query,
-                                     options
-                                   }: {
+  collection,
+  query,
+  options
+}: {
   collection: string;
   query: FilterQuery<TSchema>;
   options?: FindOneOptions;
@@ -25,13 +25,12 @@ export function mongoFind<TSchema>({
         const session = mongoClient.startSession();
 
         /* Make the query and get the cursor. */
-        const cursor = mongoClient
-          .db('demo')
-          .collection('lines')
-          .find(query, {
-            ...options,
-            session
-          });
+        const db = mongoClient.db('demo');
+
+        const cursor = db.collection(collection).find(query, {
+          ...options,
+          session
+        });
 
         /* Loop through the cursor and emit values. */
         async function emit() {
@@ -45,7 +44,10 @@ export function mongoFind<TSchema>({
         emit().catch(err => observer.error(err));
 
         /* Interrupt session on tear down. */
-        return () => session.endSession();
+        return () => {
+          /* session.endSession() is not violent enough. */
+          db.admin().command({ killSessions: [session.id] });
+        };
       });
     })
   );
