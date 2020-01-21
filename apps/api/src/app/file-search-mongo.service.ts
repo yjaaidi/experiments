@@ -1,7 +1,7 @@
 import { Line, SearchResult } from '@demo/api-interfaces';
 import { getFiles, readLines } from '@demo/walker';
 import { Injectable } from '@nestjs/common';
-import { connect, Cursor, MongoClient } from 'mongodb';
+import { ClientSession, connect, Cursor, MongoClient } from 'mongodb';
 import { join } from 'path';
 import { defer, Observable, of } from 'rxjs';
 import {
@@ -27,23 +27,30 @@ async function sleep(duration: number) {
   return new Promise(resolve => setTimeout(resolve, duration));
 }
 
-export function cursorToObservable<T>(cursor: Cursor<T>): Observable<T> {
+export function mongoQueryToObservable<T>({
+  cursor,
+  session
+}: {
+  cursor: Cursor<T>;
+  session: ClientSession;
+}): Observable<T> {
   return new Observable<T>(observer => {
     let complete = false;
 
     async function emit() {
-      while (await cursor.hasNext() && !complete) {
-        observer.next(await cursor.next());
-        await sleep(10);
+      while ((await cursor.hasNext()) && !complete) {
+        const value = await cursor.next();
+        observer.next(value);
       }
       observer.complete();
     }
 
-    emit().catch(err => observer.error());
+    emit().catch(err => observer.error(err));
 
     return () => {
       complete = true;
-      return cursor.close();
+      session.endSession();
+      cursor.close();
     };
   });
 }
@@ -53,18 +60,34 @@ export class FileSearchMongo {
   search(keywords: string): Observable<SearchResult> {
     return mongoClient$.pipe(
       switchMap(mongoClient => {
+        const session = mongoClient.startSession();
+
         const cursor = mongoClient
           .db('demo')
           .collection('lines')
-          .find({
-            content: {
-              $regex: `${escapeRegExp(keywords)}`
+          .find(
+            {
+              // content: {
+              //   $regex: `${escapeRegExp(keywords)}`
+              // }
+              $where: `function() {
+                return this.content.includes('${keywords.replace(/\\'/, '')}')
+              }`
+            },
+            {
+              session
             }
-          });
+            // {
+            //   batchSize: 1,
+            //   sort: {
+            //     content: 1
+            //   }
+            // }
+          );
 
-        return cursorToObservable<Line>(cursor);
+        return mongoQueryToObservable<Line>({ cursor, session });
       }),
-      bufferCount(1000),
+      bufferTime(5000),
       take(1),
       map(lines => ({
         items: lines
