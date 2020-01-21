@@ -1,8 +1,10 @@
-import { connect, FilterQuery, FindOneOptions } from 'mongodb';
+import { connect, FilterQuery, FindOneOptions, MongoClient } from 'mongodb';
 import { defer, Observable } from 'rxjs';
 import { shareReplay, switchMap } from 'rxjs/operators';
 
-const mongoClient$ = defer(() => connect('mongodb://127.0.0.1:27017')).pipe(
+const mongoClient$ = defer(() => connect('mongodb://127.0.0.1:27017', {
+  useUnifiedTopology: true
+})).pipe(
   shareReplay({
     bufferSize: 1,
     refCount: true
