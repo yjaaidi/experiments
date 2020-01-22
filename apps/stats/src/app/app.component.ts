@@ -58,8 +58,6 @@ export class AppComponent {
 
     const statWithInitialData$ = concat(placeholderStat$, stat$);
 
-    stat$.subscribe(console.log);
-
     this.cpuChartData$ = statWithInitialData$.pipe(
       map(stat => ({
         name: stat.date.toString(),
