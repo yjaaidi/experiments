@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 
 @Injectable()
 export class UnsubscribeOnCloseInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     if (context.getType() !== 'http') {
       return next.handle();
     }
