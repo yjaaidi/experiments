@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import { IncomingMessage } from 'http';
+import { Request } from 'express';
 import { fromEvent, Observable } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 @Injectable()
 export class UnsubscribeOnCloseInterceptor implements NestInterceptor {
@@ -10,7 +10,7 @@ export class UnsubscribeOnCloseInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest() as Request;
 
     const close$ = fromEvent(request.socket, 'close');
 
