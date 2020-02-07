@@ -11,7 +11,7 @@ import { Stat } from './stats.resolver';
 @Injectable()
 export class StatsService implements OnApplicationBootstrap {
 
-  private _port = 27017;
+  private _port = 3333;
 
   constructor(@Inject(pubSubServiceName) private _pubSub: PubSub) {}
 
