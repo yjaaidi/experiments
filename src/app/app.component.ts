@@ -1,7 +1,34 @@
-import { Component, NgModule, ɵmarkDirty } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectorRef, Component, NgModule, Pipe, PipeTransform, ɵdetectChanges, ɵmarkDirty } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
+@Pipe({
+  name: 'push',
+  pure: false
+})
+export class PushPipe extends AsyncPipe {
+
+  lastSource;
+  source;
+
+  constructor(private cdr: ChangeDetectorRef) {
+    super(cdr);
+  }
+
+  transform(source) {
+
+    if (this.lastSource !== source) {
+      this.lastSource = source;
+      this.source = source.pipe(tap(() => ɵmarkDirty((this.cdr as any).context)));
+    }
+
+    return super.transform(this.source);
+
+  }
+
+}
 
 @Component({
   selector: 'app-root',
@@ -11,9 +38,7 @@ import { tap } from 'rxjs/operators';
 export class AppComponent {
   subject$ = new BehaviorSubject(0);
 
-  x$ = this.subject$.pipe(
-    tap(() => ɵmarkDirty(this))
-  );
+  x$ = this.subject$.pipe(tap(console.log));
 
   increment() {
     this.subject$.next(this.subject$.value + 1);
@@ -22,7 +47,8 @@ export class AppComponent {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PushPipe
   ],
   imports: [
     BrowserModule
@@ -30,4 +56,5 @@ export class AppComponent {
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
