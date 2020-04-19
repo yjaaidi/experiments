@@ -1392,18 +1392,6 @@
     date-fns "^1.27.2"
     figures "^1.7.0"
 
-"@cypress/webpack-preprocessor@~4.1.0":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@cypress/webpack-preprocessor/-/webpack-preprocessor-4.1.1.tgz#3c0b5b8de6eaac605dac3b1f1c3f5916c1c6eaea"
-  integrity sha512-SfzDqOvWBSlfGRm8ak/XHUXAnndwHU2qJIRr1LIC7j2UqWcZoJ+286CuNloJbkwfyEAO6tQggLd4E/WHUAcKZQ==
-  dependencies:
-    bluebird "3.7.1"
-    debug "4.1.1"
-  optionalDependencies:
-    "@babel/core" "^7.0.1"
-    "@babel/preset-env" "^7.0.0"
-    babel-loader "^8.0.2"
-
 "@cypress/webpack-preprocessor@~4.1.2":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@cypress/webpack-preprocessor/-/webpack-preprocessor-4.1.5.tgz#b47d515d2540af977ee8b69d7c4eed64e3027668"
@@ -1722,19 +1710,6 @@
     tmp "0.0.33"
     yargs "^11.0.0"
     yargs-parser "10.0.0"
-
-"@nrwl/cypress@8.11.0":
-  version "8.11.0"
-  resolved "https://registry.yarnpkg.com/@nrwl/cypress/-/cypress-8.11.0.tgz#d0771f9a5f4e1cb25c7230de6372d3da9d9adcf0"
-  integrity sha512-AB8Df+eX/qTR05EDswhk1hr9/RxNBe41mUzUq3KGvXEj7xMw+6Jt3JmBnoISk2olqDTB1DM3gLV0ytSC1FkktQ==
-  dependencies:
-    "@angular-devkit/architect" "0.803.14"
-    "@angular-devkit/core" "8.3.14"
-    "@cypress/webpack-preprocessor" "~4.1.0"
-    tree-kill "1.2.1"
-    ts-loader "5.3.1"
-    tsconfig-paths-webpack-plugin "3.2.0"
-    webpack-node-externals "1.7.2"
 
 "@nrwl/cypress@9.2.2":
   version "9.2.2"
@@ -4572,10 +4547,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-cypress@3.6.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-3.6.1.tgz#4420957923879f60b7a5146ccbf81841a149b653"
-  integrity sha512-6n0oqENdz/oQ7EJ6IgESNb2M7Bo/70qX9jSJsAziJTC3kICfEMmJUlrAnP9bn+ut24MlXQST5nRXhUP5nRIx6A==
+cypress@3.8.3:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-3.8.3.tgz#e921f5482f1cbe5814891c878f26e704bbffd8f4"
+  integrity sha512-I9L/d+ilTPPA4vq3NC1OPKmw7jJIpMKNdyfR8t1EXYzYCjyqbc59migOm1YSse/VRbISLJ+QGb5k4Y3bz2lkYw==
   dependencies:
     "@cypress/listr-verbose-renderer" "0.4.1"
     "@cypress/xvfb" "1.2.4"
@@ -4588,6 +4563,7 @@ cypress@3.6.1:
     commander "2.15.1"
     common-tags "1.8.0"
     debug "3.2.6"
+    eventemitter2 "4.1.2"
     execa "0.10.0"
     executable "4.1.1"
     extract-zip "1.6.7"
@@ -5405,6 +5381,11 @@ event-emitter@^0.3.5:
   dependencies:
     d "1"
     es5-ext "~0.10.14"
+
+eventemitter2@4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/eventemitter2/-/eventemitter2-4.1.2.tgz#0e1a8477af821a6ef3995b311bf74c23a5247f15"
+  integrity sha1-DhqEd6+CGm7zmVsxG/dMI6UkfxU=
 
 eventemitter3@^3.1.0:
   version "3.1.2"
@@ -12048,17 +12029,6 @@ ts-jest@^24.0.0:
     resolve "1.x"
     semver "^5.5"
     yargs-parser "10.x"
-
-ts-loader@5.3.1:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-5.3.1.tgz#70614c8ec4354a9c8b89c9f97b2becb7a98a3980"
-  integrity sha512-fDDgpBH3SR8xlt2MasLdz3Yy611PQ/UY/KGyo7TgXhTRU/6sS8uGG0nJYnU1OdFBNKcoYbId1UTNaAOUn+i41g==
-  dependencies:
-    chalk "^2.3.0"
-    enhanced-resolve "^4.0.0"
-    loader-utils "^1.0.2"
-    micromatch "^3.1.4"
-    semver "^5.0.1"
 
 ts-loader@5.4.5, ts-loader@^5.3.1:
   version "5.4.5"
