@@ -88,7 +88,8 @@
           "options": {
             "jestConfig": "apps/demo/jest.config.js",
             "tsConfig": "apps/demo/tsconfig.spec.json",
-            "setupFile": "apps/demo/src/test-setup.ts"
+            "setupFile": "apps/demo/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       }
@@ -170,7 +171,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/api/jest.config.js",
-            "tsConfig": "apps/api/tsconfig.spec.json"
+            "tsConfig": "apps/api/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -195,7 +197,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/api-interfaces/jest.config.js",
-            "tsConfig": "libs/api-interfaces/tsconfig.spec.json"
+            "tsConfig": "libs/api-interfaces/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -250,7 +253,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/stats-api/jest.config.js",
-            "tsConfig": "apps/stats-api/tsconfig.spec.json"
+            "tsConfig": "apps/stats-api/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }
@@ -339,7 +343,8 @@
           "options": {
             "jestConfig": "apps/stats/jest.config.js",
             "tsConfig": "apps/stats/tsconfig.spec.json",
-            "setupFile": "apps/stats/src/test-setup.ts"
+            "setupFile": "apps/stats/src/test-setup.ts",
+            "passWithNoTests": true
           }
         }
       }
@@ -391,7 +396,8 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/walker/jest.config.js",
-            "tsConfig": "libs/walker/tsconfig.spec.json"
+            "tsConfig": "libs/walker/tsconfig.spec.json",
+            "passWithNoTests": true
           }
         }
       }

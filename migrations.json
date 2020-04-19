@@ -1,11 +1,25 @@
 {
   "migrations": [
     {
-      "version": "8.12.0-beta.1",
-      "description": "Update Cypress to ^3.8.2",
-      "factory": "./src/migrations/update-8-12-0/update-8-12-0",
-      "package": "@nrwl/cypress",
-      "name": "update-8.12.0"
+      "version": "9.0.0-beta.1",
+      "description": "Upgrades jest-preset-angular to 8.0.0",
+      "factory": "./src/migrations/update-9-0-0/update-9-0-0",
+      "package": "@nrwl/jest",
+      "name": "update-9.0.0"
+    },
+    {
+      "version": "9.0.1-beta.1",
+      "description": "Correctly sets passWithNoTests option",
+      "factory": "./src/migrations/update-9-0-1/update-9-0-1",
+      "package": "@nrwl/jest",
+      "name": "update-9.0.1"
+    },
+    {
+      "version": "9.2.0-beta.3",
+      "description": "Update jest to v25",
+      "factory": "./src/migrations/update-9-2-0/update-9-2-0",
+      "package": "@nrwl/jest",
+      "name": "update-9.2.0"
     }
   ]
 }
