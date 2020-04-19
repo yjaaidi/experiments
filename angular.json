@@ -134,7 +134,8 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
+            "assets": ["apps/api/src/assets"],
+            "buildLibsFromSource": true
           },
           "configurations": {
             "production": {
@@ -216,7 +217,8 @@
             "outputPath": "dist/apps/stats-api",
             "main": "apps/stats-api/src/main.ts",
             "tsConfig": "apps/stats-api/tsconfig.app.json",
-            "assets": ["apps/stats-api/src/assets"]
+            "assets": ["apps/stats-api/src/assets"],
+            "buildLibsFromSource": true
           },
           "configurations": {
             "production": {

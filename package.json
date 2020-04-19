@@ -85,7 +85,7 @@
     "@nrwl/cypress": "9.2.2",
     "@nrwl/jest": "9.2.2",
     "@nrwl/nest": "9.2.2",
-    "@nrwl/node": "8.11.0",
+    "@nrwl/node": "9.2.2",
     "@nrwl/workspace": "9.2.2",
     "@types/express": "^4.17.2",
     "@types/jest": "25.1.4",
