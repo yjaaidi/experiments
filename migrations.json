@@ -1,0 +1,18 @@
+{
+  "migrations": [
+    {
+      "version": "8.12.0-beta.1",
+      "description": "Changes Angular library builder to @nrwl/angular:package",
+      "factory": "./src/migrations/update-8-12-0/change-angular-lib-builder",
+      "package": "@nrwl/angular",
+      "name": "change-angular-lib-builder"
+    },
+    {
+      "version": "9.0.0-beta.1",
+      "description": "Upgrades Angular and Angular CLI to 9.0.0",
+      "factory": "./src/migrations/update-9-0-0/update-9-0-0",
+      "package": "@nrwl/angular",
+      "name": "update-9-0-0"
+    }
+  ]
+}
