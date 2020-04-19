@@ -105,7 +105,7 @@
     "@angular-devkit/core" "8.3.14"
     rxjs "6.4.0"
 
-"@angular-devkit/build-webpack@0.901.1":
+"@angular-devkit/build-webpack@0.901.1", "@angular-devkit/build-webpack@~0.901.0":
   version "0.901.1"
   resolved "https://registry.yarnpkg.com/@angular-devkit/build-webpack/-/build-webpack-0.901.1.tgz#695bec662d04a8c832fb86ae13b664d85184f42a"
   integrity sha512-9oNI+wPSk8yECy+f0EebfMx4PH3uDJRrifYZAxcr84IpzEbpfpRuYhE3ecwqd7k0zu2Kdjw1uUrGxBuH4/sbGg==
@@ -1872,14 +1872,21 @@
     "@angular-devkit/architect" "0.803.14"
     "@angular-eslint/builder" "0.0.1-alpha.17"
 
-"@nrwl/nest@8.11.0":
-  version "8.11.0"
-  resolved "https://registry.yarnpkg.com/@nrwl/nest/-/nest-8.11.0.tgz#5db7ec4cc32aa6f63919519ff48273fc3b5a3a1b"
-  integrity sha512-BYeu+SbPgOmOCK6O38F7vW541xzV83k9SKbDdncK5eRo2aZCy6jqs3z1ExF9BZPAAD15lOSj2JiLq3IG2I3MPA==
+"@nrwl/linter@9.2.2":
+  version "9.2.2"
+  resolved "https://registry.yarnpkg.com/@nrwl/linter/-/linter-9.2.2.tgz#464929b18a2f979669a0b64e7b50e410f1b3c37c"
+  integrity sha512-FLhF9sc/ErORdNmZCxjbLzQ3g3rMxo7L8Pud5QHupF/drcEHfEkIisWmbIwcLKRn91XtVmz5GA29OUypwAOxjg==
   dependencies:
-    "@angular-devkit/schematics" "8.3.14"
-    "@nrwl/jest" "8.11.0"
-    "@nrwl/node" "8.11.0"
+    "@angular-devkit/architect" "~0.901.0"
+
+"@nrwl/nest@9.2.2":
+  version "9.2.2"
+  resolved "https://registry.yarnpkg.com/@nrwl/nest/-/nest-9.2.2.tgz#e533ffa43825e6ca104a370835aa01f59818c1d2"
+  integrity sha512-bkcvHVuc1qmrxIbLmpVOADgK7OglHNLA+f/AKinfn8fApttAHeyGi1baovo2VSPZJ+4lZSsCjQupg0F+fhnRSg==
+  dependencies:
+    "@angular-devkit/schematics" "~9.1.0"
+    "@nrwl/jest" "9.2.2"
+    "@nrwl/node" "9.2.2"
 
 "@nrwl/node@8.11.0":
   version "8.11.0"
@@ -1901,6 +1908,30 @@
     ts-loader "5.4.5"
     tsconfig-paths-webpack-plugin "3.2.0"
     webpack "4.41.2"
+    webpack-dev-server "3.9.0"
+    webpack-merge "4.2.1"
+    webpack-node-externals "1.7.2"
+
+"@nrwl/node@9.2.2":
+  version "9.2.2"
+  resolved "https://registry.yarnpkg.com/@nrwl/node/-/node-9.2.2.tgz#22844c0fad6aa4c0e2f5fe1ec3d9c32347565952"
+  integrity sha512-z5YrTvBZYwHCSBu7p24fiROmKWcCvfpHREXv/6B2L8j52zdN27gvA1HSqDlJA6uMaHziB2Wjw6Ju91ezUiP7gQ==
+  dependencies:
+    "@angular-devkit/architect" "~0.901.0"
+    "@angular-devkit/build-webpack" "~0.901.0"
+    "@angular-devkit/core" "~9.1.0"
+    "@angular-devkit/schematics" "~9.1.0"
+    "@nrwl/jest" "9.2.2"
+    "@nrwl/linter" "9.2.2"
+    circular-dependency-plugin "5.2.0"
+    copy-webpack-plugin "5.1.1"
+    fork-ts-checker-webpack-plugin "^3.1.1"
+    license-webpack-plugin "2.1.2"
+    source-map-support "0.5.12"
+    tree-kill "1.2.2"
+    ts-loader "5.4.5"
+    tsconfig-paths-webpack-plugin "3.2.0"
+    webpack "4.42.0"
     webpack-dev-server "3.9.0"
     webpack-merge "4.2.1"
     webpack-node-externals "1.7.2"
