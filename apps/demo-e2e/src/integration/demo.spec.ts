@@ -95,6 +95,7 @@ export class CypressElement implements TestElement {
     throw new Error('Method not implemented.');
   }
   getAttribute(name: string): Promise<string> {
+    console.log(name);
     return Promise.resolve(this.element.attr(name));
   }
   hasClass(name: string): Promise<boolean> {
@@ -174,6 +175,16 @@ describe('demo', () => {
     const getHarness = () =>
       CypressHarnessEnvironment.getHarness(MatDatepickerInputHarness);
 
+    // function call<T extends ComponentHarness, U = keyof T>(
+    //   query: HarnessQuery<T>,
+    //   name: U
+    // ) {
+    //   return CypressHarnessEnvironment.getHarness(query).then(
+    //     (harness) => harness[name]()
+    //   );
+    // }
+    // call(MatDatepickerInputHarness, 'isCalendarOpen');
+
     getHarness()
       .pipe((harness) => harness.isCalendarOpen())
       .should('be.false');
@@ -183,5 +194,15 @@ describe('demo', () => {
     getHarness()
       .pipe((harness) => harness.isCalendarOpen())
       .should('be.true');
+  });
+
+  it('should open calendar', () => {
+    CypressHarnessEnvironment.getHarness(MatDatepickerInputHarness).then(
+      (harness) => {
+        cy.wrap(harness).invoke('isCalendarOpen').should('be.false');
+        cy.wrap(harness).invoke('openCalendar');
+        cy.wrap(harness).invoke('isCalendarOpen').should('be.true');
+      }
+    );
   });
 });
