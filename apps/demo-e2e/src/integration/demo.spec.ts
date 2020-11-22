@@ -170,7 +170,7 @@ export class CypressHarnessEnvironment extends HarnessEnvironment<
 describe('demo', () => {
   beforeEach(() => cy.visit('/'));
 
-  it('should select date', () => {
+  it('should open calendar', () => {
     const getHarness = () =>
       CypressHarnessEnvironment.getHarness(MatDatepickerInputHarness);
 
@@ -178,9 +178,7 @@ describe('demo', () => {
       .pipe((harness) => harness.isCalendarOpen())
       .should('be.false');
 
-    getHarness().then(async (harness) => {
-      await harness.openCalendar();
-    });
+    getHarness().then((harness) => harness.openCalendar());
 
     getHarness()
       .pipe((harness) => harness.isCalendarOpen())
