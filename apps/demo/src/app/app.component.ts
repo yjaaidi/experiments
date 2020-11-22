@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'marmicode-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: 'mc-app',
+  template: `<mc-demo></mc-demo>`,
 })
-export class AppComponent {
-  title = 'demo';
-}
+export class AppComponent {}
