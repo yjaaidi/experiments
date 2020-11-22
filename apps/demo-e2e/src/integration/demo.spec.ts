@@ -51,7 +51,7 @@ export class CypressElement implements TestElement {
     throw new Error('Method not implemented.');
   }
   getAttribute(name: string): Promise<string> {
-    throw new Error('Method not implemented.');
+    return Promise.resolve(this.element.attr(name));
   }
   hasClass(name: string): Promise<boolean> {
     throw new Error('Method not implemented.');
@@ -96,17 +96,22 @@ export class CypressHarnessEnvironment extends HarnessEnvironment<
     throw new Error('Method not implemented.');
   }
   protected createTestElement(element: JQuery<HTMLElement>): TestElement {
-    throw new Error('Method not implemented.');
+    return new CypressElement(element);
   }
   protected createEnvironment(
     element: JQuery<HTMLElement>
   ): HarnessEnvironment<JQuery<HTMLElement>> {
-    throw new Error('Method not implemented.');
+    return new CypressHarnessEnvironment(element);
   }
   protected getAllRawElements(
     selector: string
   ): Promise<JQuery<HTMLElement>[]> {
-    throw new Error('Method not implemented.');
+    return Promise.resolve(
+      this.rawRootElement
+        .find(selector)
+        .toArray()
+        .map((el) => Cypress.$(el))
+    );
   }
 }
 
