@@ -9,17 +9,29 @@
 // ***********************************************
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
-declare namespace Cypress {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface Chainable<Subject> {
-    login(email: string, password: string): void;
+
+import { ComponentHarness, HarnessQuery } from '@angular/cdk/testing';
+import 'cypress-pipe';
+import { CypressHarnessEnvironment } from './cypress-harness';
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interface Chainable<Subject> {
+      harness<T extends ComponentHarness>(query: HarnessQuery<T>): Chainable<T>;
+    }
   }
 }
 //
 // -- This is a parent command --
-Cypress.Commands.add('login', (email, password) => {
-  console.log('Custom command example: Login', email, password);
-});
+Cypress.Commands.add(
+  'harness',
+  <T extends ComponentHarness>(query: HarnessQuery<T>) => {
+    CypressHarnessEnvironment.getHarness(query);
+  }
+);
+
 //
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
