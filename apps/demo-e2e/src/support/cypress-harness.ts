@@ -125,18 +125,8 @@ export class CypressElement implements TestElement {
 export class CypressHarnessEnvironment extends HarnessEnvironment<
   JQuery<HTMLElement>
 > {
-  static loader(): Cypress.Chainable<CypressHarnessEnvironment> {
-    return (cy.get('body') as any).pipe(
-      (body) => new CypressHarnessEnvironment(body)
-    );
-  }
-
-  static getHarness<T extends ComponentHarness>(
-    query: HarnessQuery<T>
-  ): Cypress.Chainable<T> {
-    return (CypressHarnessEnvironment.loader() as any).pipe((loader) =>
-      loader.getHarness(query)
-    );
+  constructor(rawRootElement: JQuery<HTMLElement>) {
+    super(rawRootElement);
   }
 
   forceStabilize(): Promise<void> {

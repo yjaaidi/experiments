@@ -19,6 +19,7 @@ declare global {
   namespace Cypress {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable<Subject> {
+      login(email: string, password: string): void;
       harness<T extends ComponentHarness>(query: HarnessQuery<T>): Chainable<T>;
     }
   }
@@ -28,7 +29,11 @@ declare global {
 Cypress.Commands.add(
   'harness',
   <T extends ComponentHarness>(query: HarnessQuery<T>) => {
-    CypressHarnessEnvironment.getHarness(query);
+    /* Create a local variable so `pipe` can log name. */
+    const getHarness = (body) =>
+      new CypressHarnessEnvironment(body).getHarness(query);
+
+    return cy.get('body').pipe(getHarness);
   }
 );
 
