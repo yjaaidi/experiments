@@ -19,7 +19,7 @@ describe('demo', () => {
     cy.harness(datepicker).invoke('openCalendar');
     cy.harness(datepicker).invoke('isCalendarOpen').should('be.true');
     cy.harness(calendar).invoke('next');
-    cy.harness(cell).invoke('select');
-    cy.harness(datepicker).invoke('getValue').should('equal', '2/1/2020');
+    cy.harness(cell.with({ text: '10' })).invoke('select');
+    cy.harness(datepicker).invoke('getValue').should('equal', '2/10/2020');
   });
 });

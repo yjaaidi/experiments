@@ -93,7 +93,7 @@ export class CypressElement implements TestElement {
     }
   }
   async text(options?: TextOptions): Promise<string> {
-    return this.element.text();
+    return this.element.text().trim();
   }
   async getAttribute(name: string): Promise<string> {
     return this.element.attr(name);
