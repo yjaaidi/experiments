@@ -1,9 +1,7 @@
 import * as keyCodes from '@angular/cdk/keycodes';
 import {
-  ComponentHarness,
   ElementDimensions,
   HarnessEnvironment,
-  HarnessQuery,
   ModifierKeys,
   TestElement,
   TestKey,
@@ -48,15 +46,15 @@ export class CypressElement implements TestElement {
   blur(): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  clear(): Promise<void> {
-    throw new Error('Method not implemented.');
+  async clear(): Promise<void> {
+    this.element.val(null);
   }
 
   click(): Promise<void>;
   click(location: 'center'): Promise<void>;
   click(relativeX: number, relativeY: number): Promise<void>;
-  click(relativeX?: any, relativeY?: any): Promise<void> {
-    throw new Error('Method not implemented.');
+  async click(relativeX?: any, relativeY?: any): Promise<void> {
+    this.element.trigger('click');
   }
   rightClick?(relativeX: number, relativeY: number): Promise<void> {
     throw new Error('Method not implemented.');
@@ -78,32 +76,36 @@ export class CypressElement implements TestElement {
     modifiers: ModifierKeys,
     ...keys: (string | TestKey)[]
   ): Promise<void>;
-  async sendKeys(modifiers?: any, ...keys: any[]): Promise<void> {
+  async sendKeys(modifiersOrKeys?: any, ...keys: any[]): Promise<void> {
+    if (typeof modifiersOrKeys === 'string') {
+      this.element.val(modifiersOrKeys);
+      this.dispatchEvent('input');
+      return;
+    }
+
     for (const key of keys) {
       const evt = new KeyboardEvent('keydown', {
-        altKey: modifiers.alt,
+        altKey: modifiersOrKeys.alt,
         key,
         ...keyMap[key],
       });
-
       this.element.get(0).dispatchEvent(evt);
     }
   }
-  text(options?: TextOptions): Promise<string> {
-    throw new Error('Method not implemented.');
+  async text(options?: TextOptions): Promise<string> {
+    return this.element.text();
   }
-  getAttribute(name: string): Promise<string> {
-    console.log(name);
-    return Promise.resolve(this.element.attr(name));
+  async getAttribute(name: string): Promise<string> {
+    return this.element.attr(name);
   }
-  hasClass(name: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async hasClass(name: string): Promise<boolean> {
+    return this.element.hasClass(name);
   }
   getDimensions(): Promise<ElementDimensions> {
     throw new Error('Method not implemented.');
   }
-  getProperty(name: string): Promise<any> {
-    return Promise.resolve(this.element.prop(name));
+  async getProperty(name: string) {
+    return this.element.prop(name);
   }
   matchesSelector(selector: string): Promise<boolean> {
     throw new Error('Method not implemented.');
@@ -117,8 +119,8 @@ export class CypressElement implements TestElement {
   selectOptions?(...optionIndexes: number[]): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  dispatchEvent?(name: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async dispatchEvent?(name: string): Promise<void> {
+    this.element.trigger(name);
   }
 }
 
@@ -136,7 +138,7 @@ export class CypressHarnessEnvironment extends HarnessEnvironment<
     throw new Error('Method not implemented.');
   }
   protected getDocumentRoot(): JQuery<HTMLElement> {
-    throw new Error('Method not implemented.');
+    return this.rawRootElement;
   }
   protected createTestElement(element: JQuery<HTMLElement>): TestElement {
     return new CypressElement(element);
@@ -146,14 +148,12 @@ export class CypressHarnessEnvironment extends HarnessEnvironment<
   ): HarnessEnvironment<JQuery<HTMLElement>> {
     return new CypressHarnessEnvironment(element);
   }
-  protected getAllRawElements(
+  protected async getAllRawElements(
     selector: string
   ): Promise<JQuery<HTMLElement>[]> {
-    return Promise.resolve(
-      this.rawRootElement
-        .find(selector)
-        .toArray()
-        .map((el) => Cypress.$(el))
-    );
+    return this.rawRootElement
+      .find(selector)
+      .toArray()
+      .map((el) => Cypress.$(el));
   }
 }
