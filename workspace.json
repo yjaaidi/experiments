@@ -77,6 +77,26 @@
           }
         }
       }
+    },
+    "hello": {
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/hello/**/*.{ts,tsx,vue}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/hello/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "root": "libs/hello",
+      "sourceRoot": "libs/hello/src"
     }
   },
   "cli": {
