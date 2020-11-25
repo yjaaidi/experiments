@@ -9,7 +9,6 @@
 // ***********************************************
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
-
 import { ComponentHarness, HarnessQuery } from '@angular/cdk/testing';
 import 'cypress-pipe';
 import { getHarness } from './cypress-harness';

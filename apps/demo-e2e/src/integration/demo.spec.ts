@@ -3,12 +3,14 @@ import {
   MatDatepickerInputHarness,
 } from '@angular/material/datepicker/testing';
 import { getAllHarnesses, getHarness } from '../support/cypress-harness';
+import { mount } from '../support/mount';
 
 describe('demo', () => {
   const datepicker = MatDatepickerInputHarness;
 
   beforeEach(() => {
     cy.clock(new Date(2020, 0, 1));
+    // mount();
     cy.visit('/');
   });
 
