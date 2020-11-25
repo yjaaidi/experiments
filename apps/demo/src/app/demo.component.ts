@@ -19,9 +19,6 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class DemoComponent {
   control = new FormControl();
-  something() {
-    alert('wtf');
-  }
 }
 
 @NgModule({
