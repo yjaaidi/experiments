@@ -1,7 +1,9 @@
 import * as keyCodes from '@angular/cdk/keycodes';
 import {
+  ComponentHarness,
   ElementDimensions,
   HarnessEnvironment,
+  HarnessQuery,
   ModifierKeys,
   TestElement,
   TestKey,
@@ -107,8 +109,8 @@ export class CypressElement implements TestElement {
   async getProperty(name: string) {
     return this.element.prop(name);
   }
-  matchesSelector(selector: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async matchesSelector(selector: string): Promise<boolean> {
+    return this.element.is(selector);
   }
   isFocused(): Promise<boolean> {
     throw new Error('Method not implemented.');
@@ -127,8 +129,14 @@ export class CypressElement implements TestElement {
 export class CypressHarnessEnvironment extends HarnessEnvironment<
   JQuery<HTMLElement>
 > {
-  constructor(rawRootElement: JQuery<HTMLElement>) {
+  private _body: JQuery<HTMLElement>;
+
+  constructor(
+    rawRootElement: JQuery<HTMLElement>,
+    { body }: { body: JQuery<HTMLElement> }
+  ) {
     super(rawRootElement);
+    this._body = body;
   }
 
   forceStabilize(): Promise<void> {
@@ -138,7 +146,7 @@ export class CypressHarnessEnvironment extends HarnessEnvironment<
     throw new Error('Method not implemented.');
   }
   protected getDocumentRoot(): JQuery<HTMLElement> {
-    return this.rawRootElement;
+    return this._body;
   }
   protected createTestElement(element: JQuery<HTMLElement>): TestElement {
     return new CypressElement(element);
@@ -146,7 +154,7 @@ export class CypressHarnessEnvironment extends HarnessEnvironment<
   protected createEnvironment(
     element: JQuery<HTMLElement>
   ): HarnessEnvironment<JQuery<HTMLElement>> {
-    return new CypressHarnessEnvironment(element);
+    return new CypressHarnessEnvironment(element, { body: this._body });
   }
   protected async getAllRawElements(
     selector: string
@@ -156,4 +164,22 @@ export class CypressHarnessEnvironment extends HarnessEnvironment<
       .toArray()
       .map((el) => Cypress.$(el));
   }
+}
+
+export function getHarness<T extends ComponentHarness>(query: HarnessQuery<T>) {
+  /* Create a local variable so `pipe` can log name. */
+  const getHarness = (body) =>
+    new CypressHarnessEnvironment(body, { body }).getHarness(query);
+
+  return cy.get('body').pipe(getHarness);
+}
+
+export function getAllHarnesses<T extends ComponentHarness>(
+  query: HarnessQuery<T>
+) {
+  /* Create a local variable so `pipe` can log name. */
+  const getAllHarnesses = (body) =>
+    new CypressHarnessEnvironment(body, { body }).getAllHarnesses(query);
+
+  return cy.get('body').pipe(getAllHarnesses);
 }
