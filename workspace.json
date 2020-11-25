@@ -77,6 +77,34 @@
           }
         }
       }
+    },
+    "hello": {
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/hello/**/*.{ts,tsx,vue}"]
+          }
+        },
+        "build": {
+          "builder": "@nx-plus/vue:library",
+          "options": {
+            "dest": "dist/libs/hello",
+            "entry": "libs/hello/src/index.ts",
+            "tsConfig": "libs/hello/tsconfig.lib.json"
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/hello/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "root": "libs/hello",
+      "sourceRoot": "libs/hello/src"
     }
   },
   "cli": {
