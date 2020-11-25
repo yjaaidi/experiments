@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { HelloWorld } from '@vue-demo/hello';
+import HelloWorld from '@vue-demo/hello';
 
 export default Vue.extend({
   name: 'App',
