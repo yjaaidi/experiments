@@ -1,6 +1,84 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "app": {
+      "projectType": "application",
+      "root": "apps/app",
+      "sourceRoot": "apps/app/src",
+      "architect": {
+        "build": {
+          "builder": "@nx-plus/vue:browser",
+          "options": {
+            "dest": "dist/apps/app",
+            "index": "apps/app/public/index.html",
+            "main": "apps/app/src/main.ts",
+            "tsConfig": "apps/app/tsconfig.app.json"
+          },
+          "configurations": {
+            "production": {
+              "mode": "production",
+              "filenameHashing": true,
+              "productionSourceMap": true,
+              "css": {
+                "extract": true,
+                "sourceMap": false
+              }
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nx-plus/vue:dev-server",
+          "options": {
+            "browserTarget": "app:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "app:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/app/**/*.{ts,tsx,vue}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/app/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "app-e2e": {
+      "root": "apps/app-e2e",
+      "sourceRoot": "apps/app-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/app-e2e/cypress.json",
+            "tsConfig": "apps/app-e2e/tsconfig.e2e.json",
+            "devServerTarget": "app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "app:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/app-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   }
