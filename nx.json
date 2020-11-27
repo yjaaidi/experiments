@@ -32,6 +32,9 @@
     },
     "hello": {
       "tags": []
+    },
+    "cli-app": {
+      "tags": []
     }
   }
 }

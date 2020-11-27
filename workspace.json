@@ -105,6 +105,27 @@
       },
       "root": "libs/hello",
       "sourceRoot": "libs/hello/src"
+    },
+    "cli-app": {
+      "projectType": "application",
+      "root": "apps/cli-app",
+      "sourceRoot": "apps/cli-app/src",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn vue-cli-service build",
+            "cwd": "apps/cli-app"
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "yarn vue-cli-service serve",
+            "cwd": "apps/cli-app"
+          }
+        }
+      }
     }
   },
   "cli": {
