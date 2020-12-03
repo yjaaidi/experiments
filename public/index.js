@@ -4,6 +4,8 @@ import { ReactiveComponentModule } from '@ngrx/component';
 import { timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+module.hot && module.hot.accept();
+
 const Demo = createComponent({
   selector: 'mc-demo',
   styles: [`:host { display: block; text-align: center; }`],
