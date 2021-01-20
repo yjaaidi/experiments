@@ -1,0 +1,68 @@
+openapi: 3.0.2
+info:
+  title: Farmicode
+  version: 1.0.0
+servers:
+  - description: Dev
+    url: http://localhost:8080
+paths:
+  /farms:
+    get:
+      operationId: getFarms
+      tags:
+        - Farm
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Farm'
+      security:
+        - openId:
+            - farm.read
+    post:
+      operationId: createFarm
+      tags:
+        - Farm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FarmRequest'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Farm'
+      security:
+        - openId:
+            - farm.write
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://farmicode.eu.auth0.com/.well-known/openid-configuration
+  schemas:
+    FarmRequest:
+      additionalProperties: false
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    Farm:
+      allOf:
+        - $ref: '#/components/schemas/FarmRequest'
+        - type: object
+          additionalProperties: false
+          required:
+            - id
+          properties:
+            id:
+              type: string
