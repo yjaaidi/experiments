@@ -10,7 +10,10 @@
     "jwks-rsa": "^1.12.2",
     "memoizee": "^0.4.15"
   },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js -w openapi.yaml -w *.*"
   }
 }
