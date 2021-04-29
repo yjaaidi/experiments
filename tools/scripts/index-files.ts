@@ -49,7 +49,10 @@ export function indexFiles(path: string) {
      * as we query using $where.
      * Querying using $text is not an option as it's too fast
      * even with the whole node_modules. */
-    takeWhile(count => count < 50000)
+    takeWhile(count => count < 50000),
+    /* Close the connection to remove all pending listeners,
+     * and let the process exit. */
+    finalize(async () => (await mongoClient$.toPromise()).close())
   );
 }
 
