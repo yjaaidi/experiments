@@ -1,16 +1,18 @@
+import { connect } from 'mongodb';
 import { join } from 'path';
-import { bindNodeCallback, defer, Observable } from 'rxjs';
+import { defer } from 'rxjs';
 import {
+  bufferCount,
   concatMap,
-  mergeMap,
+  filter,
+  finalize,
+  mapTo,
   scan,
   shareReplay,
   switchMap,
-  tap,
-  bufferCount,
-  mapTo
+  takeWhile,
+  tap
 } from 'rxjs/operators';
-import { connect, MongoClient } from 'mongodb';
 import { Line } from '../../libs/api-interfaces/src/lib/api-interfaces';
 import { getFiles, readLines } from '../../libs/walker/src/lib/walker';
 
@@ -36,11 +38,18 @@ export function insertLines(lines: Line[]) {
 
 export function indexFiles(path: string) {
   return getFiles(path).pipe(
+    /* Index d.ts files only to reduce the indexed volume. */
+    filter(filePath => filePath.endsWith('.d.ts')),
     concatMap(filePath => readLines(filePath)),
     bufferCount(1000),
     concatMap(lines => insertLines(lines).pipe(mapTo(lines.length))),
     scan((acc, count) => acc + count, 0),
-    tap(count => console.log(`Indexed ${count} lines`))
+    tap(count => console.log(`Indexed ${count} lines`)),
+    /* Don't index too many lines, otherwise mongo is too slow
+     * as we query using $where.
+     * Querying using $text is not an option as it's too fast
+     * even with the whole node_modules. */
+    takeWhile(count => count < 50000)
   );
 }
 
