@@ -7,21 +7,11 @@ import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchResult } from '@demo/api-interfaces';
+import { from, Observable, of, Subject } from 'rxjs';
 import {
-  from,
-  Observable,
-  of,
-
-  OperatorFunction,
-  pipe,
-  Subject
-} from 'rxjs';
-import {
-  catchError,
   concatMap,
   delay,
   map,
-
   scan,
   shareReplay,
   startWith,
@@ -30,6 +20,7 @@ import {
   tap
 } from 'rxjs/operators';
 import { environment } from '../environments/environment';
+import { progressify } from './progressify';
 
 @Component({
   selector: 'demo-root',
@@ -170,17 +161,3 @@ export class AppComponent implements OnInit {
   bootstrap: [AppComponent]
 })
 export class AppModule {}
-
-export function progressify<T>(): OperatorFunction<T, Progressified<T>> {
-  return pipe(
-    map(data => ({ data, isLoading: false })),
-    startWith({ isLoading: true }),
-    catchError(error => of({ isLoading: false, error }))
-  );
-}
-
-export interface Progressified<T> {
-  data?: T;
-  error?: unknown;
-  isLoading: boolean;
-}
