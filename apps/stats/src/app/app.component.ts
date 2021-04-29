@@ -18,11 +18,45 @@ export type Series = Array<{
 
 @Component({
   selector: 'demo-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: `
+    <div class="mc-cpu-chart">
+      <ngx-charts-area-chart
+        [animations]="false"
+        [yScaleMax]="100"
+        [legend]="true"
+        [yAxis]="true"
+        [results]="cpuChartData$ | async"
+      >
+      </ngx-charts-area-chart>
+    </div>
+
+    <div class="mc-memory-chart">
+      <ngx-charts-area-chart
+        [animations]="false"
+        [scheme]="{ domain: ['#5AA454'] }"
+        [legend]="true"
+        [yAxis]="true"
+        [results]="memoryChartData$ | async"
+      >
+      </ngx-charts-area-chart>
+    </div>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 100vh;
+        width: 100%;
+      }
+
+      .mc-cpu-chart,
+      .mc-memory-chart {
+        height: 50%;
+      }
+    `
+  ]
 })
 export class AppComponent {
-
   cpuChartData$: Observable<{ series: Series; name: string }[]>;
   memoryChartData$: Observable<{ series: Series; name: string }[]>;
 

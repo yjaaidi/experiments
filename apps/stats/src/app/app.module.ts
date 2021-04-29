@@ -48,10 +48,10 @@ export function initApollo(apollo: Apollo, httpClient: HttpClient) {
   declarations: [AppComponent],
   imports: [
     ApolloModule,
+    AreaChartModule,
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
-    AreaChartModule,
     LineChartModule
   ],
   providers: [
