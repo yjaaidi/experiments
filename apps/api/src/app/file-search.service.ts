@@ -12,6 +12,12 @@ export class FileSearch {
   ).pipe(filter(file => file.endsWith('.d.ts')));
 
   search(keywords: string): Observable<SearchResult> {
-    return of({items: []});
+    return this._file$.pipe(
+      mergeMap(file => readLines(file)),
+      filter(line => line.content.includes(keywords)),
+      bufferTime(5000),
+      take(1),
+      map(lines => ({ items: lines }))
+    );
   }
 }

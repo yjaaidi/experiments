@@ -11,11 +11,11 @@ import { fstat } from 'fs';
   imports: [],
   controllers: [AppController],
   providers: [
-    FileSearch
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: UnsubscribeOnCloseInterceptor
-    // }
+    FileSearch,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: UnsubscribeOnCloseInterceptor
+    }
   ]
 })
 export class AppModule {}
