@@ -6,17 +6,33 @@ import {
   NgModule,
 } from '@angular/core';
 import {
-  AbstractControl, FormControl,
+  AbstractControl,
+  FormControl,
   FormGroup,
-  ReactiveFormsModule
+  ReactiveFormsModule,
 } from '@angular/forms';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'co-date-picker',
   template: ` <ng-container *ngIf="dateControl" [formGroup]="$any(dateControl)">
-    <input formControlName="month" placeholder="mm" type="number" />
-    <input formControlName="day" placeholder="dd" type="number" />
-    <input formControlName="year" placeholder="yyyy" type="number" />
+    <input
+      data-role="month-input"
+      formControlName="month"
+      placeholder="mm"
+      type="number"
+    />
+    <input
+      data-role="day-input"
+      formControlName="day"
+      placeholder="dd"
+      type="number"
+    />
+    <input
+      data-role="year-input"
+      formControlName="year"
+      placeholder="yyyy"
+      type="number"
+    />
   </ng-container>`,
   styles: [
     `
@@ -38,7 +54,11 @@ export class DatePickerComponent {
   }
 
   static valueToDate(value: unknown): Date | undefined {
-    const {year, month, day} = value as {year: number, month: number, day: number};
+    const { year, month, day } = value as {
+      year: number;
+      month: number;
+      day: number;
+    };
     if (year == null || month == null || day == null) {
       return undefined;
     }

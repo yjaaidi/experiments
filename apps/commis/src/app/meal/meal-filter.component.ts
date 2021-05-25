@@ -8,7 +8,10 @@ import {
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DatePickerComponent, DatePickerModule } from '../shared/date-picker.component';
+import {
+  DatePickerComponent,
+  DatePickerModule,
+} from '../shared/date-picker.component';
 import { MealFilter } from './meal-filter';
 
 @Component({
@@ -17,11 +20,17 @@ import { MealFilter } from './meal-filter';
   template: `<form [formGroup]="formGroup">
     <div>
       <span>Start date: </span>
-      <co-date-picker [dateControl]="startControl"></co-date-picker>
+      <co-date-picker
+        [dateControl]="startControl"
+        data-role="start-date"
+      ></co-date-picker>
     </div>
     <div>
       <span>End date&nbsp;&nbsp;: </span>
-      <co-date-picker [dateControl]="endControl"></co-date-picker>
+      <co-date-picker
+        [dateControl]="endControl"
+        data-role="end-date"
+      ></co-date-picker>
     </div>
   </form>`,
   styles: [
