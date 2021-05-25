@@ -36,7 +36,7 @@
       "projectType": "application",
       "root": "apps/commis",
       "sourceRoot": "apps/commis/src",
-      "prefix": "commis",
+      "prefix": "co",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
