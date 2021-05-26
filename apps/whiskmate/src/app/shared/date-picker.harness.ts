@@ -9,12 +9,7 @@ export class DatePickerHarness extends ComponentHarness {
   }
 
   async setDate(date: Date) {
-    const day = date.getDate().toString();
-    const month = (date.getMonth() + 1).toString();
-    const year = date.getFullYear().toString();
-    await this._setInputValue(byRole('day-input'), day);
-    await this._setInputValue(byRole('month-input'), month);
-    await this._setInputValue(byRole('year-input'), year);
+    await this._setInputValue(byRole('date-input'), date.toISOString().split('T')[0])
   }
 
   private async _setInputValue(selector: string, value: string) {

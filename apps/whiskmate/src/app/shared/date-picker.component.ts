@@ -14,24 +14,11 @@ import {
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-date-picker',
-  template: ` <ng-container *ngIf="dateControl" [formGroup]="$any(dateControl)">
+  template: ` <ng-container *ngIf="dateControl">
     <input
-      data-role="month-input"
-      formControlName="month"
-      placeholder="mm"
-      type="number"
-    />
-    <input
-      data-role="day-input"
-      formControlName="day"
-      placeholder="dd"
-      type="number"
-    />
-    <input
-      data-role="year-input"
-      formControlName="year"
-      placeholder="yyyy"
-      type="number"
+      data-role="date-input"
+      type="date"
+      [formControl]="dateControl"
     />
   </ng-container>`,
   styles: [
@@ -46,23 +33,11 @@ export class DatePickerComponent {
   @Input() dateControl?: AbstractControl;
 
   static createControl(): AbstractControl {
-    return new FormGroup({
-      day: new FormControl(),
-      month: new FormControl(),
-      year: new FormControl(),
-    });
+    return new FormControl();
   }
 
   static valueToDate(value: unknown): Date | undefined {
-    const { year, month, day } = value as {
-      year: number;
-      month: number;
-      day: number;
-    };
-    if (year == null || month == null || day == null) {
-      return undefined;
-    }
-    return new Date(Date.UTC(year, month - 1, day));
+    return new Date(Date.parse(value as string));
   }
 }
 
