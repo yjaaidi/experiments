@@ -9,7 +9,7 @@ import { MealFilter } from './meal-filter';
 export class MealRepository {
   private _meals: Meal[] = [
     createMeal({
-      date: new Date(2021, 5, 1),
+      date: new Date(Date.UTC(2021, 5, 1)),
       recipeInfo: {
         id: 'cauliflower',
         name: 'Cauliflower, pomegranate and pistachio salad',
@@ -18,7 +18,7 @@ export class MealRepository {
       },
     }),
     createMeal({
-      date: new Date(2021, 5, 2),
+      date: new Date(Date.UTC(2021, 5, 2)),
       recipeInfo: {
         id: 'braised-eggs',
         name: 'Braised eggs with leek and za’atar',
@@ -27,7 +27,7 @@ export class MealRepository {
       },
     }),
     createMeal({
-      date: new Date(2021, 5, 3),
+      date: new Date(Date.UTC(2021, 5, 3)),
       recipeInfo: {
         id: 'buckwheat-hotcakes',
         name: 'Buckwheat and ricotta hotcakes with preserved lemon salsa',
@@ -36,7 +36,7 @@ export class MealRepository {
       },
     }),
     createMeal({
-      date: new Date(2021, 5, 4),
+      date: new Date(Date.UTC(2021, 5, 4)),
       recipeInfo: {
         id: 'devilled-eggs',
         name: 'Devilled eggs with tangerine rayu',
@@ -45,7 +45,7 @@ export class MealRepository {
       },
     }),
     createMeal({
-      date: new Date(2021, 5, 5),
+      date: new Date(Date.UTC(2021, 5, 5)),
       recipeInfo: {
         id: 'stuffed-romano',
         name: 'Stuffed Romano peppers with ricotta and mascarpone',
