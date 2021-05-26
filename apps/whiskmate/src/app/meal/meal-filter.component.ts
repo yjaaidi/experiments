@@ -8,20 +8,23 @@ import {
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DatePickerComponent, DatePickerModule } from '../shared/date-picker.component';
+import {
+  DatePickerComponent,
+  DatePickerModule,
+} from '../shared/date-picker.component';
 import { MealFilter } from './meal-filter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'co-meal-filter',
+  selector: 'wm-meal-filter',
   template: `<form [formGroup]="formGroup">
     <div>
       <span>Start date: </span>
-      <co-date-picker [dateControl]="startControl"></co-date-picker>
+      <wm-date-picker [dateControl]="startControl"></wm-date-picker>
     </div>
     <div>
       <span>End date&nbsp;&nbsp;: </span>
-      <co-date-picker [dateControl]="endControl"></co-date-picker>
+      <wm-date-picker [dateControl]="endControl"></wm-date-picker>
     </div>
   </form>`,
   styles: [

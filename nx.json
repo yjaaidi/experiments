@@ -9,7 +9,7 @@
   "affected": {
     "defaultBase": "master"
   },
-  "npmScope": "commis",
+  "npmScope": "whismate",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
@@ -19,12 +19,12 @@
     }
   },
   "projects": {
-    "commis": {
+    "whiskmate": {
       "tags": []
     },
-    "commis-e2e": {
+    "whiskmate-e2e": {
       "tags": [],
-      "implicitDependencies": ["commis"]
+      "implicitDependencies": ["whiskmate"]
     }
   }
 }
