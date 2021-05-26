@@ -3,7 +3,7 @@ import { DatePickerHarness } from '../shared/date-picker.harness';
 import { byRole } from '../testing/by-role';
 
 export class MealFilterHarness extends ComponentHarness {
-  static hostSelector = 'co-meal-filter';
+  static hostSelector = 'wm-meal-filter';
 
   private _getStartEl = this.locatorFor(
     DatePickerHarness.with({ selector: byRole('start-date') })

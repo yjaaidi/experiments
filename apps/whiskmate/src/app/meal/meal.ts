@@ -4,7 +4,7 @@ export interface Meal {
     id: string;
     name: string;
     pictureUri: string;
-  }
+  };
 }
 
 export function createMeal(meal: Meal): Meal {

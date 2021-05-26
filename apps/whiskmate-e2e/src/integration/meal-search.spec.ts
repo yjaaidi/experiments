@@ -1,5 +1,5 @@
 import { getHarness } from '@jscutlery/cypress-harness';
-import { MealSearchHarness } from '../../../commis/src/app/meal/meal-search.harness';
+import { MealSearchHarness } from '../../../whiskmate/src/app/meal/meal-search.harness';
 
 describe('meal-search', () => {
   const harness = getHarness(MealSearchHarness);

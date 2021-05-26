@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'commis',
+  displayName: 'whiskmate',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -14,7 +14,7 @@ module.exports = {
       },
     },
   },
-  coverageDirectory: '../../coverage/apps/commis',
+  coverageDirectory: '../../coverage/apps/whiskmate',
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

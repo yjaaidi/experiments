@@ -9,13 +9,16 @@ import { MealModule } from './meal.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'co-meal-search',
+  selector: 'wm-meal-search',
   template: `
     <div class="filter-container">
-      <co-meal-filter (filterChange)="filter$.next($event)"></co-meal-filter>
+      <wm-meal-filter (filterChange)="filter$.next($event)"></wm-meal-filter>
     </div>
     <div class="meals">
-      <co-meal-preview *ngFor="let meal of meals$ | async" [meal]="meal"></co-meal-preview>
+      <wm-meal-preview
+        *ngFor="let meal of meals$ | async"
+        [meal]="meal"
+      ></wm-meal-preview>
     </div>
   `,
   styles: [
@@ -38,14 +41,14 @@ import { MealModule } from './meal.component';
         gap: 30px;
         justify-content: center;
       }
-    `
+    `,
   ],
 })
 export class MealSearchComponent {
   filter$ = new BehaviorSubject<MealFilter>({});
 
   meals$ = this.filter$.pipe(
-    switchMap((filter) => this._mealRepository.getMeals(filter)),
+    switchMap((filter) => this._mealRepository.getMeals(filter))
   );
 
   constructor(private _mealRepository: MealRepository) {}
@@ -54,6 +57,6 @@ export class MealSearchComponent {
 @NgModule({
   declarations: [MealSearchComponent],
   exports: [MealSearchComponent],
-  imports: [CommonModule, MealFilterModule, MealModule]
+  imports: [CommonModule, MealFilterModule, MealModule],
 })
 export class MealSearchModule {}

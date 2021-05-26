@@ -13,7 +13,7 @@ import {
 } from '@angular/forms';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'co-date-picker',
+  selector: 'wm-date-picker',
   template: ` <ng-container *ngIf="dateControl" [formGroup]="$any(dateControl)">
     <input
       data-role="month-input"

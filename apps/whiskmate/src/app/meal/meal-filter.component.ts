@@ -16,21 +16,21 @@ import { MealFilter } from './meal-filter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'co-meal-filter',
+  selector: 'wm-meal-filter',
   template: `<form [formGroup]="formGroup">
     <div>
       <span>Start date: </span>
-      <co-date-picker
+      <wm-date-picker
         [dateControl]="startControl"
         data-role="start-date"
-      ></co-date-picker>
+      ></wm-date-picker>
     </div>
     <div>
       <span>End date&nbsp;&nbsp;: </span>
-      <co-date-picker
+      <wm-date-picker
         [dateControl]="endControl"
         data-role="end-date"
-      ></co-date-picker>
+      ></wm-date-picker>
     </div>
   </form>`,
   styles: [

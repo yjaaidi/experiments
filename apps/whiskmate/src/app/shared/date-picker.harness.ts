@@ -2,7 +2,7 @@ import { ComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
 import { byRole } from '../testing/by-role';
 
 export class DatePickerHarness extends ComponentHarness {
-  static hostSelector = 'co-date-picker';
+  static hostSelector = 'wm-date-picker';
 
   static with({ selector }: { selector: string }) {
     return new HarnessPredicate(DatePickerHarness, { selector });

@@ -1,5 +1,5 @@
 {
-  "name": "commis",
+  "name": "whiskmate",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -11,7 +11,7 @@
     "test": "ng test",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
-    "ct": "cypress open-ct --project apps/commis",
+    "ct": "cypress open-ct --project apps/whiskmate",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
     "affected:build": "nx affected:build",
