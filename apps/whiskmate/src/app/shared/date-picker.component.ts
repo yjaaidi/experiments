@@ -8,18 +8,25 @@ import {
 import {
   AbstractControl,
   FormControl,
-  FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-date-picker',
   template: ` <ng-container *ngIf="dateControl">
-    <input
-      data-role="date-input"
-      type="date"
-      [formControl]="dateControl"
-    />
+    <mat-form-field>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [formControl]="$any(dateControl)"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
   </ng-container>`,
   styles: [
     `
@@ -37,13 +44,23 @@ export class DatePickerComponent {
   }
 
   static valueToDate(value: unknown): Date | undefined {
-    return new Date(Date.parse(value as string));
+    const date = value as Date;
+    if (date == null) {
+      return;
+    }
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
   }
 }
 
 @NgModule({
   declarations: [DatePickerComponent],
   exports: [DatePickerComponent],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+  ],
 })
 export class DatePickerModule {}

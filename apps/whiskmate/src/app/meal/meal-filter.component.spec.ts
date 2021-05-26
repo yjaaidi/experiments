@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { MealFilterComponent, MealFilterModule } from './meal-filter.component';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MealFilterHarness } from './meal-filter.harness';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('MealFilterComponent', () => {
   it('should trigger filterChange event', async () => {
@@ -19,7 +20,7 @@ describe('MealFilterComponent', () => {
 
   async function createComponent() {
     await TestBed.configureTestingModule({
-      imports: [MealFilterModule],
+      imports: [MealFilterModule, NoopAnimationsModule],
     }).compileComponents();
     const fixture = TestBed.createComponent(MealFilterComponent);
     return {

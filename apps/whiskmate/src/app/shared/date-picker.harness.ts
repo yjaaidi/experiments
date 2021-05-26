@@ -1,5 +1,6 @@
 import { ComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
 import { byRole } from '../testing/by-role';
+import { MatDatepickerInputHarness } from '@angular/material/datepicker/testing';
 
 export class DatePickerHarness extends ComponentHarness {
   static hostSelector = 'wm-date-picker';
@@ -9,7 +10,8 @@ export class DatePickerHarness extends ComponentHarness {
   }
 
   async setDate(date: Date) {
-    await this._setInputValue(byRole('date-input'), date.toISOString().split('T')[0])
+    const harness = await this.locatorFor(MatDatepickerInputHarness)();
+    await harness.setValue(date.toISOString());
   }
 
   private async _setInputValue(selector: string, value: string) {
