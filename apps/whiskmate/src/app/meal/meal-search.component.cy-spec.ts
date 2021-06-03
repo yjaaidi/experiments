@@ -1,12 +1,16 @@
-import { MealSearchComponent } from './meal-search.component';
 import { mount } from '@jscutlery/cypress-angular/mount';
 import { getHarness } from '@jscutlery/cypress-harness';
+import { MealSearchComponent, MealSearchModule } from './meal-search.component';
 import { MealSearchHarness } from './meal-search.harness';
 
 describe(MealSearchComponent.name, () => {
   const harness = getHarness(MealSearchHarness);
 
-  beforeEach(() => mount(MealSearchComponent));
+  beforeEach(() =>
+    mount(MealSearchComponent, {
+      imports: [MealSearchModule],
+    })
+  );
 
   it('should show all meals', () => {
     harness.getMealCount().should('equal', 5);

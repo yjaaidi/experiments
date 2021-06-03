@@ -11,6 +11,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-date-picker',
@@ -44,6 +45,13 @@ export class DatePickerComponent {
 @NgModule({
   declarations: [DatePickerComponent],
   exports: [DatePickerComponent],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    /* @hack BrowserAnimationsModule shouldn't be here
+     * but it makes the demo easier as we don't have to
+     * import it or NoopAnimationsModule in test. */
+    BrowserAnimationsModule,
+    CommonModule,
+    ReactiveFormsModule,
+  ],
 })
 export class DatePickerModule {}
