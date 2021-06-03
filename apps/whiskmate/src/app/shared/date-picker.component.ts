@@ -18,7 +18,7 @@ import {
     <input
       data-role="date-input"
       type="date"
-      [formControl]="dateControl"
+      [formControl]="$any(dateControl)"
     />
   </ng-container>`,
   styles: [
