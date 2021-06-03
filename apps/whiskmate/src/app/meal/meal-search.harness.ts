@@ -1,17 +1,15 @@
-import { ComponentHarness } from '@angular/cdk/testing';
+import { EasyHarness } from './../testing/easy-harness';
 import { MealFilterHarness, TestingMealFilter } from './meal-filter.harness';
 
-export class MealSearchHarness extends ComponentHarness {
+export class MealSearchHarness extends EasyHarness {
   static hostSelector = 'wm-meal-search';
 
-  private _getFilterHarness = this.locatorFor(MealFilterHarness);
-
   async getMealCount() {
-    return (await this.locatorForAll('wm-meal-preview')()).length;
+    return (await this.getAll('wm-meal-preview')).length;
   }
 
   async setFilter(filter: TestingMealFilter) {
-    const harness = await this._getFilterHarness();
+    const harness = await this.get(MealFilterHarness);
     await harness.setFilter(filter);
   }
 }

@@ -1,8 +1,8 @@
-import { ComponentHarness } from '@angular/cdk/testing';
 import { DatePickerHarness } from '../shared/date-picker.harness';
 import { byRole } from '../testing/by-role';
+import { EasyHarness } from './../testing/easy-harness';
 
-export class MealFilterHarness extends ComponentHarness {
+export class MealFilterHarness extends EasyHarness {
   static hostSelector = 'wm-meal-filter';
 
   async setFilter({ start, end }: TestingMealFilter) {
@@ -11,17 +11,17 @@ export class MealFilterHarness extends ComponentHarness {
   }
 
   async _setStart(date: Date) {
-    const harness = await this._getDatePickerHarness(byRole('start-date'));
+    const harness = await this.get(DatePickerHarness, {
+      selector: byRole('start-date'),
+    });
     await harness.setDate(date);
   }
 
   async _setEnd(date: Date) {
-    const harness = await this._getDatePickerHarness(byRole('end-date'));
+    const harness = await this.get(DatePickerHarness, {
+      selector: byRole('end-date'),
+    });
     await harness.setDate(date);
-  }
-
-  private async _getDatePickerHarness(selector: string) {
-    return this.locatorFor(DatePickerHarness.with({ selector }))();
   }
 }
 
