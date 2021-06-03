@@ -10,9 +10,10 @@ describe('meal-search', () => {
   });
 
   it('should filter meals', () => {
-    harness.getFilterHarness().setStartDate(new Date(2021, 5, 2));
-
-    harness.getFilterHarness().setEndDate(new Date(2021, 5, 4));
+    harness.setFilter({
+      start: new Date(2021, 5, 2),
+      end: new Date(2021, 5, 4),
+    });
 
     harness.getMealCount().should('equal', 3);
   });
