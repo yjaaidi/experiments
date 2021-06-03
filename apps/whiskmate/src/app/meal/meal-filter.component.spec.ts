@@ -9,8 +9,11 @@ describe('MealFilterComponent', () => {
     const { component, harness } = await createComponent();
     const observer = jest.fn();
     component.filterChange.subscribe(observer);
-    await harness.setStartDate(new Date(Date.UTC(2021, 5, 1)));
-    await harness.setEndDate(new Date(Date.UTC(2021, 5, 10)));
+
+    await harness.setFilter({
+      start: new Date(Date.UTC(2021, 5, 1)),
+      end: new Date(Date.UTC(2021, 5, 10)),
+    });
 
     expect(observer).toHaveBeenLastCalledWith({
       start: new Date(Date.UTC(2021, 5, 1)),

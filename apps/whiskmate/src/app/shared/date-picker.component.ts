@@ -10,9 +10,10 @@ import {
   FormControl,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,6 +57,10 @@ export class DatePickerComponent {
   declarations: [DatePickerComponent],
   exports: [DatePickerComponent],
   imports: [
+    /* @hack BrowserAnimationsModule shouldn't be here
+     * but it makes the demo easier as we don't have to
+     * import it or NoopAnimationsModule in test. */
+    BrowserAnimationsModule,
     CommonModule,
     MatDatepickerModule,
     MatInputModule,
