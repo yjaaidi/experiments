@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { Component } from '@angular/core';
-import { Reactive, watch } from './reactor';
 import { timer } from 'rxjs';
+import { Reactive, watchAsync } from './reactor';
+
 
 @Reactive()
 @Component({
@@ -18,11 +17,11 @@ export class AppComponent {
 
   constructor() {
     timer(0, 100).subscribe((value) => {
-      // this.value = 0;
+      this.value = 0;
       this.value = Math.round(value / 10);
     });
 
-    watch(this, 'value').subscribe((value) => console.log(value));
+    watchAsync(this, 'value').subscribe((value) => console.log(value));
   }
 
   log() {

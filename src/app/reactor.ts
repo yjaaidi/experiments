@@ -14,6 +14,7 @@ import {
   from,
   Observable,
   observeOn,
+  Subject,
   tap,
   timer,
 } from 'rxjs';
@@ -34,6 +35,12 @@ export function Reactive() {
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (instance as any)[_cdrSymbol] = cdr;
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (instance as any)[_markForCheckSubjectSymbol] = new Subject();
+            (instance as any)[_markForCheckSubjectSymbol].subscribe(() =>
+              cdr.detectChanges()
+            );
 
             return instance;
           },
@@ -68,6 +75,17 @@ export function watch<T extends object>(
   return _getOrCreateSubject(instance, property).pipe(distinctUntilChanged());
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/ban-types
+export function watchAsync<T extends object>(
+  instance: T,
+  property: keyof T
+): Observable<T[keyof T]> {
+  return watch(instance, property).pipe(
+    debounce(() => Promise.resolve()),
+    distinctUntilChanged()
+  );
+}
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 const _getOrCreateSubject = <T extends object>(
   instance: T,
@@ -81,8 +99,11 @@ const _getOrCreateSubject = <T extends object>(
     /* Trigger change detection. */
     // @todo coalesce
     watch(instance, property)
-      .pipe(observeOn(asapScheduler))
-      .subscribe(() => _getCdr(instance)?.detectChanges());
+      .pipe(
+        debounce(() => Promise.resolve()),
+        distinctUntilChanged()
+      )
+      .subscribe(() => _markForCheck(instance));
   }
 
   return subjects[property];
@@ -101,6 +122,12 @@ const _getSubjects = <T extends object>(
   ((instance as any)[_subjectsSymbol] = {});
 
 const _subjectsSymbol = Symbol('Subjects');
+
+const _markForCheck = (instance: any) =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (instance as any)[_markForCheckSubjectSymbol]?.next();
+
+const _markForCheckSubjectSymbol = Symbol('MarkForCheckSubject');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const _getCdr = (instance: any) => instance[_cdrSymbol];
