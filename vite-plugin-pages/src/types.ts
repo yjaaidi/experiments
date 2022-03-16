@@ -3,11 +3,11 @@ import type { Awaitable } from '@antfu/utils'
 export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>
 
 export type ImportMode = 'sync' | 'async'
-export type ImportModeResolver = (filepath: string, pluginOptions: ResolvedOptions) => ImportMode
+export type ImportModeResolveFn = (filepath: string) => ImportMode
 
 export type CustomBlock = Record<string, any>
 
-export type SupportedPagesResolver = 'vue' | 'react' | 'solid'
+export type SupportedPagesResolver = 'vue' | 'react' | 'solid' | 'angular'
 
 export interface PageOptions {
   dir: string
@@ -34,13 +34,12 @@ interface Options {
   exclude: string[]
   /**
    * Import routes directly or as async components
-   * @default 'root index file => "sync", others => "async"'
+   * @default 'async'
    */
-  importMode: ImportMode | ImportModeResolver
+  importMode: ImportMode | ImportModeResolveFn
   /**
    * Sync load top level index file
    * @default true
-   * @deprecated use `importMode` instead
    */
   syncIndex: boolean
   /**
@@ -96,7 +95,7 @@ interface Options {
 
 export type UserOptions = Partial<Options>
 
-export interface ResolvedOptions extends Omit<Options, 'pagesDir' | 'replaceSquareBrackets' | 'nuxtStyle' | 'syncIndex'> {
+export interface ResolvedOptions extends Omit<Options, 'pagesDir' | 'replaceSquareBrackets' | 'nuxtStyle'> {
   /**
    * Resolves to the `root` value from Vite config.
    * @default config.root

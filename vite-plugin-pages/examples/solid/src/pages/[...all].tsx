@@ -1,3 +1,5 @@
 export default function All() {
-  return <div>...all route</div>
+  return <>
+    <div>...all route</div>
+  </>
 }

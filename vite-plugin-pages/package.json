@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-pages",
-  "version": "0.22.0",
+  "version": "0.21.4",
   "description": "File system base vue-router plugin for Vite",
   "keywords": [
     "vite",
@@ -12,14 +12,18 @@
     "routing"
   ],
   "license": "MIT",
-  "author": "hannoeru <me@hanlee.co>",
   "repository": {
     "type": "git",
     "url": "https://github.com/hannoeru/vite-plugin-pages"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "author": "hannoeru <me@hanlee.co>",
+  "files": [
+    "dist",
+    "client.d.ts",
+    "client-react.d.ts",
+    "client-solid.d.ts",
+    "LICENSE"
+  ],
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -36,13 +40,9 @@
       "types": "./client-solid.d.ts"
     }
   },
-  "files": [
-    "dist",
-    "client.d.ts",
-    "client-react.d.ts",
-    "client-solid.d.ts",
-    "LICENSE"
-  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "homepage": "https://github.com/hannoeru/vite-plugin-pages",
   "bugs": "https://github.com/hannoeru/vite-plugin-pages/issues",
   "scripts": {
@@ -56,8 +56,8 @@
     "example:serve": "npm -C examples/vue run serve",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint": "eslint --ext .js,.ts,.vue,.json .",
+    "lint:fix": "eslint --fix --ext .js,.ts,.vue,.json ."
   },
   "peerDependencies": {
     "@vue/compiler-sfc": ">=3",
@@ -79,24 +79,24 @@
   },
   "devDependencies": {
     "@antfu/utils": "^0.5.0",
-    "@hannoeru/eslint-config": "^0.7.6",
+    "@hannoeru/eslint-config": "^0.6.0",
     "@types/debug": "^4.1.7",
     "@types/deep-equal": "^1.0.1",
     "@types/glob-to-regexp": "^0.4.1",
     "@types/node": "^17.0.21",
-    "@vitest/ui": "^0.6.1",
+    "@vitest/ui": "^0.5.8",
     "@vue/compiler-sfc": "^3.2.31",
     "bumpp": "^7.1.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.11.0",
+    "eslint": "^8.10.0",
     "esno": "^0.14.1",
-    "playwright": "^1.20.0",
-    "react-router": "^6.2.2",
-    "solid-app-router": "^0.3.1",
-    "tsup": "^5.12.1",
-    "typescript": "^4.6.2",
-    "vite": "^2.8.6",
-    "vitest": "^0.6.1",
-    "vue-router": "^4.0.14"
+    "playwright": "^1.19.2",
+    "react-router": "^6.2.1",
+    "solid-app-router": "^0.3.0",
+    "tsup": "^5.11.13",
+    "typescript": "^4.5.5",
+    "vite": "^2.8.4",
+    "vitest": "^0.5.8",
+    "vue-router": "^4.0.12"
   }
 }

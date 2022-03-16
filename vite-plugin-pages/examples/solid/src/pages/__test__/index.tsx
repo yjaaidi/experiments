@@ -1,3 +1,5 @@
 export default function Index() {
-  return 'test default exclude'
+  return <>
+      test default exclude
+  </>
 }

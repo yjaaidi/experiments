@@ -5,7 +5,7 @@ import {
 
 import type { ResolvedOptions } from './types'
 
-const componentRE = /"(?:component|element)":("(.*?)")/g
+const componentRE = /"(?:component|element|loadChildren)":("(.*?)")/g
 const hasFunctionRE = /"(?:props|beforeEnter)":("(.*?)")/g
 
 const multilineCommentsRE = /\/\*(.|[\r\n])*?\*\//gm
@@ -39,21 +39,25 @@ export function stringifyRoutes(
 
   function componentReplacer(str: string, replaceStr: string, path: string) {
     const mode = resolveImportMode(path, options)
+    // console.log('mode', mode);
     if (mode === 'sync') {
       const importName = pathToName(path)
       const importStr = `import ${importName} from "${path}"`
 
       // Only add import to array if it hasn't beed added before.
-      if (!imports.includes(importStr))
+      if (!imports.includes(importStr) && !str.includes('loadChildren'))
         imports.push(importStr)
 
-      if (options.resolver === 'react')
+      if (str.includes('loadChildren'))
+        return str.replace(replaceStr, `() => import('${path.replace('.ts', '')}').then(m => m.default)`)
+      else if (options.resolver === 'react')
         return str.replace(replaceStr, `React.createElement(${importName})`)
+      // TODO: solid sync case
       else
         return str.replace(replaceStr, importName)
     } else {
       if (options.resolver === 'react')
-        return str.replace(replaceStr, `React.createElement(React.lazy(() => import('${path}')))`)
+        return str.replace(replaceStr, `React.lazy(() => import('${path}'))`)
       else if (options.resolver === 'solid')
         return str.replace(replaceStr, `Solid.lazy(() => import('${path}'))`)
       else
@@ -84,11 +88,16 @@ export function stringifyRoutes(
 
 export function generateClientCode(routes: any[], options: ResolvedOptions) {
   const { imports, stringRoutes } = stringifyRoutes(routes, options)
-
+  // console.log('sr', stringRoutes);
   if (options.resolver === 'react')
     imports.push('import React from \"react\"')
   if (options.resolver === 'solid')
     imports.push('import * as Solid from \"solid-js\"')
+  if (options.resolver === 'angular') {
+    imports.push('import { Route } from \"@angular/router\"')
+
+    return `${imports.join(';\n')};\n\nexport const routes: Route[] = ${stringRoutes};\n\n`
+  }
 
   return `${imports.join(';\n')};\n\nconst routes = ${stringRoutes};\n\nexport default routes;`
 }

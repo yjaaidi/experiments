@@ -8,13 +8,14 @@ import { debug, invalidatePagesModule, isTarget } from './utils'
 import { resolveReactRoutes } from './resolvers/react'
 import { resolveVueRoutes } from './resolvers/vue'
 import { resolveSolidRoutes } from './resolvers/solid'
+import { resolveAngularRoutes } from './resolvers/angular'
 import { getRouteBlock } from './customBlock'
 
 import type { FSWatcher } from 'fs'
 import type { Logger, ViteDevServer } from 'vite'
 import type { CustomBlock, PageOptions, ResolvedOptions, UserOptions } from './types'
 
-export interface PageRoute {
+export type PageRoute = {
   path: string
   route: string
 }
@@ -147,6 +148,8 @@ export class PageContext {
       return await resolveReactRoutes(this)
     if (this.options.resolver === 'solid')
       return await resolveSolidRoutes(this)
+    if (this.options.resolver === 'angular')
+      return await resolveAngularRoutes(this)      
   }
 
   async searchGlob() {

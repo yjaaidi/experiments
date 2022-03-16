@@ -2,6 +2,7 @@ export const MODULE_IDS = [
   '~pages',
   '~react-pages',
   '~solid-pages',
+  '~angular-pages',
   'pages-generated',
   'virtual:generated-pages',
   'virtual:generated-pages-react',

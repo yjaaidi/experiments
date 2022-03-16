@@ -2,17 +2,17 @@ import { Component, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-products',
-  template: ` <h1>Product</h1> `
+  selector: 'app-products-new',
+  template: ` <h1>New Product</h1> `
 })
-export class ProductPageComponent {}
+export class NewProductPageComponent {}
 
 @NgModule({
   imports: [
     RouterModule.forChild([
-      { path: '', component: ProductPageComponent}
+      { path: '', component: NewProductPageComponent}
     ])
   ],
-  declarations: [ProductPageComponent]
+  declarations: [NewProductPageComponent]
 })
 export default class ProductPageComponentModule {}

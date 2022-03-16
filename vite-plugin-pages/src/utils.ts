@@ -55,7 +55,16 @@ export function resolveImportMode(
 ) {
   const mode = options.importMode
   if (typeof mode === 'function')
-    return mode(filepath, options)
+    return mode(filepath)
+
+  for (const page of options.dirs) {
+    if (
+      options.syncIndex
+      && page.baseRoute === ''
+      && filepath === `/${page.dir}/index.vue`
+    )
+      return 'sync'
+  }
   return mode
 }
 
@@ -93,6 +102,21 @@ export function buildReactRoutePath(node: string, nuxtStyle = false): string | u
   if (isDynamic) {
     if (isCatchAll)
       return '*'
+
+    return `:${normalizedName}`
+  }
+
+  return `${normalizedName}`
+}
+
+export function buildAngularRoutePath(node: string, nuxtStyle = false): string | undefined {
+  const isDynamic = isDynamicRoute(node, nuxtStyle)
+  const isCatchAll = isCatchAllRoute(node, nuxtStyle)
+  const normalizedName = normalizeName(node, isDynamic, nuxtStyle)
+
+  if (isDynamic) {
+    if (isCatchAll)
+      return '**'
 
     return `:${normalizedName}`
   }

@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {
-  BrowserRouter as Router,
   useRoutes,
+  BrowserRouter as Router,
 } from 'react-router-dom'
 
 import './index.css'

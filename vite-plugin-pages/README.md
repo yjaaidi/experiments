@@ -5,7 +5,7 @@
 [![types](https://badgen.net/npm/types/vite-plugin-pages)](https://github.com/hannoeru/vite-plugin-pages/blob/main/src/types.ts)
 [![license](https://badgen.net/npm/license/vite-plugin-pages)](https://github.com/hannoeru/vite-plugin-pages/blob/main/LICENSE)
 
-[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://open.vscode.dev/hannoeru/vite-plugin-pages)
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/hannoeru/vite-plugin-pages)
 
 > File system based routing for Vue 3 / React applications using
 > [Vite](https://github.com/vitejs/vite)
@@ -46,14 +46,14 @@ npm install solid-app-router
 Add to your `vite.config.js`:
 
 ```js
-import Pages from 'vite-plugin-pages'
+import Pages from "vite-plugin-pages";
 
 export default {
   plugins: [
     // ...
     Pages(),
   ],
-}
+};
 ```
 
 ## Overview
@@ -67,13 +67,13 @@ module in your application.
 ### Vue
 
 ```js
-import { createRouter } from 'vue-router'
-import routes from '~pages'
+import { createRouter } from "vue-router";
+import routes from "~pages";
 
 const router = createRouter({
   // ...
   routes,
-})
+});
 ```
 
 **Type**
@@ -87,21 +87,16 @@ const router = createRouter({
 
 **experimental**
 
-```jsx
-import { Suspense } from 'react'
+```js
 import {
-  BrowserRouter as Router,
   useRoutes,
+  BrowserRouter as Router,
 } from 'react-router-dom'
 
 import routes from '~react-pages'
 
-const App = () => {
-  return (
-    <Suspense fallback={<p>Loading...</p>}>
-      {useRoutes(routes)}
-    </Suspense>
-  )
+function App() {
+  return useRoutes(routes)
 }
 
 ReactDOM.render(
@@ -123,20 +118,19 @@ ReactDOM.render(
 
 **experimental**
 
-```tsx
+```js
 import { render } from 'solid-js/web'
 import { Router, useRoutes } from 'solid-app-router'
 import routes from '~solid-pages'
 
+const Routes = useRoutes(routes)
+
 render(
-  () => {
-    const Routes = useRoutes(routes)
-    return (
-      <Router>
-        <Routes />
-      </Router>
-    )
-  },
+  () => (
+    <Router>
+      <Routes />
+    </Router>
+  ),
   document.getElementById('root') as HTMLElement,
 )
 ```
@@ -155,15 +149,15 @@ plugin:
 
 ```js
 // vite.config.js
-import Pages from 'vite-plugin-pages'
+import Pages from "vite-plugin-pages";
 
 export default {
   plugins: [
     Pages({
-      dirs: 'src/views',
+      dirs: "src/views"
     }),
   ],
-}
+};
 ```
 
 ### dirs
@@ -206,13 +200,13 @@ export default {
   plugins: [
     Pages({
       dirs: [
-        { dir: 'src/pages', baseRoute: '' },
-        { dir: 'src/features/**/pages', baseRoute: 'features' },
-        { dir: 'src/admin/pages', baseRoute: 'admin' },
+        { dir: "src/pages", baseRoute: "" },
+        { dir: "src/features/**/pages", baseRoute: "features" },
+        { dir: "src/admin/pages", baseRoute: "admin" },
       ],
     }),
   ],
-}
+};
 ```
 
 ### extensions
@@ -248,17 +242,19 @@ src/pages/
 export default {
   plugins: [
     Pages({
-      exclude: ['**/components/*.vue'],
+      exclude: ["**/components/*.vue"],
     }),
   ],
-}
+};
 ```
 
 ### importMode
 
-- **Type:** `'sync' | 'async' | (filepath: string, pluginOptions: ResolvedOptions) => 'sync' | 'async')`
+- **Type:** `'sync' | 'async' | (filepath: string) => 'sync' | 'async')`
 - **Default:**
-  - Top level index file: `'sync'`, others: `async`.
+  - Top level index file: `'sync'`, can turn off by option `syncIndex`.
+  - Others(Vue): `'async'`
+  - Others(React): `'sync'`
 
 Import mode can be set to either `async`, `sync`, or a function which returns
 one of those values.
@@ -271,32 +267,13 @@ can use a function to resolve the value based on the route path. For example:
 export default {
   plugins: [
     Pages({
-      importMode(filepath, options) {
-        // default resolver
-        // for (const page of options.dirs) {
-        //   if (page.baseRoute === '' && filepath.startsWith(`/${page.dir}/index`))
-        //     return 'sync'
-        // }
-        // return 'async'
-
+      importMode(path) {
         // Load about page synchronously, all other pages are async.
-        return filepath.includes('about') ? 'sync' : 'async'
+        return path.includes("about") ? "sync" : "async";
       },
     }),
   ],
-}
-```
-
-If you are using `async` mode with `react-router`, you will need to wrap your route components with `Suspense`:
-
-```jsx
-const App = () => {
-  return (
-    <Suspense fallback={<p>Loading...</p>}>
-      {useRoutes(routes)}
-    </Suspense>
-  )
-}
+};
 ```
 
 ### routeBlockLang
@@ -339,20 +316,20 @@ export default {
   plugins: [
     Pages({
       extendRoute(route, parent) {
-        if (route.path === '/') {
+        if (route.path === "/") {
           // Index is unauthenticated.
-          return route
+          return route;
         }
 
         // Augment the route with meta that indicates that the route requires authentication.
         return {
           ...route,
           meta: { auth: true },
-        }
+        };
       },
     }),
   ],
-}
+};
 ```
 
 ### onRoutesGenerated
@@ -495,18 +472,18 @@ will result in this routes configuration:
 ```json5
 [
   {
-    "path": "/users",
-    "component": "/src/pages/users.vue",
-    "children": [
+    path: '/users',
+    component: '/src/pages/users.vue',
+    children: [
       {
-        "path": "",
-        "component": "/src/pages/users/index.vue",
-        "name": "users"
+        path: '',
+        component: '/src/pages/users/index.vue',
+        name: 'users'
       },
       {
-        "path": ":id",
-        "component": "/src/pages/users/[id].vue",
-        "name": "users-id"
+        path: ':id',
+        component: '/src/pages/users/[id].vue',
+        name: 'users-id'
       }
     ]
   }

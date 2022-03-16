@@ -2,7 +2,9 @@ import React from 'react'
 
 const Component: React.FC = () => {
   return (
-    <p>blog/index.tsx</p>
+    <>
+      <p>blog/index.tsx</p>
+    </>
   )
 }
 

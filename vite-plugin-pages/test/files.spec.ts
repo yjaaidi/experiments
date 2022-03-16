@@ -8,14 +8,14 @@ const testpages = 'examples/vue/src/pages'
 const testDeeppages = 'examples/vue/src/features'
 
 describe('Get files', () => {
-  test('pages', async() => {
+  test('Pages file', async() => {
     const files = getPageFiles(testpages, options)
     expect(files.sort()).toMatchSnapshot()
   })
 })
 
 describe('Get page dirs', () => {
-  test('with glob', async() => {
+  test('With glob', async() => {
     const PageOptions = {
       dir: join(testDeeppages, '**', 'pages'),
       baseRoute: '',

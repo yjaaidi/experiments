@@ -1,10 +1,15 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { routes } from '~pages';
-// const routes: Routes = [];
+import { routes } from '~angular-pages';
+
+@Component({
+  template: '<router-outlet></router-outlet>'
+})
+export class OutletComponent {}
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  declarations: [OutletComponent],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

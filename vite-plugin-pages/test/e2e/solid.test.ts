@@ -1,5 +1,3 @@
-/* eslint-disable jest/no-conditional-expect */
-/* eslint-disable no-console */
 import { resolve } from 'path'
 import { copyFile, rm } from 'fs/promises'
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
@@ -10,7 +8,7 @@ import type { ViteDevServer } from 'vite'
 
 const solidRoot = resolve('./examples/solid')
 
-describe('solid e2e test', () => {
+describe('solid e2e test', async() => {
   let server: ViteDevServer
   let browser: Browser
   let page: Page
@@ -34,7 +32,7 @@ describe('solid e2e test', () => {
 
   const getUrl = (path: string) => `http://localhost:${server.config.server.port}${path}`
 
-  test('/blog/today have content', async() => {
+  test('/blog/today should have currect content', async() => {
     try {
       await page.goto(getUrl('/blog/today'))
       const text = await page.locator('body > div').textContent()
@@ -45,7 +43,7 @@ describe('solid e2e test', () => {
     }
   })
 
-  test('/blog/today/xxx - nested cache all', async() => {
+  test('/blog/today/xxx should be nested cache all', async() => {
     try {
       await page.goto(getUrl('/blog/today/xxx'))
       const text = await page.locator('body > div').textContent()
@@ -56,7 +54,7 @@ describe('solid e2e test', () => {
     }
   })
 
-  test('/xxx/xxx - cache all route', async() => {
+  test('/xxx/xxx should be cache all route', async() => {
     try {
       await page.goto(getUrl('/xxx/xxx'))
       const text = await page.locator('body > div').textContent()
@@ -67,7 +65,7 @@ describe('solid e2e test', () => {
     }
   })
 
-  test('/about/1b234bk12b3/more deep nested dynamic route', async() => {
+  test('/about/1b234bk12b3/more deep nested dynamic route should works', async() => {
     try {
       await page.goto(getUrl('/about/1b234bk12b3/more'))
       const text = await page.locator('div.deep-more').textContent()
@@ -78,7 +76,7 @@ describe('solid e2e test', () => {
     }
   })
 
-  test('/features/dashboard custom routes folder', async() => {
+  test('/features/dashboard custom routes folder should works', async() => {
     try {
       await page.goto(getUrl('/features/dashboard'))
       const text = await page.locator('body > div > p >> nth=0').textContent()
@@ -89,7 +87,7 @@ describe('solid e2e test', () => {
     }
   })
 
-  test('hmr - dynamic add /test route', async() => {
+  test('HMR - dynamic add /test route should works', async() => {
     const srcPath = resolve('./test/data/test.tsx')
     const distPath = resolve(`${solidRoot}/src/pages/test.tsx`)
 

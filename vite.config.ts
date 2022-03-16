@@ -1,65 +1,47 @@
 import { defineConfig } from 'vite';
 import { ViteAngularPlugin } from '@nxext/angular/plugins/vite-plugin-angular';
-import Pages, { PageContext, SupportedPagesResolver } from "vite-plugin-pages";
-PageContext.prototype.resolveRoutes = async() => {
-  // @ts-ignore
+import Pages, { PageContext, SupportedPagesResolver } from "./vite-plugin-pages/src";
+// PageContext.prototype.resolveRoutes = async() => {
+//   // @ts-ignore
   
-  return `
-    import { Routes } from '@angular/router';
-    // import { Component, NgModule } from '@angular/core';
+//   return `
+//     import { Routes } from '@angular/router';
+//     // import { Component, NgModule } from '@angular/core';
 
-    // @Component({
-    //  selector: 'app-home',
-    //  template: '<h1>Home</h1>'
-    // })
-    // export class HomePageComponent {}
+//     // @Component({
+//     //  selector: 'app-home',
+//     //  template: '<h1>Home</h1>'
+//     // })
+//     // export class HomePageComponent {}
 
-  import { HomePageComponent } from '/pages/home';
+//   import { HomePageComponent } from '/pages/home';
 
-  export const routes = [
-    { path: '', component: HomePageComponent },
-  ];
-  `;
-}
-export function myPlugin() {
-  const virtualModuleId = '@my-virtual-module'
-  const resolvedVirtualModuleId = '\0' + virtualModuleId
-
-  return {
-    name: 'my-plugin', // required, will show up in warnings and errors
-    resolveId(id) {
-      if (id === virtualModuleId) {
-        console.log(virtualModuleId)
-        return resolvedVirtualModuleId
-      }
-    },
-    load(id) {
-      if (id === resolvedVirtualModuleId) {
-        return `export const routes = [];`
-      }
-    }
-  }
-}
+//   export const routes = [
+//     { path: '', component: HomePageComponent },
+//   ];
+//   `;
+// }
 
 export default defineConfig({
   root: './src',
   plugins: [
     Pages({
-      resolver: 'angular' as SupportedPagesResolver,
+      resolver: 'angular',
       pagesDir: ['pages'],
       extensions: ['ts'],
-      importMode: 'async',
-      onRoutesGenerated(routes) {
-        console.log('routes', JSON.stringify(routes));
-        return [];
+      importMode: function(path: string) {
+        return path.includes('module') ? 'sync' : 'sync';
       },
-      onClientGenerated(code) {
-        console.log('client', code);
-        return `
-          /*${code}*/
-          export const routes = [];
-        `;
-      }
+      // onRoutesGenerated(routes) {
+      //   console.log('routes', JSON.stringify(routes));
+      // },
+      // onClientGenerated(code) {
+      //   console.log('client', code);
+      //   return `
+      //     /*${code}*/
+      //     export const routes = [];
+      //   `;
+      // }
     }
     ),
     // myPlugin(),
