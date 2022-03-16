@@ -1,0 +1,6 @@
+{
+  "extends": "@hannoeru",
+  "rules": {
+    "react/function-component-definition": "off"
+  }
+}

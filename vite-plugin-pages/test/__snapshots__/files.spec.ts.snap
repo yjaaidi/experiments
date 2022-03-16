@@ -1,0 +1,33 @@
+// Vitest Snapshot v1
+
+exports[`Get files > pages 1`] = `
+[
+  "examples/vue/src/pages/[...all].vue",
+  "examples/vue/src/pages/[sensor].vue",
+  "examples/vue/src/pages/[sensor]/current.vue",
+  "examples/vue/src/pages/about.vue",
+  "examples/vue/src/pages/about/[id].vue",
+  "examples/vue/src/pages/about/[id]/more.vue",
+  "examples/vue/src/pages/about/[id]/nested.vue",
+  "examples/vue/src/pages/about/index.vue",
+  "examples/vue/src/pages/blog/[id].vue",
+  "examples/vue/src/pages/blog/index.vue",
+  "examples/vue/src/pages/blog/today/[...all].vue",
+  "examples/vue/src/pages/blog/today/index.vue",
+  "examples/vue/src/pages/components.vue",
+  "examples/vue/src/pages/index.vue",
+]
+`;
+
+exports[`Get page dirs > with glob 1`] = `
+[
+  {
+    "baseRoute": "",
+    "dir": "examples/vue/src/features/admin/pages",
+  },
+  {
+    "baseRoute": "",
+    "dir": "examples/vue/src/features/dashboard/pages",
+  },
+]
+`;

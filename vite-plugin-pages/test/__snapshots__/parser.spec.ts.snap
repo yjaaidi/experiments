@@ -1,0 +1,10 @@
+// Vitest Snapshot v1
+
+exports[`Parser > custom block 1`] = `
+{
+  "meta": {
+    "requiresAuth": false,
+  },
+  "name": "blog-id",
+}
+`;
