@@ -15,4 +15,6 @@ export class AdminDashboardPageComponent {}
   ],
   declarations: [AdminDashboardPageComponent]
 })
-export default class AdminDashboardPageComponentModule {}
+export class AdminDashboardPageComponentModule {}
+
+export default AdminDashboardPageComponentModule;

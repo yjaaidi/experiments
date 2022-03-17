@@ -52,7 +52,12 @@ export async function resolveAngularRoutes(ctx: PageContext) {
   const pageRoutes = [...ctx.pageRouteMap.values()]
     // sort routes for HMR
     .sort((a, b) => countSlash(a.route) - countSlash(b.route))
-    .sort((a, b) => {console.log(a.path, b.path);
+    // give priority to static paths over dynamic paths
+    .sort((a, b) => {
+      if (a.path.endsWith('index.ts') || a.path.endsWith('].ts')) {
+        return 1
+      }
+
       if (b.path.endsWith('index.ts') || b.path.endsWith('].ts')) {
         return -1
       }
@@ -61,8 +66,8 @@ export async function resolveAngularRoutes(ctx: PageContext) {
     })    
   
   const routes: AngularRouteBase[] = []
-  // console.log(pageRoutes);
-  pageRoutes.forEach((page) => {console.log(page.path);
+  
+  pageRoutes.forEach((page) => {
     const pathNodes = page.route.split('/')
     // add leading slash to component path if not already there
     const component = page.path.replace(ctx.root, '')
@@ -80,10 +85,13 @@ export async function resolveAngularRoutes(ctx: PageContext) {
       const isIndexRoute = normalizeCase(node, caseSensitive).endsWith('index')
 
       if (!route.path && isIndexRoute) {
-        route.path = '';
         route.pathMatch = 'full';
       } else if (!isIndexRoute) {
-        route.path = buildAngularRoutePath(node, nuxtStyle)
+        route.path = buildAngularRoutePath(node, nuxtStyle);
+      }
+      
+      if (route.path && route.path.includes('__')) {
+        route.path = route.path.replace('__', '')
       }
 
       // Check parent exits
@@ -92,7 +100,15 @@ export async function resolveAngularRoutes(ctx: PageContext) {
       })
 
       if (parent) {
-        parent.component = undefined;
+        const parts = component.split('/');
+        const componentPathParts = parts.slice(0, parts.length - 1).join('/');
+        const componentPath = `${componentPathParts}.ts`;
+
+        // if the route has a __parent component, use it
+        if (ctx.pageRouteMap.has(`${ctx.root}${componentPath}`)) {
+          parent.component = componentPath;
+        }
+
         parent.loadChildren = undefined;
         // Make sure children exits in parent
         parent.children = parent.children || []
@@ -110,11 +126,11 @@ export async function resolveAngularRoutes(ctx: PageContext) {
 
   // sort by dynamic routes
   let finalRoutes = prepareRoutes(routes, ctx.options)
-  console.log('fr', JSON.stringify(finalRoutes));
+  // console.log('fr', JSON.stringify(finalRoutes, null, 2));
 
   finalRoutes = (await ctx.options.onRoutesGenerated?.(finalRoutes)) || finalRoutes
   let client = generateClientCode(finalRoutes, ctx.options)
   client = (await ctx.options.onClientGenerated?.(client)) || client
-  console.log('cl', client);
+  // console.log('cl', client);
   return client
 }

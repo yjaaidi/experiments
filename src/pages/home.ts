@@ -17,4 +17,6 @@ export  class HomePageComponent {}
     HomePageComponent
   ]
 })
-export default class HomePageComponentModule {}
+export class HomePageComponentModule {}
+
+export default HomePageComponentModule;

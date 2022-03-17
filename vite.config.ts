@@ -29,6 +29,7 @@ export default defineConfig({
       resolver: 'angular',
       pagesDir: ['pages'],
       extensions: ['ts'],
+      // routeStyle: 'remix',
       importMode: function(path: string) {
         return path.includes('module') ? 'sync' : 'sync';
       },

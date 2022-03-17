@@ -15,4 +15,6 @@ export class ProductPageComponent {}
   ],
   declarations: [ProductPageComponent]
 })
-export default class ProductPageComponentModule {}
+export class ProductPageComponentModule {}
+
+export default ProductPageComponentModule;
