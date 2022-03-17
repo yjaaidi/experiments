@@ -1,53 +1,48 @@
-import {
-  buildAngularRoutePath,
-  countSlash,
-  normalizeCase,
-} from '../utils'
-import { generateClientCode } from '../stringify'
+import { buildAngularRoutePath, countSlash, normalizeCase } from '../utils';
+import { generateClientCode } from '../stringify';
 
-import type { Optional, ResolvedOptions } from '../types'
-import type { PageContext } from '../context'
+import type { Optional, ResolvedOptions } from '../types';
+import type { PageContext } from '../context';
 
 export interface AngularRouteBase {
-  loadChildren?: any
-  children?: AngularRouteBase[]
-  index?: boolean
-  path?: string
+  loadChildren?: any;
+  children?: AngularRouteBase[];
+  index?: boolean;
+  path?: string;
   component?: string;
-  pathMatch?: 'full' | 'partial'
-  rawRoute: string
+  pathMatch?: 'full' | 'partial';
+  rawRoute: string;
 }
 
-export interface AngularRoute extends Omit<Optional<AngularRouteBase, 'rawRoute' | 'path'>, 'children'> {
-  children?: AngularRoute[]
+export interface AngularRoute
+  extends Omit<Optional<AngularRouteBase, 'rawRoute' | 'path'>, 'children'> {
+  children?: AngularRoute[];
 }
 
 function prepareRoutes(
   routes: AngularRoute[],
   options: ResolvedOptions,
-  parent?: AngularRoute,
+  parent?: AngularRoute
 ) {
   for (const route of routes) {
-    if (parent)
-      route.path = route.path?.replace(/^\//, '')
+    if (parent) route.path = route.path?.replace(/^\//, '');
 
     if (route.children)
-      route.children = prepareRoutes(route.children, options, route)
+      route.children = prepareRoutes(route.children, options, route);
 
-    delete route.rawRoute
+    delete route.rawRoute;
 
-    if (route.index)
-      delete route.path
+    if (route.index) delete route.path;
 
-    Object.assign(route, options.extendRoute?.(route, parent) || {})
+    Object.assign(route, options.extendRoute?.(route, parent) || {});
   }
 
-  return routes
+  return routes;
 }
 
 export async function resolveAngularRoutes(ctx: PageContext) {
-  const { routeStyle, caseSensitive } = ctx.options
-  const nuxtStyle = routeStyle === 'nuxt'
+  const { routeStyle, caseSensitive } = ctx.options;
+  const nuxtStyle = routeStyle === 'nuxt';
 
   const pageRoutes = [...ctx.pageRouteMap.values()]
     // sort routes for HMR
@@ -55,49 +50,56 @@ export async function resolveAngularRoutes(ctx: PageContext) {
     // give priority to static paths over dynamic paths
     .sort((a, b) => {
       if (a.path.endsWith('index.ts') || a.path.endsWith('].ts')) {
-        return 1
+        return 1;
       }
 
       if (b.path.endsWith('index.ts') || b.path.endsWith('].ts')) {
-        return -1
+        return -1;
       }
 
       return 0;
-    })    
-  
-  const routes: AngularRouteBase[] = []
-  
+    })
+    .sort((a, b) => {
+      if (a.path.includes('[...') || b.path.includes('[...')) {
+        return 1;
+      }
+
+      return -1;
+    });
+
+  const routes: AngularRouteBase[] = [];
+
   pageRoutes.forEach((page) => {
-    const pathNodes = page.route.split('/')
+    const pathNodes = page.route.split('/');
     // add leading slash to component path if not already there
-    const component = page.path.replace(ctx.root, '')
-    let parentRoutes = routes
+    const component = page.path.replace(ctx.root, '');
+    let parentRoutes = routes;
 
     for (let i = 0; i < pathNodes.length; i++) {
-      const node = pathNodes[i]
+      const node = pathNodes[i];
 
       const route: AngularRouteBase = {
         path: '',
         loadChildren: component,
         rawRoute: pathNodes.slice(0, i + 1).join('/'),
-      }
+      };
 
-      const isIndexRoute = normalizeCase(node, caseSensitive).endsWith('index')
+      const isIndexRoute = normalizeCase(node, caseSensitive).endsWith('index');
 
       if (!route.path && isIndexRoute) {
         route.pathMatch = 'full';
       } else if (!isIndexRoute) {
         route.path = buildAngularRoutePath(node, nuxtStyle);
       }
-      
+
       if (route.path && route.path.includes('__')) {
-        route.path = route.path.replace('__', '')
+        route.path = route.path.replace('__', '');
       }
 
       // Check parent exits
       const parent = parentRoutes.find((parent) => {
-        return pathNodes.slice(0, i).join('/') === parent.rawRoute
-      })
+        return pathNodes.slice(0, i).join('/') === parent.rawRoute;
+      });
 
       if (parent) {
         const parts = component.split('/');
@@ -111,26 +113,26 @@ export async function resolveAngularRoutes(ctx: PageContext) {
 
         parent.loadChildren = undefined;
         // Make sure children exits in parent
-        parent.children = parent.children || []
+        parent.children = parent.children || [];
         // Append to parent's children
-        parentRoutes = parent.children || []
+        parentRoutes = parent.children || [];
       }
 
       const exits = parentRoutes.some((parent) => {
-        return pathNodes.slice(0, i + 1).join('/') === parent.rawRoute
-      })
-      if (!exits)
-        parentRoutes.push(route)
+        return pathNodes.slice(0, i + 1).join('/') === parent.rawRoute;
+      });
+      if (!exits) parentRoutes.push(route);
     }
-  })
+  });
 
   // sort by dynamic routes
-  let finalRoutes = prepareRoutes(routes, ctx.options)
+  let finalRoutes = prepareRoutes(routes, ctx.options);
   // console.log('fr', JSON.stringify(finalRoutes, null, 2));
 
-  finalRoutes = (await ctx.options.onRoutesGenerated?.(finalRoutes)) || finalRoutes
-  let client = generateClientCode(finalRoutes, ctx.options)
-  client = (await ctx.options.onClientGenerated?.(client)) || client
+  finalRoutes =
+    (await ctx.options.onRoutesGenerated?.(finalRoutes)) || finalRoutes;
+  let client = generateClientCode(finalRoutes, ctx.options);
+  client = (await ctx.options.onClientGenerated?.(client)) || client;
   // console.log('cl', client);
-  return client
+  return client;
 }
