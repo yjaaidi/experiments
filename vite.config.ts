@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import { ViteAngularPlugin } from '@nxext/angular/plugins/vite-plugin-angular';
+import { ViteAngularPlugin } from '@nxext/angular-vite';
 import Pages, { PageContext, SupportedPagesResolver } from "./vite-plugin-pages/src";
 // PageContext.prototype.resolveRoutes = async() => {
 //   // @ts-ignore
