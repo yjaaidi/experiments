@@ -20,6 +20,7 @@
   "files": [
     "dist",
     "client.d.ts",
+    "client-angular.d.ts",
     "client-react.d.ts",
     "client-solid.d.ts",
     "LICENSE"
@@ -33,6 +34,9 @@
     "./client": {
       "types": "./client.d.ts"
     },
+    "./client-angular": {
+      "types": "./client-angular.d.ts"
+    },    
     "./client-react": {
       "types": "./client-react.d.ts"
     },
