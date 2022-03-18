@@ -1,6 +1,6 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import OutletComponent from '../pages/__products';
+import OutletComponent from '../pages/products';
 import { routes } from '~angular-pages';
 
 @NgModule({

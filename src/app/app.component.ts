@@ -1,6 +1,6 @@
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
-import { map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, of, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -59,12 +59,13 @@ export class AppComponent {
   title = 'ng-vite';
 
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
+  isHandset$: Observable<boolean> = of(false);
+  // this.breakpointObserver.observe(Breakpoints.Handset)
+  //   .pipe(
+  //     map(result => result.matches),
+  //     shareReplay()
+  //   );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  // constructor(private breakpointObserver: BreakpointObserver) {}
 
 }

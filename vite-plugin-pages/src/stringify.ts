@@ -96,9 +96,9 @@ export function generateClientCode(routes: any[], options: ResolvedOptions) {
   if (options.resolver === 'solid')
     imports.push('import * as Solid from \"solid-js\"')
   if (options.resolver === 'angular') {
-    imports.push('import { Routes } from \"@angular/router\"')
+    // imports.push('import { Routes } from \"@angular/router\"')
 
-    return `${imports.join(';\n')};\n\nexport const routes: Routes = ${stringRoutes};\n\n`
+    return `${imports.join(';\n')};\n\nexport const routes = ${stringRoutes};\n\n`
   }
 
   return `${imports.join(';\n')};\n\nconst routes = ${stringRoutes};\n\nexport default routes;`

@@ -3,6 +3,7 @@ import { generateClientCode } from '../stringify';
 
 import type { Optional, ResolvedOptions } from '../types';
 import type { PageContext } from '../context';
+import { compareRoutes } from '../compare-routes';
 
 export interface AngularRouteBase {
   loadChildren?: any;
@@ -49,6 +50,11 @@ export async function resolveAngularRoutes(ctx: PageContext) {
     .sort((a, b) => countSlash(a.route) - countSlash(b.route))
     // give priority to static paths over dynamic paths
     .sort((a, b) => {
+      // return compareRoutes(a, b);
+      if (a.path.includes('[product') || b.path.includes('[product')) {
+        console.log(a.path, b.path);
+      }
+
       if (a.path.endsWith('index.ts') || a.path.endsWith('].ts')) {
         return 1;
       }
@@ -68,6 +74,7 @@ export async function resolveAngularRoutes(ctx: PageContext) {
     });
 
   const routes: AngularRouteBase[] = [];
+  // console.log(pageRoutes)
 
   pageRoutes.forEach((page) => {
     const pathNodes = page.route.split('/');
@@ -90,10 +97,6 @@ export async function resolveAngularRoutes(ctx: PageContext) {
         route.pathMatch = 'full';
       } else if (!isIndexRoute) {
         route.path = buildAngularRoutePath(node, nuxtStyle);
-      }
-
-      if (route.path && route.path.includes('__')) {
-        route.path = route.path.replace('__', '');
       }
 
       // Check parent exits

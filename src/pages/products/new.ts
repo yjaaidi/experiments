@@ -10,7 +10,7 @@ export class NewProductPageComponent {}
 @NgModule({
   imports: [
     RouterModule.forChild([
-      { path: '', component: NewProductPageComponent}
+      { path: '', component: NewProductPageComponent }
     ])
   ],
   declarations: [NewProductPageComponent]
