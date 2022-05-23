@@ -1,15 +1,18 @@
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
-import { map, Observable, of, shareReplay } from 'rxjs';
+import { Component } from "@angular/core";
+import { Observable, of } from "rxjs";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   template: `
     <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav #drawer class="sidenav" fixedInViewport
-          [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-          [mode]="(isHandset$ | async) ? 'over' : 'side'"
-          [opened]="(isHandset$ | async) === false">
+      <mat-sidenav
+        #drawer
+        class="sidenav"
+        fixedInViewport
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'"
+        [opened]="(isHandset$ | async) === false"
+      >
         <mat-toolbar>Menu</mat-toolbar>
         <mat-nav-list>
           <a mat-list-item href="#">Link 1</a>
@@ -24,7 +27,8 @@ import { map, Observable, of, shareReplay } from 'rxjs';
             aria-label="Toggle sidenav"
             mat-icon-button
             (click)="drawer.toggle()"
-            *ngIf="isHandset$ | async">
+            *ngIf="isHandset$ | async"
+          >
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
           </button>
           <span>ng-vite</span>
@@ -32,40 +36,31 @@ import { map, Observable, of, shareReplay } from 'rxjs';
         <router-outlet></router-outlet>
       </mat-sidenav-content>
     </mat-sidenav-container>
-    
   `,
-  styles: [`
-    .sidenav-container {
-      height: 100%;
-    }
-    
-    .sidenav {
-      width: 200px;
-    }
-    
-    .sidenav .mat-toolbar {
-      background: inherit;
-    }
-    
-    .mat-toolbar.mat-primary {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    
-  `]
+  styles: [
+    `
+      .sidenav-container {
+        height: 100%;
+      }
+
+      .sidenav {
+        width: 200px;
+      }
+
+      .sidenav .mat-toolbar {
+        background: inherit;
+      }
+
+      .mat-toolbar.mat-primary {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+    `,
+  ],
 })
 export class AppComponent {
-  title = 'ng-vite';
-
+  title = "ng-vite";
 
   isHandset$: Observable<boolean> = of(false);
-  // this.breakpointObserver.observe(Breakpoints.Handset)
-  //   .pipe(
-  //     map(result => result.matches),
-  //     shareReplay()
-  //   );
-
-  // constructor(private breakpointObserver: BreakpointObserver) {}
-
 }
