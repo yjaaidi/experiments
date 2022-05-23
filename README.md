@@ -1,6 +1,4 @@
-# Angular + Vite Demo app
-
-YouTube Video: https://www.youtube.com/watch?v=P9vcLPsW9lQ
+# Angular + Vite + Playwright
 
 ## Setup
 
@@ -9,6 +7,13 @@ yarn
 ```
 
 ## Serve
+
 ```
 yarn dev
+```
+
+## E2E
+
+```
+yarn e2e
 ```
