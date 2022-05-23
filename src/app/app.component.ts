@@ -15,9 +15,15 @@ import { Observable, of } from "rxjs";
       >
         <mat-toolbar>Menu</mat-toolbar>
         <mat-nav-list>
-          <a mat-list-item href="#">Link 1</a>
-          <a mat-list-item href="#">Link 2</a>
-          <a mat-list-item href="#">Link 3</a>
+          <a
+            mat-list-item
+            [routerLink]="['dashboard']"
+            routerLinkActive="active"
+            >Dashboard</a
+          >
+          <a mat-list-item [routerLink]="['customer']" routerLinkActive="active"
+            >Customer</a
+          >
         </mat-nav-list>
       </mat-sidenav>
       <mat-sidenav-content>
@@ -55,6 +61,10 @@ import { Observable, of } from "rxjs";
         position: sticky;
         top: 0;
         z-index: 1;
+      }
+
+      .active {
+        font-weight: 600;
       }
     `,
   ],

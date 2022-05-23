@@ -7,7 +7,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
+import { ROUTES } from './app.routes';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { AppComponent } from './app.component';
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    RouterModule.forRoot(ROUTES),
   ],
   bootstrap: [AppComponent]
 })
