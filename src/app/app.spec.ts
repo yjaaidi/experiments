@@ -11,10 +11,14 @@ test.describe("pages", () => {
   });
 
   test("should navigate to customer", async ({ page }) => {
-    await page.goto("http://localhost:3000");
-
-    await page.click("text=customer");
+    await page.click("text=Customer");
     const content = page.locator("main");
     await expect(content).toHaveText("Hello Customer");
+  });
+
+  test("should navigate to admin", async ({ page }) => {
+    await page.click("text=Admin");
+    const content = page.locator("main");
+    await expect(content).toHaveText("Hello Admin");
   });
 });
