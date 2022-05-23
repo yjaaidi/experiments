@@ -12,6 +12,11 @@ export const ROUTES: Routes = [
       (await import("./pages/customer-page.component")).CustomerPageModule,
   },
   {
+    path: "admin",
+    loadChildren: async () =>
+      (await import("./pages/admin-page.component")).AdminPageModule,
+  },
+  {
     path: "**",
     pathMatch: "full",
     redirectTo: "dashboard",

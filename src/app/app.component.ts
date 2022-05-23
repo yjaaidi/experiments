@@ -24,6 +24,9 @@ import { Observable, of } from "rxjs";
           <a mat-list-item [routerLink]="['customer']" routerLinkActive="active"
             >Customer</a
           >
+          <a mat-list-item [routerLink]="['admin']" routerLinkActive="active"
+            >Admin</a
+          >
         </mat-nav-list>
       </mat-sidenav>
       <mat-sidenav-content>
