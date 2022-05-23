@@ -42,7 +42,7 @@ import { Observable, of } from "rxjs";
           </button>
           <span>ng-vite</span>
         </mat-toolbar>
-        <router-outlet></router-outlet>
+        <main><router-outlet></router-outlet></main>
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,
