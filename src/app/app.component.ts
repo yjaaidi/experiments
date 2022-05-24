@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { type ComponentFixture } from "@angular/core/testing";
 import { Observable, of } from "rxjs";
 
 @Component({
@@ -76,4 +77,31 @@ export class AppComponent {
   title = "ng-vite";
 
   isHandset$: Observable<boolean> = of(false);
+}
+
+if (import.meta.vitest) {
+	const { it, expect, describe, beforeEach } = import.meta.vitest;
+	const { TestBed } = await import('@angular/core/testing');
+	const { RouterTestingModule } = await import('@angular/router/testing');
+  const { NoopAnimationsModule } = await import("@angular/platform-browser/animations");
+
+
+  describe("AppComponent", () => {
+    let fixture: ComponentFixture<AppComponent>;
+    let main: HTMLElement;
+  
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule, NoopAnimationsModule],
+        declarations: [AppComponent],
+      }).compileComponents();
+    });
+  
+    it('should display content', () => {
+      fixture = TestBed.createComponent(AppComponent);
+      main = fixture.nativeElement.querySelector("main");
+      
+      expect(main.textContent).toContain("Hello Dashboard");
+    });
+  });
 }
