@@ -18,11 +18,17 @@
     "exactOptionalPropertyTypes": true,
     "types": ["vitest/importMeta"]
   },
-  "include": ["src", "src/test-setup.ts"],
+  "include": ["src"],
+  "exclude": ["src/**/spec.ts"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "references": [
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
 }
