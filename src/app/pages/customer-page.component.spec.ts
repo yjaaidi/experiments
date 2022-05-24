@@ -1,11 +1,5 @@
-import { Component } from '@angular/core';
+import { CustomerPageComponent } from './customer-page.component';
 import { TestBed } from '@angular/core/testing';
-
-@Component({
-  selector: 'app-dashboard-page',
-  template: `Hello Customer`,
-})
-export class CustomerPageComponent {}
 
 describe(CustomerPageComponent.name, () => {
   it('should be polite', () => {

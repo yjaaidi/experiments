@@ -5,11 +5,11 @@ import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => ({
   root: "src",
-  plugins: [
-    ViteAngularPlugin({
-      target: "es2020",
-    }),
-  ],
+  // plugins: [
+  //   ViteAngularPlugin({
+  //     target: "es2020",
+  //   }),
+  // ],
   test: {
     globals: true,
     environment: "jsdom",
