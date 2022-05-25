@@ -1,5 +1,5 @@
-import { CustomerPageComponent } from './customer-page.component';
 import { TestBed } from '@angular/core/testing';
+import { CustomerPageComponent } from './customer-page.component';
 
 describe(CustomerPageComponent.name, () => {
   it('should be polite', () => {

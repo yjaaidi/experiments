@@ -33,6 +33,7 @@
     "@nxext/angular-vite": "^13.0.0-alpha.2",
     "@playwright/test": "^1.22.2",
     "@types/node": "^12.11.1",
+    "@vitest/ui": "^0.12.9",
     "concurrently": "^7.2.1",
     "jsdom": "^19.0.0",
     "typescript": "~4.5.2",
