@@ -1,33 +1,16 @@
+import { CounterReactiveComponent } from './counter-reactive.component';
+import { CounterComponent } from './counter.component';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { injectState } from './inject-state';
-
-@Component({
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'mc-counter',
-  template: `<div>{{ state.counter }}</div>
-    <div>
-      <button (click)="state.counter = 0">RESET</button>
-      <button (click)="increment()">+</button>
-    </div>`,
-})
-export class CounterComponent {
-  state = injectState({
-    counter: 0,
-  });
-
-  increment() {
-    /* Adding a dirty setTimeout to show that reactivity works anyway. */
-    setTimeout(() => {
-      this.state.counter += 1;
-    }, 500);
-  }
-}
+import { describeReactiveStore } from './reactive-store-factory';
+import { injectStore, provideStore } from './store';
 
 @Component({
   standalone: true,
   selector: 'mc-root',
-  imports: [CounterComponent],
-  template: `<mc-counter></mc-counter>`,
+  imports: [CounterComponent, CounterReactiveComponent],
+  template: `<mc-counter></mc-counter
+    ><mc-counter-reactive></mc-counter-reactive>`,
+  providers: [provideStore()],
 })
 export class AppComponent {}
