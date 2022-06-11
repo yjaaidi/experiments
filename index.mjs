@@ -16,8 +16,8 @@ const NowService = defineInjectable(
 
 const Counter = defineComponent({
   selector: 'mc-counter',
+  inputs: ['count'],
   template: `
-    <div>{{count}}</div>
     <button [disabled]="count === 0" (click)="count = count - 1">-</button>
     <button (click)="count = count + 1">+</button>
   `,
@@ -26,14 +26,17 @@ const Counter = defineComponent({
   },
 });
 
-const Demo = defineComponent({
-  selector: 'mc-demo',
+const Header = defineComponent({
+  selector: 'mc-header',
+  inputs: ['title'],
   imports: [CommonModule],
   template: `
+    <h1>{{ title }}</h1>
     <img [src]="pictureUrl">
     <div>{{ now$ | async | date:'HH:mm:ss' }}</div>
   `,
   component: class {
+    title;
     pictureUrl = 'https://marmicode.io/f3683922cdecc8b0642e4ab8f8f1d35e.gif';
     now$ = inject(NowService).now$;
   },
@@ -41,8 +44,11 @@ const Demo = defineComponent({
 
 const App = defineComponent({
   selector: 'mc-app',
-  imports: [Counter, Demo],
-  template: `<mc-demo></mc-demo><mc-counter></mc-counter>`,
+  imports: [Counter, Header],
+  template: `
+    <mc-header title="Ngx Light"></mc-header>
+    <mc-counter></mc-counter>
+  `,
   styles: [`:host {display: block; text-align: center; }`],
 });
 
