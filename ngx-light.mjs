@@ -1,7 +1,4 @@
-import {
-  Component,
-  Injectable,
-} from 'https://unpkg.com/@angular/core@14.0.1/fesm2020/core.mjs';
+import { Component, Injectable } from '@angular/core';
 
 export function defineComponent(componentDef) {
   const { component = class {}, ...rest } = componentDef;

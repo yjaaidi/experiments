@@ -22,7 +22,7 @@ const Counter = defineComponent({
     <button (click)="count = count + 1">+</button>
   `,
   component: class {
-    count = 10;
+    count = 0;
   },
 });
 
