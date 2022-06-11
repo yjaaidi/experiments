@@ -12,3 +12,5 @@
 | [wmr-angular](https://github.com/yjaaidi/ng-experiments/tree/wmr-angular)                           | WMR example with Angular                                                                                                                                                |
 | [zoneless](https://github.com/yjaaidi/ng-experiments/tree/zoneless)                                 | Zoneless Angular                                                                                                                                                        |
 | [angular-inject-state](https://github.com/yjaaidi/ng-experiments/tree/inject-rx-state)                     | Angular 14 Injection Function Demo                                                                                                                                      |
+
+| [private-configurable-store](https://github.com/yjaaidi/ng-experiments/tree/private-configurable-store)                     | Angular 14 Private Configurable Store                                                                                                                                     |
