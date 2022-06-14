@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { EMPTY, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { createMeal, Meal } from './meal';
 import { MealFilter } from './meal-filter';
+
+// @hack use this meanwhile we move pics somewhere else
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const require: any;
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +17,7 @@ export class MealRepository {
       recipeInfo: {
         id: 'cauliflower',
         name: 'Cauliflower, pomegranate and pistachio salad',
-        pictureUri:
-          'https://ottolenghi.co.uk/media/contentmanager/content/cache/646x458//Cauliflower,-pomegranate-and-pistachio-salad.jpg',
+        pictureUri: require('!!file-loader!./pics/cauliflower.jpg').default,
       },
     }),
     createMeal({
@@ -22,8 +25,7 @@ export class MealRepository {
       recipeInfo: {
         id: 'braised-eggs',
         name: 'Braised eggs with leek and za’atar',
-        pictureUri:
-          'https://ottolenghi.co.uk/media/contentmanager/content/cache/646x458//Braised-eggs-with-leek-and-za%E2%80%99atar.jpg',
+        pictureUri: require('!!file-loader!./pics/braised-eggs.jpg').default,
       },
     }),
     createMeal({
@@ -31,8 +33,7 @@ export class MealRepository {
       recipeInfo: {
         id: 'buckwheat-hotcakes',
         name: 'Buckwheat and ricotta hotcakes with preserved lemon salsa',
-        pictureUri:
-          'https://ottolenghi.co.uk/media/contentmanager/content/cache/646x458//Buckwheat-and-ricotta-hotcakes-with-preserved-lemon-salsa.jpg',
+        pictureUri: require('!!file-loader!./pics/hotcakes.jpg').default,
       },
     }),
     createMeal({
@@ -40,8 +41,7 @@ export class MealRepository {
       recipeInfo: {
         id: 'devilled-eggs',
         name: 'Devilled eggs with tangerine rayu',
-        pictureUri:
-          'https://ottolenghi.co.uk/media/contentmanager/content/cache/646x458//Devilled-eggs-with-tangerine-rayu.jpg',
+        pictureUri: require('!!file-loader!./pics/eggs.jpg').default,
       },
     }),
     createMeal({
@@ -49,8 +49,7 @@ export class MealRepository {
       recipeInfo: {
         id: 'stuffed-romano',
         name: 'Stuffed Romano peppers with ricotta and mascarpone',
-        pictureUri:
-          'https://ottolenghi.co.uk/media/contentmanager/content/cache/646x458//Stuffed-Romano-peppers-with-ricotta-and-mascarpone.jpg',
+        pictureUri: require('!!file-loader!./pics/peppers.jpg').default,
       },
     }),
   ];

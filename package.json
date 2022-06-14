@@ -72,6 +72,7 @@
     "eslint": "7.22.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
+    "file-loader": "^6.2.0",
     "jest": "26.2.2",
     "jest-preset-angular": "8.4.0",
     "ng-dynamic-component": "^8.0.1",
