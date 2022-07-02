@@ -13,7 +13,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "lifecycleHooks",
+            "prefix": "mc",
             "style": "camelCase"
           }
         ],
@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "lifecycle-hooks",
+            "prefix": "mc",
             "style": "kebab-case"
           }
         ]
