@@ -1,22 +1,29 @@
+import { GetRecipes4XXResponse } from './dtos/model/get-recipes4-xx-response';
+import { Response } from 'express';
 import { join } from 'path';
+import { GetRecipes200Response } from './dtos/model/get-recipes200-response';
+import { Ingredient } from './dtos/model/ingredient';
+import { Recipe } from './dtos/model/recipe';
+import { RecipeNew } from './dtos/model/recipe-new';
 import { startService } from './start-service';
 
-let recipes: any[] = [];
-let ingredients: any[] = [];
+let recipes: Recipe[] = [];
+let ingredients: (Ingredient & { recipe_id: string })[] = [];
 
 startService({
   spec: join(__dirname, 'recipes.openapi.yaml'),
   handlers: {
-    'post-recipes': (req, res) => {
+    'post-recipes': (req, res: Response<Recipe>) => {
+      const body = req.body as RecipeNew;
       const recipe = {
         id: generateId('rec'),
         created_at: new Date().toISOString(),
-        ...req.body,
+        ...body,
       };
       recipes.push(recipe);
       res.status(201).send(recipe);
     },
-    'get-recipes': (req, res) => {
+    'get-recipes': (req, res: Response<GetRecipes200Response>) => {
       const shouldEmbedIngredients = (req.query['embed'] as string)
         ?.split(',')
         .includes('ingredients');
@@ -28,7 +35,7 @@ startService({
 
       res.send({ items });
     },
-    'get-recipe': (req, res) => {
+    'get-recipe': (req, res: Response<Recipe | GetRecipes4XXResponse>) => {
       const recipe = recipes.find(
         (recipe) => recipe.id === req.params.recipe_id
       );
@@ -39,7 +46,7 @@ startService({
         res.status(404).send(createResourceNotFoundError('recipe'));
       }
     },
-    'post-ingredient': (req, res) => {
+    'post-ingredient': (req, res: Response<Ingredient>) => {
       const ingredient = {
         id: generateId('ing'),
         recipe_id: req.params.recipe_id,
@@ -57,14 +64,14 @@ startService({
   },
 });
 
-function toIngredientDto(ingredient: any) {
+function toIngredientDto(ingredient: Ingredient) {
   return {
     id: ingredient.id,
     name: ingredient.name,
   };
 }
 
-function embedRecipeIngredients(recipe: any) {
+function embedRecipeIngredients(recipe: Recipe) {
   return {
     ...recipe,
     ingredients: ingredients

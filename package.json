@@ -1,5 +1,9 @@
 {
   "main": "main.ts",
+  "scripts": {
+    "codegen": "openapi-generator-cli generate -i src/recipes.openapi.yaml -g typescript-angular -o src/dtos --additional-properties fileNaming=kebab-case --global-property models",
+    "start": "nodemon src/main.ts --watch src --ext ts,yaml"
+  },
   "dependencies": {
     "axios": "^1.0.0-alpha.1",
     "body-parser": "^1.20.0",
@@ -10,12 +14,10 @@
     "memoizee": "^0.4.15"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.5.2",
     "@types/memoizee": "^0.4.8",
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.3"
-  },
-  "scripts": {
-    "start": "nodemon src/main.ts --watch src --ext ts,yaml"
   }
 }
