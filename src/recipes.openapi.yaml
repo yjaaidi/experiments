@@ -41,6 +41,8 @@ paths:
                     name: Babaganoush
                     type: entree
           headers: {}
+        '4XX':
+          $ref: '#/components/responses/4XX'
       requestBody:
         content:
           application/json:
@@ -87,6 +89,8 @@ paths:
                               items:
                                 $ref: '#/components/schemas/Ingredient'
               examples: {}
+        '4XX':
+          $ref: '#/components/responses/4XX'
       parameters:
         - schema:
             type: string
@@ -114,6 +118,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Recipe'
+        '4XX':
+          $ref: '#/components/responses/4XX'
       requestBody:
         content:
           application/json:
@@ -139,6 +145,8 @@ paths:
                     id: burger
                     created_at: '2019-08-24T14:15:22Z'
                     name: Burger
+        '4XX':
+          $ref: '#/components/responses/4XX'
   '/recipes/{recipe_id}/ingredients':
     parameters:
       - schema:
@@ -157,6 +165,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ingredient'
+        '4XX':
+          $ref: '#/components/responses/4XX'
       description: ...
       requestBody:
         content:
@@ -180,6 +190,8 @@ paths:
       responses:
         '200':
           description: OK
+        '4XX':
+          $ref: '#/components/responses/4XX'
       tags:
         - Ingredient
 components:
@@ -250,3 +262,23 @@ components:
         name:
           type: string
           example: Salt
+  responses:
+    4XX:
+      description: |
+        Problem
+        Cf. https://www.rfc-editor.org/rfc/rfc7807
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+              title:
+                type: string
+              status:
+                type: number
+              detail:
+                type: string
+              instance:
+                type: string
