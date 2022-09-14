@@ -7,14 +7,14 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import memoize from 'memoizee';
 
-export function startService({ handlers }) {
+export function startService({ spec, handlers }) {
   const app = express();
 
   app.use(bodyParser.json());
 
   app.use(
     OpenApiValidator.middleware({
-      apiSpec: './openapi.yaml',
+      apiSpec: spec,
       validateFormats: 'full',
       validateRequests: true,
       validateSecurity: {
