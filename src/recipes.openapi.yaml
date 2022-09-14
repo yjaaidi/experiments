@@ -1,0 +1,252 @@
+openapi: 3.0.0
+info:
+  title: Recipe
+  version: '0.1'
+  description: Recipe management API.
+  contact:
+    name: Marmicode Team
+    url: 'https://marmicode.io'
+    email: kitchen@marmicode.io
+servers:
+  - url: 'http://localhost:3000'
+    description: Local
+tags:
+  - name: Ingredient
+  - name: Recipe
+paths:
+  /recipes:
+    post:
+      summary: Create a Recipe
+      description: ...
+      operationId: post-recipes
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Recipe'
+                  - type: object
+                    properties:
+                      ingredients:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Ingredient'
+              examples:
+                Babaganoush:
+                  value:
+                    id: babaganoush
+                    created_at: '2022-03-01T00:00:00Z'
+                    name: Babaganoush
+                    type: entree
+          headers: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - type
+              allOf:
+                - $ref: '#/components/schemas/RecipeNew'
+                - type: object
+                  properties:
+                    ingredients:
+                      description: 'Prefer using POST /recipes/{recipe_id}/ingredients'
+                      oneOf:
+                        - type: array
+                          items:
+                            type: string
+                        - type: array
+                          items:
+                            $ref: '#/components/schemas/IngredientRequest'
+      tags:
+        - Recipe
+    get:
+      summary: Retrieve recipes
+      description: ...
+      operationId: get-recipes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Recipe'
+                        - type: object
+                          properties:
+                            ingredients:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/Ingredient'
+              examples: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: embed
+          description: 'e.g. ingredients, steps'
+      tags:
+        - Recipe
+  '/recipes/{recipe_id}':
+    parameters:
+      - schema:
+          type: string
+        name: recipe_id
+        in: path
+        required: true
+        description: Recipe's ID
+    patch:
+      summary: Update a recipe
+      description: ...
+      operationId: patch-recipe
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeNew'
+      tags:
+        - Recipe
+    get:
+      tags:
+        - Recipe
+      description: ...
+      operationId: get-recipe
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+              examples:
+                Burger:
+                  value:
+                    id: burger
+                    created_at: '2019-08-24T14:15:22Z'
+                    name: Burger
+  '/recipes/{recipe_id}/ingredients':
+    parameters:
+      - schema:
+          type: string
+        name: recipe_id
+        in: path
+        required: true
+        description: Recipe's ID
+    post:
+      summary: Add an ingredient to the recipe
+      operationId: post-ingredient
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+      description: ...
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngredientRequest'
+      tags:
+        - Recipe
+        - Ingredient
+  '/ingredients/{ingredient_id}':
+    parameters:
+      - schema:
+          type: string
+        name: ingredient_id
+        in: path
+        required: true
+    delete:
+      summary: Remove an ingredient
+      description: ...
+      operationId: delete-ingredient
+      responses:
+        '200':
+          description: OK
+      tags:
+        - Ingredient
+components:
+  schemas:
+    RecipeNew:
+      title: RecipeNew
+      x-examples:
+        example-1:
+          name: Babaganoush
+          type: entree
+          ingredients:
+            - salt
+        example-2:
+          name: Babaganoush
+          type: entree
+          ingredients:
+            - name: Salt
+      allOf:
+        - properties:
+            name:
+              type: string
+              example: Babaganoush
+            type:
+              type: string
+              enum:
+                - entree
+                - plat
+                - dessert
+      type: object
+    Recipe:
+      title: Recipe
+      x-examples:
+        Babaganoush:
+          id: babaganoush
+          created_at: '2019-08-24T14:15:22Z'
+          name: Babaganoush
+          type: entree
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              example: babaganoush
+            created_at:
+              type: string
+              format: date-time
+          required:
+            - id
+            - created_at
+        - $ref: '#/components/schemas/RecipeNew'
+    Ingredient:
+      title: Ingredient
+      required:
+        - name
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              example: salt
+          required:
+            - id
+        - $ref: '#/components/schemas/IngredientRequest'
+    IngredientRequest:
+      title: IngredientRequest
+      type: object
+      properties:
+        name:
+          type: string
+          example: Salt

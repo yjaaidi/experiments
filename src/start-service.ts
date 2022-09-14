@@ -28,6 +28,7 @@ export function startService({
       apiSpec: spec,
       validateFormats: 'full',
       validateRequests: true,
+      validateResponses: true,
       validateSecurity: {
         handlers: {
           async openId(req, scopes, scheme) {
