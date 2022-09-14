@@ -8,9 +8,6 @@ import jwt from 'jsonwebtoken';
 import memoize from 'memoizee';
 
 export function startService({ handlers }) {
-  const openIdConnectMap = new Map();
-  const jwksClientMap = new Map();
-
   const app = express();
 
   app.use(bodyParser.json());
@@ -32,7 +29,7 @@ export function startService({ handlers }) {
 
             /* Check token. */
             const jwkClient = await getJwkClient(scheme.openIdConnectUrl);
-            const key = await jwkClient.getSigningKeyAsync(kid);
+            const key = await jwkClient.getSigningKey(kid);
             const claims = jwt.verify(token, key.getPublicKey());
 
             /* Check scope. */
