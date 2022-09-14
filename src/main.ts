@@ -1,10 +1,11 @@
+import { join } from 'path';
 import { startService } from './start-service';
 
 let index = 0;
 const farms: any[] = [];
 
 startService({
-  spec: './openapi.yaml',
+  spec: join(__dirname, 'openapi.yaml'),
   handlers: {
     createFarm(req, res) {
       const farm = {

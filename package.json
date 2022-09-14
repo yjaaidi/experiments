@@ -16,6 +16,6 @@
     "typescript": "^4.8.3"
   },
   "scripts": {
-    "start": "nodemon main.ts -w openapi.yaml -w *.*"
+    "start": "nodemon src/main.ts --watch src --ext ts,yaml"
   }
 }
