@@ -81,7 +81,12 @@ export function startService({
     });
   });
 
-  http.createServer(app).listen(3000);
+  const port = process.env.PORT ?? 3000;
+  const server = http.createServer(app);
+  server.listen(port);
+  server.on('listening', () =>
+    console.log(`Listening at http://localhost:${port}`)
+  );
 }
 
 export function getDirname(url: string) {
