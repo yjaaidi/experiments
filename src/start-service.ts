@@ -11,6 +11,8 @@ import http from 'http';
 import jwt from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 import memoize from 'memoizee';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 export function startService({
   spec,
@@ -80,6 +82,10 @@ export function startService({
   });
 
   http.createServer(app).listen(3000);
+}
+
+export function getDirname(url: string) {
+  return dirname(fileURLToPath(url));
 }
 
 /**

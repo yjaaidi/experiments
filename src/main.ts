@@ -3,15 +3,15 @@ import { Response } from 'express';
 import { join } from 'path';
 import { GetRecipes200Response } from './dtos/model/get-recipes200-response';
 import { Ingredient } from './dtos/model/ingredient';
-import { Recipe } from './dtos/model/recipe';
-import { RecipeNew } from './dtos/model/recipe-new';
-import { startService } from './start-service';
+import { Recipe } from './dtos/model/recipe.js';
+import { RecipeNew } from './dtos/model/recipe-new.js';
+import { startService, getDirname } from './start-service.js';
 
 let recipes: Recipe[] = [];
 let ingredients: (Ingredient & { recipe_id: string })[] = [];
 
 startService({
-  spec: join(__dirname, 'recipes.openapi.yaml'),
+  spec: join(getDirname(import.meta.url), 'recipes.openapi.yaml'),
   handlers: {
     'post-recipes': (req, res: Response<Recipe>) => {
       const body = req.body as RecipeNew;
