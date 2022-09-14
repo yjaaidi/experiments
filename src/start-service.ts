@@ -90,8 +90,21 @@ const handlerResolver =
     const { basePath, openApiRoute, method } = route;
     const pathKey = openApiRoute.substring(basePath.length);
     const { operationId } = apiDoc.paths[pathKey][method.toLowerCase()];
-    return handlers[operationId];
+    return (
+      handlers[operationId] ??
+      createNotFoundHandler({ method, path: openApiRoute })
+    );
   };
+
+const createNotFoundHandler =
+  ({ method, path }: { method: string; path: string }): RequestHandler =>
+  (_, res) =>
+    res.status(501).send({
+      type: 'https://errors.marmicode.io/route-not-implemented',
+      title: 'Route Not Implemented',
+      method,
+      path,
+    });
 
 /**
  * Get JwkClient from open id config.
