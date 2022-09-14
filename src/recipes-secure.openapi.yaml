@@ -19,6 +19,9 @@ paths:
       summary: Create a Recipe
       description: ...
       operationId: post-recipes
+      security:
+        - openId:
+            - recipe.write
       responses:
         '201':
           description: Created
@@ -69,6 +72,9 @@ paths:
       summary: Retrieve recipes
       description: ...
       operationId: get-recipes
+      security:
+        - openId:
+            - recipe.read
       responses:
         '200':
           description: OK
@@ -111,6 +117,9 @@ paths:
       summary: Update a recipe
       description: ...
       operationId: patch-recipe
+      security:
+        - openId:
+            - recipe.write
       responses:
         '200':
           description: OK
@@ -132,6 +141,9 @@ paths:
         - Recipe
       description: ...
       operationId: get-recipe
+      security:
+        - openId:
+            - recipe.read
       responses:
         '200':
           description: OK
@@ -158,6 +170,9 @@ paths:
     post:
       summary: Add an ingredient to the recipe
       operationId: post-ingredient
+      security:
+        - openId:
+            - recipe.write
       responses:
         '201':
           description: Created
@@ -187,6 +202,9 @@ paths:
       summary: Remove an ingredient
       description: ...
       operationId: delete-ingredient
+      security:
+        - openId:
+            - recipe.write
       responses:
         '200':
           description: OK
@@ -195,6 +213,10 @@ paths:
       tags:
         - Ingredient
 components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://whiskmate.eu.auth0.com/.well-known/openid-configuration
   schemas:
     RecipeNew:
       title: RecipeNew
