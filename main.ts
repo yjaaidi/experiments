@@ -1,7 +1,7 @@
-import { startService } from './start-service.js';
+import { startService } from './start-service';
 
 let index = 0;
-const farms = [];
+const farms: any[] = [];
 
 startService({
   spec: './openapi.yaml',

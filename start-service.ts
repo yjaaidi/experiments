@@ -1,13 +1,24 @@
-import bodyParser from 'body-parser';
-import express from 'express';
-import OpenApiValidator from 'express-openapi-validator';
-import http from 'http';
-import jwksClient from 'jwks-rsa';
 import axios from 'axios';
+import bodyParser from 'body-parser';
+import express, {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from 'express';
+import * as OpenApiValidator from 'express-openapi-validator';
+import http from 'http';
 import jwt from 'jsonwebtoken';
+import jwksClient from 'jwks-rsa';
 import memoize from 'memoizee';
 
-export function startService({ spec, handlers }) {
+export function startService({
+  spec,
+  handlers,
+}: {
+  spec: string;
+  handlers: Record<string, RequestHandler>;
+}) {
   const app = express();
 
   app.use(bodyParser.json());
@@ -20,6 +31,11 @@ export function startService({ spec, handlers }) {
       validateSecurity: {
         handlers: {
           async openId(req, scopes, scheme) {
+            /* Skip handler if scheme type is not openIdConnect. */
+            if (scheme.type !== 'openIdConnect') {
+              return false;
+            }
+
             /* Get token's kid. */
             const token = req.headers.authorization?.split(' ')[1];
             if (token == null) {
@@ -30,7 +46,10 @@ export function startService({ spec, handlers }) {
             /* Check token. */
             const jwkClient = await getJwkClient(scheme.openIdConnectUrl);
             const key = await jwkClient.getSigningKey(kid);
-            const claims = jwt.verify(token, key.getPublicKey());
+            const claims = jwt.verify(
+              token,
+              key.getPublicKey()
+            ) as jwt.JwtPayload;
 
             /* Check scope. */
             const tokenScopes = claims.scope.split(' ');
@@ -45,12 +64,13 @@ export function startService({ spec, handlers }) {
         },
       },
       operationHandlers: {
+        basePath: '/',
         resolver: handlerResolver(handlers),
       },
     })
   );
 
-  app.use((err, req, res, next) => {
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err);
     res.status(err.status || 500).json({
       message: err.message,
@@ -64,12 +84,14 @@ export function startService({ spec, handlers }) {
 /**
  * Custom resolver that maps `operationId`s to functions.
  */
-const handlerResolver = (handlers) => (_, route, apiDoc) => {
-  const { basePath, openApiRoute, method } = route;
-  const pathKey = openApiRoute.substring(basePath.length);
-  const { operationId } = apiDoc.paths[pathKey][method.toLowerCase()];
-  return handlers[operationId];
-};
+const handlerResolver =
+  (handlers: Record<string, RequestHandler>) =>
+  (_: unknown, route: any, apiDoc: Record<string, any>) => {
+    const { basePath, openApiRoute, method } = route;
+    const pathKey = openApiRoute.substring(basePath.length);
+    const { operationId } = apiDoc.paths[pathKey][method.toLowerCase()];
+    return handlers[operationId];
+  };
 
 /**
  * Get JwkClient from open id config.

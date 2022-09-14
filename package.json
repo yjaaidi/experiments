@@ -1,6 +1,5 @@
 {
-  "type": "module",
-  "main": "index.js",
+  "main": "main.ts",
   "dependencies": {
     "axios": "^1.0.0-alpha.1",
     "body-parser": "^1.20.0",
@@ -11,9 +10,12 @@
     "memoizee": "^0.4.15"
   },
   "devDependencies": {
-    "nodemon": "^2.0.19"
+    "@types/memoizee": "^0.4.8",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.3"
   },
   "scripts": {
-    "start": "nodemon index.js -w openapi.yaml -w *.*"
+    "start": "nodemon main.ts -w openapi.yaml -w *.*"
   }
 }

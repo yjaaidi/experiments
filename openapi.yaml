@@ -46,7 +46,7 @@ components:
   securitySchemes:
     openId:
       type: openIdConnect
-      openIdConnectUrl: https://farmicode.eu.auth0.com/.well-known/openid-configuration
+      openIdConnectUrl: https://whiskmate.eu.auth0.com/.well-known/openid-configuration
   schemas:
     FarmRequest:
       additionalProperties: false
