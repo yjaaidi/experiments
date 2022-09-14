@@ -3,6 +3,7 @@
   "scripts": {
     "build": "rm -Rf dist && tsc && cp src/*.openapi.yaml dist/",
     "codegen": "openapi-generator-cli generate -i src/recipes.openapi.yaml -g typescript-angular -o src/dtos --additional-properties fileNaming=kebab-case --global-property models",
+    "deploy": "tools/deploy.sh",
     "start": "nodemon --esm src/main.ts --watch src --ext ts,yaml"
   },
   "dependencies": {
