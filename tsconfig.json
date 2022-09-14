@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "strict": true
+    "module": "CommonJS",
+    "outDir": "dist",
+    "strict": true,
+    "target": "ES2015"
   }
 }
