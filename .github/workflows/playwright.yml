@@ -15,7 +15,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        run: yarn concurrently "yarn start" "yarn test --reporter=html" --kill-others --success first
+        run: yarn concurrently "yarn start" "yarn wait-on http://localhost:3000 && yarn test --reporter=html" --kill-others --success first
       - uses: actions/upload-artifact@v2
         if: always()
         with:
