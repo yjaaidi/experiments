@@ -16,7 +16,7 @@ COPY yarn.lock ./
 RUN yarn --immutable
 
 # Copy local code to the container image.
-COPY dist .
+COPY dist ./
 
 # Run the web service on container startup.
-CMD [ "node", "main.js" ]
+CMD [ "node", "src/main.js" ]
