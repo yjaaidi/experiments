@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { IngredientRequest } from './ingredient-request';
+import { IngredientNew } from './ingredient-new';
 
 
 /**
@@ -20,5 +20,5 @@ import { IngredientRequest } from './ingredient-request';
  * Prefer using POST /recipes/{recipe_id}/ingredients
  * @export
  */
-export type PostRecipesRequestAllOfIngredients = Array<IngredientRequest> | Array<string>;
+export type PostRecipesRequestAllOfIngredients = Array<IngredientNew> | Array<string>;
 

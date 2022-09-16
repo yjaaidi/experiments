@@ -5,24 +5,24 @@ import type { GetRecipes200ResponseItemsInner } from './dtos/model/get-recipes20
 import type { PostRecipesRequest } from './dtos/model/post-recipes-request';
 import type { Recipe } from './dtos/model/recipe';
 
-// test('should remove an ingredient', async ({ request }) => {
-//   const client = new RecipeClient(request);
+test('should remove an ingredient', async ({ request }) => {
+  const client = new RecipeClient(request);
 
-//   let burgerResponse = await client.createBurger();
+  let burgerResponse = await client.createBurger();
 
-//   const tomatoes = burgerResponse.data.ingredients![3];
+  const tomatoes = burgerResponse.data.ingredients![3];
 
-//   const deleteResponse = await client.deleteIngredient(tomatoes.id);
+  const deleteResponse = await client.deleteIngredient(tomatoes.id);
 
-//   burgerResponse = await client.getRecipe(burgerResponse.data.id);
+  burgerResponse = await client.getRecipe(burgerResponse.data.id);
 
-//   expect(deleteResponse.status).toEqual(204);
-//   expect(burgerResponse.status).toEqual(200);
-//   expect(burgerResponse.data.ingredients?.length).toEqual(3);
-//   expect(burgerResponse.data.ingredients).not.toEqual(
-//     expect.arrayContaining([expect.objectContaining({ name: 'Tomato' })])
-//   );
-// });
+  expect(deleteResponse.status).toEqual(204);
+  expect(burgerResponse.status).toEqual(200);
+  expect(burgerResponse.data.ingredients?.length).toEqual(3);
+  expect(burgerResponse.data.ingredients).not.toEqual(
+    expect.arrayContaining([expect.objectContaining({ name: 'Tomato' })])
+  );
+});
 
 /*
  * This is the (Domain-Specific Language) DSL.
