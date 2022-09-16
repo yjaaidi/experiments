@@ -18,7 +18,8 @@ startService({
       const recipe = {
         id: generateId('rec'),
         created_at: new Date().toISOString(),
-        ...body,
+        name: body.name,
+        type: body.type
       };
       recipes.push(recipe);
       res.status(201).send(recipe);
