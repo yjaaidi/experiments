@@ -4,7 +4,8 @@
     "build": "rm -Rf dist && tsc && cp src/*.openapi.yaml dist/",
     "codegen": "openapi-generator-cli generate -i src/recipes.openapi.yaml -g typescript-angular -o src/dtos --additional-properties fileNaming=kebab-case --global-property models",
     "deploy": "tools/deploy.sh",
-    "start": "nodemon --esm src/main.ts --watch src --ext ts,yaml"
+    "start": "nodemon --esm src/main.ts --watch src --ext ts,yaml",
+    "test": "playwright test"
   },
   "dependencies": {
     "axios": "^1.0.0-alpha.1",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.5.2",
+    "@playwright/test": "^1.25.2",
     "@types/memoizee": "^0.4.8",
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1",
