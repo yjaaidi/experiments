@@ -65,7 +65,7 @@ paths:
                             type: string
                         - type: array
                           items:
-                            $ref: '#/components/schemas/IngredientRequest'
+                            $ref: '#/components/schemas/IngredientNew'
       tags:
         - Recipe
     get:
@@ -187,7 +187,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IngredientRequest'
+              $ref: '#/components/schemas/IngredientNew'
       tags:
         - Recipe
         - Ingredient
@@ -276,9 +276,9 @@ components:
               example: salt
           required:
             - id
-        - $ref: '#/components/schemas/IngredientRequest'
-    IngredientRequest:
-      title: IngredientRequest
+        - $ref: '#/components/schemas/IngredientNew'
+    IngredientNew:
+      title: IngredientNew
       type: object
       properties:
         name:
