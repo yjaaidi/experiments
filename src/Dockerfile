@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 # Copy yarn berry's files just to make sure that we are
 # using the same version of yarn. 
 COPY .yarnrc.yml ./
-COPY .yarn ./.yarn
+COPY .yarn/releases ./.yarn/releases/
 # Copy deps
 COPY package.json ./
 COPY yarn.lock ./
