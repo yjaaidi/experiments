@@ -3,13 +3,11 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/mr-button/src",
-  "prefix": "mr-button",
+  "prefix": "wm",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/mr-button",
         "index": "apps/mr-button/src/index.html",
@@ -88,9 +86,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/apps/mr-button"
-      ],
+      "outputs": ["coverage/apps/mr-button"],
       "options": {
         "jestConfig": "apps/mr-button/jest.config.ts",
         "passWithNoTests": true

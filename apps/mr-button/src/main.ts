@@ -1,13 +1,22 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { RecipeRepositoryFake } from './app/recipe-repository/recipe-repository.fake';
 
-import { AppModule } from './app/app.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RecipeRepository } from './app/recipe-repository/recipe-repository.service';
 import { environment } from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch((err) => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    importProvidersFrom(BrowserAnimationsModule, BrowserModule),
+    {
+      provide: RecipeRepository,
+      useClass: RecipeRepositoryFake,
+    },
+  ],
+});
