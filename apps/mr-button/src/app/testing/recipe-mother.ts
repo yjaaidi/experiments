@@ -3,14 +3,17 @@ import { Recipe } from './../recipe/recipe';
 
 class RecipeMother {
   withBasicInfo(name: string): NestedRecipeMother {
-    const slug = name.toLowerCase().replace(/ +/g, '-');
+    const slug = name
+      .toLowerCase()
+      .replace(/ +/g, '-')
+      .replace(/([^\w-])/g, '');
     return new NestedRecipeMother(
       createRecipe({
         id: `rec_${slug}`,
         name,
         description: `A delicious ${name}.`,
         ingredients: [],
-        pictureUri: `https://pictures.marmicode.io/${slug}`,
+        pictureUri: `https://pictures.marmicode.io/${slug}.jpg`,
         steps: [],
       })
     );
