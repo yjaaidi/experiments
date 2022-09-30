@@ -7,7 +7,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/mr-button",
         "index": "apps/mr-button/src/index.html",
@@ -18,7 +20,10 @@
           "apps/mr-button/src/favicon.ico",
           "apps/mr-button/src/assets"
         ],
-        "styles": ["apps/mr-button/src/styles.css"],
+        "styles": [
+          "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/mr-button/src/styles.css"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -83,7 +88,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/mr-button"],
+      "outputs": [
+        "coverage/apps/mr-button"
+      ],
       "options": {
         "jestConfig": "apps/mr-button/jest.config.ts",
         "passWithNoTests": true
