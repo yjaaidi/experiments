@@ -40,6 +40,7 @@
     "@nrwl/jest": "14.8.2",
     "@nrwl/linter": "14.8.2",
     "@nrwl/workspace": "14.8.2",
+    "@testing-library/angular": "^12.1.2",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.36.1",

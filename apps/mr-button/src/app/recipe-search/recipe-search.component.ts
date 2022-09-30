@@ -2,7 +2,7 @@ import { AsyncPipe, NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { BehaviorSubject } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { RecipeRepository } from '../recipe-repository/recipe-repository.service';
 import { RecipeFilter } from '../recipe/recipe-filter';
 import { CatalogComponent } from './../shared/catalog.component';
@@ -63,7 +63,11 @@ export class RecipeSearchComponent {
         canAdd$: this._mealPlanner.watchCanAddRecipe(recipe),
         recipe,
       }))
-    )
+    ),
+    catchError((err) => {
+      console.log(err);
+      throw err;
+    })
   );
 
   constructor(
