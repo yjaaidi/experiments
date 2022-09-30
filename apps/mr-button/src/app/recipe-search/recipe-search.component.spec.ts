@@ -2,9 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { firstValueFrom } from 'rxjs';
 import { RecipeRepository } from '../recipe-repository/recipe-repository.service';
-import { createRecipe } from '../recipe/recipe';
 import { RecipeRepositoryFake } from './../recipe-repository/recipe-repository.fake';
-import { Recipe } from './../recipe/recipe';
+import { recipeMother } from './../testing/recipe-mother';
 import { MealPlanner } from './meal-planner.service';
 import { RecipeSearchComponent } from './recipe-search.component';
 
@@ -18,7 +17,7 @@ describe(RecipeSearchComponent.name, () => {
     const recipes = await getMealPlannerRecipes();
     expect(recipes).toEqual([
       expect.objectContaining({
-        name: 'Burger',
+        name: '🍔 Burger',
       }),
     ]);
   });
@@ -27,14 +26,9 @@ describe(RecipeSearchComponent.name, () => {
     const fakeRepo = new RecipeRepositoryFake();
 
     fakeRepo.setRecipes([
-      createRecipe({
-        id: 'burger',
-        name: 'Burger',
-      } as Recipe),
-      createRecipe({
-        id: 'salad',
-        name: 'Salad',
-      } as Recipe),
+      recipeMother.withBasicInfo('🍔 Burger').build(),
+      recipeMother.withBasicInfo('🍕 Pizza').build(),
+      recipeMother.withBasicInfo('🥗 Salad').build(),
     ]);
 
     await render(RecipeSearchComponent, {
