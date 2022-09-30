@@ -1,19 +1,21 @@
 /* eslint-disable */
 export default {
   displayName: 'mr-button',
-  preset: '../../jest.preset.js',
+  testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-      stringifyContentPathRegex: '\\.(html|svg)$',
-    },
-  },
   coverageDirectory: '../../coverage/apps/mr-button',
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
+    /* Using @swc/jest instead of jest-preset-angular
+     * because jest-preset-angular strips component styles.
+     * ts-jest didn't work as it seemed to ignore modules/.../*.mjs.
+     * @swc/jest worked out of the box. */
+    '^.+\\.(ts|mjs)$': '@swc/jest',
+    /* Let jest-preview handle the styling and the rest. */
+    '^.+\\.(css|scss|sass|less)$': 'jest-preview/transforms/css',
+    '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)':
+      'jest-preview/transforms/file',
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  transformIgnorePatterns: ['node_modules/(?!.*\\.(css|mjs)$)'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

@@ -1,13 +1,13 @@
 import { AsyncPipe, NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { BehaviorSubject } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { RecipeRepository } from '../recipe-repository/recipe-repository.service';
+import { Recipe } from '../recipe/recipe';
 import { RecipeFilter } from '../recipe/recipe-filter';
 import { CatalogComponent } from './../shared/catalog.component';
 import { MealPlanner } from './meal-planner.service';
-import { Recipe } from '../recipe/recipe';
 import { RecipeFilterComponent } from './recipe-filter.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
 
@@ -63,17 +63,17 @@ export class RecipeSearchComponent {
         canAdd$: this._mealPlanner.watchCanAddRecipe(recipe),
         recipe,
       }))
-    ),
-    catchError((err) => {
-      console.log(err);
-      throw err;
-    })
+    )
   );
 
-  constructor(
-    private _mealPlanner: MealPlanner,
-    private _recipeRepository: RecipeRepository
-  ) {}
+  /* Using inject to avoid NG0202 error with ts-jest or @swc/jest.
+   * This happens because jest-preset-angular is using Angular's downlevel constructor transform
+   * to keep the constructor's param types.
+   * Cf. https://github.com/angular/angular/issues/47606
+   * Cf. https://github.com/thymikee/jest-preset-angular/blob/f24156ea1f7532c02c44d8d023b54623a4bccccd/scripts/prebuild.js
+   * Cf. https://github.com/angular/angular/blob/3a60063a54d850c50ce962a8a39ce01cfee71398/packages/compiler-cli/src/transformers/downlevel_decorators_transform/downlevel_decorators_transform.ts */
+  private _mealPlanner = inject(MealPlanner);
+  private _recipeRepository = inject(RecipeRepository);
 
   addRecipe(recipe: Recipe) {
     this._mealPlanner.addRecipe(recipe);
