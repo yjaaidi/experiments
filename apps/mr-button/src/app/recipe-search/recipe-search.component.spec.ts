@@ -37,8 +37,7 @@ describe(RecipeSearchComponent.name, () => {
       recipeMother.withBasicInfo('🥗 Salad').build(),
     ]);
 
-    await render('<wm-recipe-search>', {
-      imports: [RecipeSearchComponent],
+    await render(RecipeSearchComponent, {
       providers: [{ provide: RecipeRepository, useValue: fakeRepo }],
     });
 
