@@ -31,7 +31,7 @@ import { RecipePreviewComponent } from './recipe-preview.component';
         *ngFor="let item of items$ | async; trackBy: trackById"
         [recipe]="item.recipe"
       >
-        <div [class.dn]="item.isAlreadyAdded$" class="container">
+        <div [class.dn]="item.isAlreadyAdded$">
           <button
             (click)="addRecipe(item.recipe)"
             class="add-recipe-button"
