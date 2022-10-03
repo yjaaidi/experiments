@@ -31,7 +31,7 @@ import { RecipePreviewComponent } from './recipe-preview.component';
         *ngFor="let item of items$ | async; trackBy: trackById"
         [recipe]="item.recipe"
       >
-        <div class="container">
+        <div>
           <button
             [disabled]="(item.canAdd$ | async) === false"
             (click)="addRecipe(item.recipe)"
