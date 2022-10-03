@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { configure } from '@testing-library/dom';
 
 import '../../styles.css';
