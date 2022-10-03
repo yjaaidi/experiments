@@ -18,6 +18,8 @@ describe(RecipeSearchComponent.name, () => {
 
     const mrButton = getFirstAddButton();
 
+    expect(mrButton).toBeVisible();
+
     mrButton.click();
 
     const recipes = await getMealPlannerRecipes();
