@@ -1,6 +1,7 @@
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { Observable, BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { RxState, select } from '@rx-angular/state';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Recipe } from '../recipe/recipe';
 
 @Injectable({
@@ -9,41 +10,27 @@ import { Recipe } from '../recipe/recipe';
 export class MealPlanner {
   recipes$: Observable<Recipe[]>;
 
-  private _recipes$ = new BehaviorSubject<Recipe[]>([]);
+  private _state = new RxState<{ recipes: Recipe[] }>();
 
   constructor() {
-    this.recipes$ = this._recipes$.asObservable();
+    this._state.set({ recipes: [] });
+    this.recipes$ = this._state.select(map((state) => state.recipes));
   }
 
   addRecipe(recipe: Recipe) {
-    if (!this.canAddRecipe(recipe)) {
+    if (!this._canAddRecipe({ recipe, recipes: this._state.get('recipes') })) {
       throw new Error(`Can't add recipe.`);
     }
-    this._recipes$.next([...this._recipes$.value, recipe]);
+    this._state.set(({ recipes }) => ({ recipes: [...recipes, recipe] }));
   }
 
   watchCanAddRecipe(recipe: Recipe): Observable<boolean> {
-    return this._recipes$.pipe(
-      map((recipes) => this._canAddRecipes({ recipe, recipes })),
-      distinctUntilChanged()
-    );
+    return this._state
+      .select('recipes')
+      .pipe(select(map((recipes) => this._canAddRecipe({ recipe, recipes }))));
   }
 
-  /**
-   * @deprecated use `watchCanAddRecipe` instead.
-   */
-  canAddRecipe(recipe: Recipe): boolean {
-    return this._canAddRecipes({ recipe, recipes: this.getRecipes() });
-  }
-
-  /**
-   * @deprecated use `recipes$` instead.
-   */
-  getRecipes(): Recipe[] {
-    return this._recipes$.value;
-  }
-
-  private _canAddRecipes({
+  private _canAddRecipe({
     recipes,
     recipe,
   }: {

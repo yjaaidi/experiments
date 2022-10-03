@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { RecipeFilter } from '../recipe/recipe-filter';
-import { createRecipe, Recipe } from './../recipe/recipe';
+import { Recipe } from './../recipe/recipe';
 import { RecipeRepositoryPort } from './recipe-repository.port';
 
 @Injectable({
