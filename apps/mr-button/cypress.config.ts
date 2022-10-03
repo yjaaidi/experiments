@@ -3,4 +3,6 @@ import { nxComponentTestingPreset } from '@nrwl/angular/plugins/component-testin
 
 export default defineConfig({
   component: nxComponentTestingPreset(__filename),
+  viewportHeight: 720,
+  viewportWidth: 1280,
 });
