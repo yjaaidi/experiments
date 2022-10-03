@@ -18,8 +18,6 @@ describe(RecipeSearchComponent.name, () => {
   });
 
   function renderRecipeSearch() {
-    const burger = recipeMother.withBasicInfo('Burger').build();
-
     cy.mount(RecipeSearchComponent, {
       imports: [BrowserAnimationsModule],
       providers: [
@@ -27,7 +25,11 @@ describe(RecipeSearchComponent.name, () => {
           provide: RecipeRepository,
           useFactory(): RecipeRepository {
             const repo = new RecipeRepositoryFake();
-            repo.setRecipes([burger]);
+            repo.setRecipes([
+              recipeMother.withBasicInfo('🍔 Burger').build(),
+              recipeMother.withBasicInfo('🥟 Maultaschen').build(),
+              recipeMother.withBasicInfo('🍺 Beer').build(),
+            ]);
             return repo;
           },
         },
