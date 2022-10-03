@@ -14,7 +14,7 @@ describe(RecipeSearchComponent.name, () => {
     clickFirstAddButton();
 
     getMealPlannerRecipes().should('have.length', 1);
-    getMealPlannerRecipes().its('0.name').should('equal', 'Burger');
+    getMealPlannerRecipes().its('0.name').should('equal', '🍔 Burger');
   });
 
   function renderRecipeSearch() {
@@ -38,7 +38,7 @@ describe(RecipeSearchComponent.name, () => {
 
     return {
       clickFirstAddButton() {
-        cy.getByDataRole('add-recipe').click();
+        cy.getByDataRole('add-recipe').eq(0).click();
       },
       getMealPlannerRecipes() {
         return cy.then(() =>
