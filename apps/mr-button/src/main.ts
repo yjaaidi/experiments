@@ -1,4 +1,10 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { recipeMother } from './app/testing/recipe-mother';
+import {
+  APP_INITIALIZER,
+  enableProdMode,
+  importProvidersFrom,
+  inject,
+} from '@angular/core';
 import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { RecipeRepositoryFake } from './app/recipe-repository/recipe-repository.fake';
@@ -16,7 +22,15 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(BrowserAnimationsModule, BrowserModule),
     {
       provide: RecipeRepository,
-      useClass: RecipeRepositoryFake,
+      useFactory(): RecipeRepository {
+        const fakeRepo = new RecipeRepositoryFake();
+        fakeRepo.setRecipes([
+          recipeMother.withBasicInfo('🍔 Burger').build(),
+          recipeMother.withBasicInfo('🍕 Pizza').build(),
+          recipeMother.withBasicInfo('🥗 Salad').build(),
+        ]);
+        return fakeRepo;
+      },
     },
   ],
 });
