@@ -13,10 +13,12 @@ setUpDomTesting();
 
 describe(RecipeSearchComponent.name, () => {
   it('should add recipe to meal planner when clicked', async () => {
-    const { clickFirstAddButton, getMealPlannerRecipes } =
+    const { getFirstAddButton, getMealPlannerRecipes } =
       await renderRecipeSearch();
 
-    clickFirstAddButton();
+    const mrButton = getFirstAddButton();
+
+    mrButton.click();
 
     const recipes = await getMealPlannerRecipes();
     expect(recipes).toEqual([
@@ -35,15 +37,16 @@ describe(RecipeSearchComponent.name, () => {
       recipeMother.withBasicInfo('🥗 Salad').build(),
     ]);
 
-    await render(RecipeSearchComponent, {
+    await render('<wm-recipe-search>', {
+      imports: [RecipeSearchComponent],
       providers: [{ provide: RecipeRepository, useValue: fakeRepo }],
     });
 
     const mealPlanner = TestBed.inject(MealPlanner);
 
     return {
-      clickFirstAddButton() {
-        return screen.getAllByTestId('add-recipe')[0].click();
+      getFirstAddButton() {
+        return screen.getAllByTestId('add-recipe')[0];
       },
       async getMealPlannerRecipes() {
         return await firstValueFrom(mealPlanner.recipes$);

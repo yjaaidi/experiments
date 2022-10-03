@@ -31,9 +31,8 @@ import { RecipePreviewComponent } from './recipe-preview.component';
         *ngFor="let item of items$ | async; trackBy: trackById"
         [recipe]="item.recipe"
       >
-        <div class="container">
+        <div [class.dn]="item.isAlreadyAdded$" class="container">
           <button
-            [disabled]="(item.canAdd$ | async) === false"
             (click)="addRecipe(item.recipe)"
             class="add-recipe-button"
             color="primary"
@@ -51,6 +50,10 @@ import { RecipePreviewComponent } from './recipe-preview.component';
         display: block;
         margin: auto;
       }
+
+      .dn {
+        display: none;
+      }
     `,
   ],
 })
@@ -60,7 +63,9 @@ export class RecipeSearchComponent {
     switchMap((filter) => this._recipeRepository.search(filter)),
     map((recipes) =>
       recipes.map((recipe) => ({
-        canAdd$: this._mealPlanner.watchCanAddRecipe(recipe),
+        isAlreadyAdded$: this._mealPlanner
+          .watchCanAddRecipe(recipe)
+          .pipe(map((canAdd) => !canAdd)),
         recipe,
       }))
     )
