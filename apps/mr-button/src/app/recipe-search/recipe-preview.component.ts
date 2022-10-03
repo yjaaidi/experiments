@@ -13,7 +13,7 @@ import { Recipe } from '../recipe/recipe';
     <h2 data-role="recipe-name">{{ recipe.name }}</h2>
     <div class="flex-row">
       <ng-content></ng-content>
-      <div class="share-btn-container">
+      <div>
         <button color="accent" mat-stroked-button>SHARE</button>
       </div>
     </div>
@@ -26,10 +26,6 @@ import { Recipe } from '../recipe/recipe';
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-      }
-
-      .share-btn-container {
-        flex-basis: 300px;
       }
     `,
   ],
