@@ -15,6 +15,8 @@ describe(RecipeSearchComponent.name, () => {
 
     getMealPlannerRecipes().should('have.length', 1);
     getMealPlannerRecipes().its('0.name').should('equal', 'Burger');
+
+    cy.percySnapshot();
   });
 
   function renderRecipeSearch() {

@@ -8,6 +8,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test --watch",
+    "test-visual-regressions": "percy exec -- nx run-many --target component-test",
     "test-ui": "nx component-test --watch"
   },
   "private": true,
@@ -43,6 +44,8 @@
     "@nrwl/jest": "14.8.2",
     "@nrwl/linter": "14.8.2",
     "@nrwl/workspace": "14.8.2",
+    "@percy/cli": "^1.10.4",
+    "@percy/cypress": "^3.1.2",
     "@swc/core": "^1.3.4",
     "@swc/jest": "^0.2.23",
     "@testing-library/angular": "^12.1.2",

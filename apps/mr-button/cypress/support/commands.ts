@@ -1,3 +1,4 @@
+import '@percy/cypress';
 import { mount } from 'cypress/angular';
 
 declare global {

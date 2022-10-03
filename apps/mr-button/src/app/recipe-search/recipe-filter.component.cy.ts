@@ -12,6 +12,8 @@ describe(RecipeFilterComponent.name, () => {
     getFilterChangeSpy()
       .its('lastCall.args.0.keywords')
       .should('equal', 'Burger');
+
+    cy.percySnapshot();
   });
 
   function renderRecipePreview() {
