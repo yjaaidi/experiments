@@ -8,3 +8,13 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+.flex-row {
+  display: flex;
+}
+
+.flex-row > * {
+  flex: 1 1 0;
+  overflow: hidden;
+  text-align: center;
+}

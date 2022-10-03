@@ -1,3 +1,4 @@
+import { MatButtonModule } from '@angular/material/button';
 import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardComponent } from './../shared/card.component';
@@ -7,10 +8,15 @@ import { Recipe } from '../recipe/recipe';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-recipe-preview',
-  imports: [CardComponent, NgIf],
+  imports: [CardComponent, MatButtonModule, NgIf],
   template: `<wm-card *ngIf="recipe" [pictureUri]="recipe.pictureUri">
     <h2 data-role="recipe-name">{{ recipe.name }}</h2>
-    <ng-content></ng-content>
+    <div class="flex-row">
+      <ng-content></ng-content>
+      <div class="share-btn-container">
+        <button color="accent" mat-stroked-button>SHARE</button>
+      </div>
+    </div>
   </wm-card>`,
   styles: [
     `
@@ -20,6 +26,10 @@ import { Recipe } from '../recipe/recipe';
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+
+      .share-btn-container {
+        flex-basis: 300px;
       }
     `,
   ],

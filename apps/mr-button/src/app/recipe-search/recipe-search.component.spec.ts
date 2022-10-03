@@ -16,6 +16,8 @@ describe(RecipeSearchComponent.name, () => {
     const { getFirstAddButton, getMealPlannerRecipes } =
       await renderRecipeSearch();
 
+    debug();
+
     const mrButton = getFirstAddButton();
 
     expect(mrButton).toBeVisible();
