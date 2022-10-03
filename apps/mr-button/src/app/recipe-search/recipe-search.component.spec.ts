@@ -35,8 +35,8 @@ describe(RecipeSearchComponent.name, () => {
 
     fakeRepo.setRecipes([
       recipeMother.withBasicInfo('🍔 Burger').build(),
-      recipeMother.withBasicInfo('🍕 Pizza').build(),
-      recipeMother.withBasicInfo('🥗 Salad').build(),
+      recipeMother.withBasicInfo('🥟 Maultaschen').build(),
+      recipeMother.withBasicInfo('🍺 Beer').build(),
     ]);
 
     await render(RecipeSearchComponent, {
