@@ -7,7 +7,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/mr-button",
         "index": "apps/mr-button/src/index.html",
@@ -86,10 +88,21 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/mr-button"],
+      "outputs": [
+        "coverage/apps/mr-button"
+      ],
       "options": {
         "jestConfig": "apps/mr-button/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "component-test": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/mr-button/cypress.config.ts",
+        "testingType": "component",
+        "skipServe": true,
+        "devServerTarget": "mr-button:build"
       }
     }
   },
