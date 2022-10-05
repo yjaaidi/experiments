@@ -8,8 +8,8 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test --watch",
-    "test-visual-regressions": "percy exec -- nx run-many --target component-test",
-    "test-ui": "nx component-test --watch"
+    "test-ui": "nx component-test --browser chrome --watch",
+    "test-visual-regressions": "percy exec -- nx run-many --target component-test"
   },
   "private": true,
   "dependencies": {
