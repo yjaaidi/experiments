@@ -8,7 +8,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test --watch",
-    "test-ui": "nx component-test --watch"
+    "test-ui": "nx component-test --browser chrome --watch"
   },
   "private": true,
   "dependencies": {
