@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { render, screen } from '@testing-library/angular';
+import { fireEvent, render, screen } from '@testing-library/angular';
 import { debug } from 'jest-preview';
 import { firstValueFrom } from 'rxjs';
 import { RecipeRepository } from '../recipe-repository/recipe-repository.service';
@@ -45,7 +45,13 @@ describe(RecipeSearchComponent.name, () => {
 
     return {
       getFirstAddButton() {
-        return screen.getAllByTestId('add-recipe')[0];
+        const nativeElement = screen.getAllByTestId('add-recipe')[0];
+        return {
+          nativeElement,
+          click() {
+            fireEvent.click(nativeElement);
+          },
+        };
       },
       async getMealPlannerRecipes() {
         return await firstValueFrom(mealPlanner.recipes$);
