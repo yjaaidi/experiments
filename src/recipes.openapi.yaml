@@ -8,8 +8,10 @@ info:
     url: 'https://marmicode.io'
     email: kitchen@marmicode.io
 servers:
-  - url: 'http://localhost:3000'
-    description: Local
+  - description: Production
+    url: https://recipes-service-lrhkyo6iiq-ew.a.run.app
+  - description: Local
+    url: 'http://localhost:3000'
 tags:
   - name: Ingredient
   - name: Recipe
