@@ -1,19 +1,10 @@
 import { Component } from '@angular/core';
+import { RecipeSearchComponent } from './recipe-search.component';
 
 @Component({
   standalone: true,
-  selector: 'app-root',
-  template: `<button (click)="decrement()">-</button><span>{{ i }}</span
-    ><button (click)="increment()">+</button>`,
+  selector: 'wm-app',
+  imports: [RecipeSearchComponent],
+  template: ` <wm-recipe-search></wm-recipe-search>`,
 })
-export class AppComponent {
-  i = 0;
-
-  decrement() {
-    --this.i;
-  }
-
-  increment() {
-    ++this.i;
-  }
-}
+export class AppComponent {}
