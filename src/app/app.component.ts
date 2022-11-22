@@ -1,10 +1,19 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: `<button (click)="decrement()">-</button><span>{{ i }}</span
+    ><button (click)="increment()">+</button>`,
 })
 export class AppComponent {
-  title = 'demo';
+  i = 0;
+
+  decrement() {
+    --this.i;
+  }
+
+  increment() {
+    ++this.i;
+  }
 }
