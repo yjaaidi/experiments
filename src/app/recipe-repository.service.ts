@@ -3,10 +3,14 @@ import { Observable, of } from 'rxjs';
 import { createRecipe, Recipe } from './recipe';
 import { RecipeFilter } from './recipe-filter';
 
+export interface RecipeRepositoryDef {
+  search(filter?: RecipeFilter): Observable<Recipe[]>;
+}
+
 @Injectable({
   providedIn: 'root',
 })
-export class RecipeRepository {
+export class RecipeRepository implements RecipeRepositoryDef {
   private _recipes = [
     createRecipe({
       id: 'cauliflower-pomegranate-and-pistachio-salad',

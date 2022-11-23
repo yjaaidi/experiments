@@ -21,6 +21,10 @@ class NoopZone {
   fork() {
     return this;
   }
+
+  run(callback: Function, applyThis?: any, applyArgs?: any[]) {
+    return callback.apply(applyThis, applyArgs);
+  }
 }
 (globalThis as any).Zone = NoopZone;
 
