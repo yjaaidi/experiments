@@ -15,7 +15,7 @@ import { CardComponent } from './card.component';
   styles: [
     `
       h2 {
-        font-size: 1.2em;
+        font-size: 1em;
         text-align: center;
         overflow: hidden;
         text-overflow: ellipsis;
