@@ -1,38 +1,13 @@
 import { afterEach } from 'vitest';
 
-/* @hack use a dummy zone implementation because Angular TestBed
- * manually instantiates NgZone.
- * This could be quickly fixed. */
-class NoopZone {
-  static root = new NoopZone();
-  static current = NoopZone.root;
-  static currentTask = null;
-
-  static assertZonePatched() {
-    return true;
-  }
-
-  static __load_patch() {}
-
-  static __symbol__(name: string) {
-    return name;
-  }
-
-  fork() {
-    return this;
-  }
-
-  run(callback: Function, applyThis?: any, applyArgs?: any[]) {
-    return callback.apply(applyThis, applyArgs);
-  }
-}
-(globalThis as any).Zone = NoopZone;
-
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
 import { getTestBed } from '@angular/core/testing';
+import { NoopZone } from './app/testing/noop-zone';
+
+(globalThis as any).Zone = NoopZone;
 
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
