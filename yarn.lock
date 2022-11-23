@@ -4223,39 +4223,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"demo@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "demo@workspace:."
-  dependencies:
-    "@angular-devkit/build-angular": ^15.0.0
-    "@angular/animations": ^15.0.0
-    "@angular/cdk": 15.0.0
-    "@angular/cli": ~15.0.0
-    "@angular/common": ^15.0.0
-    "@angular/compiler": ^15.0.0
-    "@angular/compiler-cli": ^15.0.0
-    "@angular/core": ^15.0.0
-    "@angular/forms": ^15.0.0
-    "@angular/material": 15.0.0
-    "@angular/platform-browser": ^15.0.0
-    "@angular/platform-browser-dynamic": ^15.0.0
-    "@angular/router": ^15.0.0
-    "@types/jasmine": ~4.3.0
-    "@types/node": ^18.11.9
-    jasmine-core: ~4.5.0
-    karma: ~6.4.0
-    karma-chrome-launcher: ~3.1.0
-    karma-coverage: ~2.2.0
-    karma-jasmine: ~5.1.0
-    karma-jasmine-html-reporter: ~2.0.0
-    rxjs: ~7.5.0
-    tslib: ^2.3.0
-    typescript: ~4.8.2
-    vite: ^3.2.4
-    zone.js: ~0.12.0
-  languageName: unknown
-  linkType: soft
-
 "depd@npm:2.0.0":
   version: 2.0.0
   resolution: "depd@npm:2.0.0"
@@ -9124,6 +9091,39 @@ __metadata:
   checksum: fdcf3cadab414e60b86c6836e7ac9de9273561a8926f57cbc28641b602a771527239ee4d47f2689ed255666f035ba0a0d72390986cc0c4e45344491adc7d0eeb
   languageName: node
   linkType: hard
+
+"whiskmate@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "whiskmate@workspace:."
+  dependencies:
+    "@angular-devkit/build-angular": ^15.0.0
+    "@angular/animations": ^15.0.0
+    "@angular/cdk": 15.0.0
+    "@angular/cli": ~15.0.0
+    "@angular/common": ^15.0.0
+    "@angular/compiler": ^15.0.0
+    "@angular/compiler-cli": ^15.0.0
+    "@angular/core": ^15.0.0
+    "@angular/forms": ^15.0.0
+    "@angular/material": 15.0.0
+    "@angular/platform-browser": ^15.0.0
+    "@angular/platform-browser-dynamic": ^15.0.0
+    "@angular/router": ^15.0.0
+    "@types/jasmine": ~4.3.0
+    "@types/node": ^18.11.9
+    jasmine-core: ~4.5.0
+    karma: ~6.4.0
+    karma-chrome-launcher: ~3.1.0
+    karma-coverage: ~2.2.0
+    karma-jasmine: ~5.1.0
+    karma-jasmine-html-reporter: ~2.0.0
+    rxjs: ~7.5.0
+    tslib: ^2.3.0
+    typescript: ~4.8.2
+    vite: ^3.2.4
+    zone.js: ~0.12.0
+  languageName: unknown
+  linkType: soft
 
 "wide-align@npm:^1.1.5":
   version: 1.1.5
