@@ -17,7 +17,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/whiskmate",
-            "index": "src/app/index.html",
+            "index": "src/ngc/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
