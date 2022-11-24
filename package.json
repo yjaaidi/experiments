@@ -6,7 +6,8 @@
     "start": "vite dev",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "vitest"
+    "test": "vitest",
+    "test-ct": "playwright test -c playwright-ct.config.ts"
   },
   "private": true,
   "dependencies": {
@@ -28,8 +29,12 @@
     "@angular-devkit/build-angular": "^15.0.0",
     "@angular/cli": "~15.0.0",
     "@angular/compiler-cli": "^15.0.0",
+    "@playwright/test": "1.28.1",
     "@types/node": "^18.11.9",
     "@vitest/ui": "^0.25.3",
+    "expect": "^29.3.1",
+    "jest": "^29.3.1",
+    "jest-mock": "^29.3.1",
     "jsdom": "^20.0.3",
     "typescript": "~4.8.2",
     "vite": "^3.2.4",
