@@ -5,7 +5,6 @@ import { MealPlanner } from './meal-planner.service';
 import { RecipeFilter } from './recipe-filter';
 import { RecipeRepository } from './recipe-repository.service';
 import { RecipeSearchComponent } from './recipe-search.component';
-import { describe, expect, it } from 'vitest';
 import { RecipeRepositoryFake } from './testing/recipe-repository.fake';
 import { recipeMother } from './testing/recipe.mother';
 import { AsyncPipe, NgForOf } from '@angular/common';

@@ -2,9 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { MealPlanner } from './meal-planner.service';
 import { createObserver } from './testing/observer';
 import { recipeMother } from './testing/recipe.mother';
-import { describe, it, expect } from 'vitest';
 import { firstValueFrom } from 'rxjs';
-import { NgZone, ɵNoopNgZone } from '@angular/core';
 
 describe(MealPlanner.name, () => {
   const { observe } = createObserver();
@@ -90,9 +88,6 @@ describe(MealPlanner.name, () => {
   }
 
   function createMealPlanner() {
-    TestBed.configureTestingModule({
-      providers: [{ provide: NgZone, useClass: ɵNoopNgZone }],
-    });
     return {
       burger: recipeMother.withBasicInfo('Burger').build(),
       beer: recipeMother.withBasicInfo('Beer').build(),

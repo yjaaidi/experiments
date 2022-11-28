@@ -1,10 +1,14 @@
 /* @hack use a dummy zone implementation because Angular TestBed
  * manually instantiates NgZone.
  * This could be quickly fixed. */
-export class NoopZone {
+class NoopZone {
   static root = new NoopZone();
   static current = NoopZone.root;
   static currentTask = null;
+  /* This is used by TestBed's teardown. */
+  static fakeAsyncTest = {
+    resetFakeAsyncZone() {},
+  };
 
   static assertZonePatched() {
     return true;
@@ -24,3 +28,5 @@ export class NoopZone {
     return callback.apply(applyThis, applyArgs);
   }
 }
+
+(globalThis as any).Zone = NoopZone;

@@ -1,5 +1,5 @@
 import { Observable, Observer, Subscription } from 'rxjs';
-import { Mocked, beforeEach, afterEach, vi } from 'vitest';
+import { fn, Mocked } from 'jest-mock';
 
 export function createObserver() {
   let subscription: Subscription;
@@ -12,9 +12,9 @@ export function createObserver() {
   return {
     observe<T>(observable: Observable<T>) {
       const observer: Mocked<Observer<T>> = {
-        next: vi.fn<[T], void>(),
-        error: vi.fn<[unknown], void>(),
-        complete: vi.fn<[], void>(),
+        next: fn(),
+        error: fn(),
+        complete: fn(),
       };
       subscription.add(observable.subscribe(observer));
       return {
