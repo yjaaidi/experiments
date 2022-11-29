@@ -5,6 +5,9 @@
     "outDir": "./out-tsc/app",
     "types": []
   },
+  "files": [
+    "src/ngc/main.ts"
+  ],
   "include": [
     "src/**/*.d.ts"
   ]

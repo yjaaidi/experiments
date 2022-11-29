@@ -18,7 +18,7 @@
           "options": {
             "outputPath": "dist/whiskmate",
             "index": "src/ngc/index.html",
-            "main": "src/main.ts",
+            "main": "src/ngc/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
