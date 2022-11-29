@@ -6,8 +6,9 @@
     "start": "vite dev",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "vitest",
-    "test-ct": "playwright test -c playwright-ct.config.ts"
+    "test:playwright-ct": "playwright test -c playwright-ct.config.ts",
+    "test:jest": "jest",
+    "test:vitest": "vitest run"
   },
   "private": true,
   "dependencies": {
