@@ -1,7 +1,7 @@
 import { ComponentFixtures, expect, test } from '../../playwright-ct-angular';
 import { RecipeSearchTestContainerComponent } from './recipe-search-test-container.component';
 import { recipeMother } from './testing/recipe.mother';
-import { Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 test.describe('<wm-recipe-search>', () => {
   test('should search recipes without keyword on load', async ({
@@ -53,7 +53,7 @@ test.describe('<wm-recipe-search>', () => {
         /* Wait for images to load. */
         await page.waitForLoadState('networkidle');
         /* jpg rendering might change a bit so let's reduce the threshold. */
-        await expect(page).toHaveScreenshot({maxDiffPixelRatio: 0.05});
+        await expect(page).toHaveScreenshot({ maxDiffPixelRatio: 0.05 });
       },
     };
   }

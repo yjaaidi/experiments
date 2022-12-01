@@ -1,5 +1,5 @@
 import { ComponentFixtures, expect, test } from '../../playwright-ct-angular';
-import { Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { RecipeFilterComponent } from './recipe-filter.component';
 
 test.describe('<wm-recipe-filter>', () => {
