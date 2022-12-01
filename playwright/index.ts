@@ -1,3 +1,1 @@
-import '@angular/compiler';
-import 'zone.js';
-import '../src/styles.css'
+import '../src/styles.css';
