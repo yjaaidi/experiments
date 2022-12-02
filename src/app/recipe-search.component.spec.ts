@@ -1,4 +1,3 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 import { MealPlanner } from './meal-planner.service';
@@ -8,8 +7,8 @@ import { RecipeSearchComponent } from './recipe-search.component';
 import { RecipeRepositoryFake } from './testing/recipe-repository.fake';
 import { recipeMother } from './testing/recipe.mother';
 import { AsyncPipe, NgForOf } from '@angular/common';
-import { fireEvent, render, screen } from '@testing-library/angular';
-import { getAllDebugElements, getDebugElement } from './testing/utils';
+import { fireEvent, screen } from '@testing-library/angular';
+import { renderShallow } from './testing/utils';
 
 describe(RecipeSearchComponent.name, () => {
   it('should search recipes without keyword on load', async () => {
@@ -63,22 +62,17 @@ describe(RecipeSearchComponent.name, () => {
       recipeMother.withBasicInfo('Burger').build(),
     ]);
 
-    TestBed.overrideComponent(RecipeSearchComponent, {
-      set: {
-        /* Shallow test is at least 5x faster. */
-        imports: [AsyncPipe, NgForOf],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      },
-    });
-
-    const { detectChanges } = await render(RecipeSearchComponent, {
-      providers: [
-        {
-          provide: RecipeRepository,
-          useValue: fakeRepo,
-        },
-      ],
-    });
+    /* Shallow test is at least 5x faster. */
+    const { detectChanges, getDebugElement, getAllDebugElements } =
+      await renderShallow(RecipeSearchComponent, {
+        componentImports: [AsyncPipe, NgForOf],
+        providers: [
+          {
+            provide: RecipeRepository,
+            useValue: fakeRepo,
+          },
+        ],
+      });
 
     return {
       getDisplayedRecipeNames() {
