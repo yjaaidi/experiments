@@ -38,6 +38,7 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
           color="primary"
           data-role="add-recipe"
           mat-stroked-button
+          role="button"
         >
           ADD
         </button>

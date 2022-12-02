@@ -20,6 +20,10 @@ class NoopZone {
     return name;
   }
 
+  get() {
+    return this;
+  }
+
   fork() {
     return this;
   }

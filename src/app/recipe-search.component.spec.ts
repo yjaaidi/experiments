@@ -8,13 +8,8 @@ import { RecipeSearchComponent } from './recipe-search.component';
 import { RecipeRepositoryFake } from './testing/recipe-repository.fake';
 import { recipeMother } from './testing/recipe.mother';
 import { AsyncPipe, NgForOf } from '@angular/common';
-import {
-  detectChanges,
-  get,
-  getAll,
-  getByDataRole,
-  render,
-} from './testing/utils';
+import { fireEvent, render, screen } from '@testing-library/angular';
+import { getAllDebugElements, getDebugElement } from './testing/utils';
 
 describe(RecipeSearchComponent.name, () => {
   it('should search recipes without keyword on load', async () => {
@@ -62,12 +57,6 @@ describe(RecipeSearchComponent.name, () => {
   });
 
   async function renderSearchComponent() {
-    const { render, ...rest } = await setUpSearchComponent();
-    render();
-    return rest;
-  }
-
-  async function setUpSearchComponent() {
     const fakeRepo = new RecipeRepositoryFake();
     fakeRepo.setRecipes([
       recipeMother.withBasicInfo('Beer').build(),
@@ -76,48 +65,48 @@ describe(RecipeSearchComponent.name, () => {
 
     TestBed.overrideComponent(RecipeSearchComponent, {
       set: {
-        providers: [
-          {
-            provide: RecipeRepository,
-            useValue: fakeRepo,
-          },
-        ],
         /* Shallow test is at least 5x faster. */
         imports: [AsyncPipe, NgForOf],
         schemas: [CUSTOM_ELEMENTS_SCHEMA],
       },
     });
 
-    const mealPlanner = TestBed.inject(MealPlanner);
+    const { detectChanges } = await render(RecipeSearchComponent, {
+      providers: [
+        {
+          provide: RecipeRepository,
+          useValue: fakeRepo,
+        },
+      ],
+    });
 
     return {
-      mealPlanner,
-      render() {
-        render(RecipeSearchComponent);
-        detectChanges();
-      },
       getDisplayedRecipeNames() {
-        return getAll('wm-recipe-preview').map(
+        return getAllDebugElements('wm-recipe-preview').map(
           (el) => el.properties['recipe'].name
         );
       },
       async getMealPlannerRecipes() {
-        return firstValueFrom(mealPlanner.recipes$);
+        return firstValueFrom(TestBed.inject(MealPlanner).recipes$);
       },
       getFirstAddButton() {
-        const el = getByDataRole('add-recipe');
+        const button = screen.getAllByRole<HTMLButtonElement>('button', {
+          name: 'ADD',
+        })[0];
         return {
           click() {
-            el.triggerEventHandler('click');
-            detectChanges();
+            fireEvent.click(button);
           },
           isDisabled() {
-            return el.properties['disabled'];
+            return button.disabled;
           },
         };
       },
       updateFilter(filter: RecipeFilter) {
-        get('wm-recipe-filter').triggerEventHandler('filterChange', filter);
+        getDebugElement('wm-recipe-filter').triggerEventHandler(
+          'filterChange',
+          filter
+        );
         detectChanges();
       },
     };
