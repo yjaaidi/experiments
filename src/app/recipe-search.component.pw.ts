@@ -1,24 +1,23 @@
-import { ComponentFixtures, expect, test } from '../../playwright-ct-angular';
-import { RecipeSearchTestContainerComponent } from './recipe-search-test-container.component';
-import { recipeMother } from './testing/recipe.mother';
-import type { Page } from '@playwright/test';
+import {
+  ComponentFixtures,
+  expect,
+  test,
+} from '@jscutlery/playwright-ct-angular';
+import {RecipeSearchTestContainer} from './recipe-search.test-container';
+import {recipeMother} from './testing/recipe.mother';
 
 test.describe('<wm-recipe-search>', () => {
-  test('should search recipes without keyword on load', async ({
-    page,
-    mount,
-  }) => {
-    const { recipeTitleLocator, verifyScreenshot } =
-      await renderSearchComponent({ page, mount });
+  test('should search recipes without keyword on load', async ({mount}) => {
+    const {recipeTitleLocator, verifyScreenshot} =
+      await renderSearchComponent({mount});
 
     await expect(recipeTitleLocator).toHaveText(['Beer', 'Burger']);
 
     await verifyScreenshot();
   });
 
-  test('should search recipes using given filter', async ({ page, mount }) => {
-    const { recipeTitleLocator, updateFilter } = await renderSearchComponent({
-      page,
+  test('should search recipes using given filter', async ({mount}) => {
+    const {recipeTitleLocator, updateFilter} = await renderSearchComponent({
       mount,
     });
 
@@ -29,11 +28,8 @@ test.describe('<wm-recipe-search>', () => {
     await expect(recipeTitleLocator).toHaveText(['Burger']);
   });
 
-  async function renderSearchComponent({
-    page,
-    mount,
-  }: { page: Page } & ComponentFixtures) {
-    await mount(RecipeSearchTestContainerComponent, {
+  async function renderSearchComponent({mount}: ComponentFixtures) {
+    const locator = await mount(RecipeSearchTestContainer, {
       inputs: {
         recipes: [
           recipeMother.withBasicInfo('Beer').build(),
@@ -43,16 +39,17 @@ test.describe('<wm-recipe-search>', () => {
     });
 
     return {
-      recipeTitleLocator: page.getByRole('heading', {
-        name: "Recipe's Name",
-      }),
-      async updateFilter({ keywords }: { keywords: string }) {
-        await page.getByLabel('Keywords').type(keywords);
+      recipeTitleLocator: locator.getByTestId('recipe-name'),
+      async updateFilter({keywords}: { keywords: string }) {
+        await locator.getByLabel('Keywords').type(keywords);
       },
       async verifyScreenshot() {
         /* Wait for images to load. */
-        await page.waitForLoadState('networkidle');
-        await expect(page).toHaveScreenshot();
+        await locator.page().waitForLoadState('networkidle');
+        /* Prefer using whole page screenshot for two reasons:
+         * 1. it's the same resolution and the Playwright reporter diff will show slider.
+         * 2. we make sure that there's no extra overlay in the DOM (e.g. dialog). */
+        await expect(locator.page()).toHaveScreenshot();
       },
     };
   }

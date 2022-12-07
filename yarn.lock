@@ -1979,6 +1979,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jest/schemas@npm:^28.1.3":
+  version: 28.1.3
+  resolution: "@jest/schemas@npm:28.1.3"
+  dependencies:
+    "@sinclair/typebox": ^0.24.1
+  checksum: 3cf1d4b66c9c4ffda58b246de1ddcba8e6ad085af63dccdf07922511f13b68c0cc480a7bc620cb4f3099a6f134801c747e1df7bfc7a4ef4dceefbdea3e31e1de
+  languageName: node
+  linkType: hard
+
 "@jest/schemas@npm:^29.0.0":
   version: 29.0.0
   resolution: "@jest/schemas@npm:29.0.0"
@@ -2059,6 +2068,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jest/types@npm:^28.1.3":
+  version: 28.1.3
+  resolution: "@jest/types@npm:28.1.3"
+  dependencies:
+    "@jest/schemas": ^28.1.3
+    "@types/istanbul-lib-coverage": ^2.0.0
+    "@types/istanbul-reports": ^3.0.0
+    "@types/node": "*"
+    "@types/yargs": ^17.0.8
+    chalk: ^4.0.0
+  checksum: 1e258d9c063fcf59ebc91e46d5ea5984674ac7ae6cae3e50aa780d22b4405bf2c925f40350bf30013839eb5d4b5e521d956ddf8f3b7c78debef0e75a07f57350
+  languageName: node
+  linkType: hard
+
 "@jest/types@npm:^29.3.1":
   version: 29.3.1
   resolution: "@jest/types@npm:29.3.1"
@@ -2132,6 +2155,23 @@ __metadata:
     "@jridgewell/resolve-uri": 3.1.0
     "@jridgewell/sourcemap-codec": 1.4.14
   checksum: 9d703b859cff5cd83b7308fd457a431387db5db96bd781a63bf48e183418dd9d3d44e76b9e4ae13237f6abeeb25d739ec9215c1d5bfdd08f66f750a50074a339
+  languageName: node
+  linkType: hard
+
+"@jscutlery/playwright-ct-angular@file:/tmp/playwright-ct-angular/::locator=whiskmate%40workspace%3A.":
+  version: 0.0.1
+  resolution: "@jscutlery/playwright-ct-angular@file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."
+  dependencies:
+    jest-mock: ^28.1.3
+    rxjs: ^7.5.7
+    vite: ^3.2.1
+  peerDependencies:
+    "@angular/core": "*"
+    "@angular/platform-browser": "*"
+    "@angular/platform-browser-dynamic": "*"
+    "@playwright/test": ^1.28.0
+    tslib: "*"
+  checksum: 8ad5dab8e2e7a67ee3dc4876466e23db05800c81ed6efe0f1d0f832bdb4b5ccd611fba532610f0afeb5d0240a1221820c22d5cf55f933ed4c2238a3f6cdc9c13
   languageName: node
   linkType: hard
 
@@ -7482,6 +7522,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-mock@npm:^28.1.3":
+  version: 28.1.3
+  resolution: "jest-mock@npm:28.1.3"
+  dependencies:
+    "@jest/types": ^28.1.3
+    "@types/node": "*"
+  checksum: a573bf8e5f12f4c29c661266c31b5c6b69a28d3195b83049983bce025b2b1a0152351567e89e63b102ef817034c2a3aa97eda4e776f3bae2aee54c5765573aa7
+  languageName: node
+  linkType: hard
+
 "jest-pnp-resolver@npm:^1.2.2":
   version: 1.2.3
   resolution: "jest-pnp-resolver@npm:1.2.3"
@@ -9672,7 +9722,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^7.5.5":
+"rxjs@npm:^7.5.5, rxjs@npm:^7.5.7":
   version: 7.6.0
   resolution: "rxjs@npm:7.6.0"
   dependencies:
@@ -10776,7 +10826,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:3.2.5, vite@npm:^3.0.0":
+"vite@npm:3.2.5, vite@npm:^3.0.0, vite@npm:^3.2.1":
   version: 3.2.5
   resolution: "vite@npm:3.2.5"
   dependencies:
@@ -11158,6 +11208,7 @@ __metadata:
     "@angular/platform-browser": 15.0.2
     "@angular/platform-browser-dynamic": 15.0.2
     "@angular/router": 15.0.2
+    "@jscutlery/playwright-ct-angular": /tmp/playwright-ct-angular/
     "@playwright/test": 1.28.1
     "@swc/core": 1.3.21
     "@swc/jest": 0.2.23

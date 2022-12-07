@@ -1,8 +1,8 @@
-import {Component, inject, Input} from '@angular/core';
-import {RecipeSearchComponent} from './recipe-search.component';
-import {RecipeRepository} from './recipe-repository.service';
-import {RecipeRepositoryFake} from './testing/recipe-repository.fake';
-import {Recipe} from './recipe';
+import { Component, inject, Input } from '@angular/core';
+import { RecipeSearchComponent } from './recipe-search.component';
+import { RecipeRepository } from './recipe-repository.service';
+import { RecipeRepositoryFake } from './testing/recipe-repository.fake';
+import { Recipe } from './recipe';
 
 @Component({
   standalone: true,
@@ -16,7 +16,7 @@ import {Recipe} from './recipe';
     },
   ],
 })
-export class RecipeSearchTestContainerComponent {
+export class RecipeSearchTestContainer {
   private _repo = inject(RecipeRepositoryFake);
 
   @Input() set recipes(recipes: Recipe[]) {

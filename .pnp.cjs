@@ -41,6 +41,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@angular/platform-browser", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/platform-browser-dynamic", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/router", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
+            ["@jscutlery/playwright-ct-angular", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."],\
             ["@playwright/test", "npm:1.28.1"],\
             ["@swc/core", "npm:1.3.21"],\
             ["@swc/jest", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:0.2.23"],\
@@ -3595,6 +3596,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@jest/schemas", [\
+        ["npm:28.1.3", {\
+          "packageLocation": "./.yarn/cache/@jest-schemas-npm-28.1.3-231835b296-3cf1d4b66c.zip/node_modules/@jest/schemas/",\
+          "packageDependencies": [\
+            ["@jest/schemas", "npm:28.1.3"],\
+            ["@sinclair/typebox", "npm:0.24.51"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:29.0.0", {\
           "packageLocation": "./.yarn/cache/@jest-schemas-npm-29.0.0-5d6c90262d-41355c78f0.zip/node_modules/@jest/schemas/",\
           "packageDependencies": [\
@@ -3679,6 +3688,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
+        ["npm:28.1.3", {\
+          "packageLocation": "./.yarn/cache/@jest-types-npm-28.1.3-422ad1bd71-1e258d9c06.zip/node_modules/@jest/types/",\
+          "packageDependencies": [\
+            ["@jest/types", "npm:28.1.3"],\
+            ["@jest/schemas", "npm:28.1.3"],\
+            ["@types/istanbul-lib-coverage", "npm:2.0.4"],\
+            ["@types/istanbul-reports", "npm:3.0.1"],\
+            ["@types/node", "npm:18.11.10"],\
+            ["@types/yargs", "npm:17.0.15"],\
+            ["chalk", "npm:4.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:29.3.1", {\
           "packageLocation": "./.yarn/cache/@jest-types-npm-29.3.1-6b45218613-6f9faf2750.zip/node_modules/@jest/types/",\
           "packageDependencies": [\
@@ -3759,6 +3781,47 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@jridgewell/trace-mapping", "npm:0.3.17"],\
             ["@jridgewell/resolve-uri", "npm:3.1.0"],\
             ["@jridgewell/sourcemap-codec", "npm:1.4.14"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@jscutlery/playwright-ct-angular", [\
+        ["file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A.", {\
+          "packageLocation": "./.yarn/cache/@jscutlery-playwright-ct-angular-file-e09cc649de-8ad5dab8e2.zip/node_modules/@jscutlery/playwright-ct-angular/",\
+          "packageDependencies": [\
+            ["@jscutlery/playwright-ct-angular", "file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A.", {\
+          "packageLocation": "./.yarn/__virtual__/@jscutlery-playwright-ct-angular-virtual-1ec6f9467a/0/cache/@jscutlery-playwright-ct-angular-file-e09cc649de-8ad5dab8e2.zip/node_modules/@jscutlery/playwright-ct-angular/",\
+          "packageDependencies": [\
+            ["@jscutlery/playwright-ct-angular", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."],\
+            ["@angular/core", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
+            ["@angular/platform-browser", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
+            ["@angular/platform-browser-dynamic", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
+            ["@playwright/test", "npm:1.28.1"],\
+            ["@types/angular__core", null],\
+            ["@types/angular__platform-browser", null],\
+            ["@types/angular__platform-browser-dynamic", null],\
+            ["@types/playwright__test", null],\
+            ["@types/tslib", null],\
+            ["jest-mock", "npm:28.1.3"],\
+            ["rxjs", "npm:7.6.0"],\
+            ["tslib", "npm:2.4.1"],\
+            ["vite", "virtual:1ec6f9467ac75421bd9af8626ae2ff53932999deaaaec3bb941f9e7ded3dec25059e6bca57a9e6b8d6699f05ec3d785de95f0b9ce3190ada0637dff202a46305#npm:3.2.5"]\
+          ],\
+          "packagePeers": [\
+            "@angular/core",\
+            "@angular/platform-browser-dynamic",\
+            "@angular/platform-browser",\
+            "@playwright/test",\
+            "@types/angular__core",\
+            "@types/angular__platform-browser-dynamic",\
+            "@types/angular__platform-browser",\
+            "@types/playwright__test",\
+            "@types/tslib",\
+            "tslib"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -9987,6 +10050,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["jest-mock", [\
+        ["npm:28.1.3", {\
+          "packageLocation": "./.yarn/cache/jest-mock-npm-28.1.3-75849d2dd2-a573bf8e5f.zip/node_modules/jest-mock/",\
+          "packageDependencies": [\
+            ["jest-mock", "npm:28.1.3"],\
+            ["@jest/types", "npm:28.1.3"],\
+            ["@types/node", "npm:18.11.10"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:29.3.1", {\
           "packageLocation": "./.yarn/cache/jest-mock-npm-29.3.1-45d1cf0a4c-9098852cb2.zip/node_modules/jest-mock/",\
           "packageDependencies": [\
@@ -13762,6 +13834,42 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
+        ["virtual:1ec6f9467ac75421bd9af8626ae2ff53932999deaaaec3bb941f9e7ded3dec25059e6bca57a9e6b8d6699f05ec3d785de95f0b9ce3190ada0637dff202a46305#npm:3.2.5", {\
+          "packageLocation": "./.yarn/__virtual__/vite-virtual-17ab85ac4d/0/cache/vite-npm-3.2.5-f23b9ecb5b-ad35b7008c.zip/node_modules/vite/",\
+          "packageDependencies": [\
+            ["vite", "virtual:1ec6f9467ac75421bd9af8626ae2ff53932999deaaaec3bb941f9e7ded3dec25059e6bca57a9e6b8d6699f05ec3d785de95f0b9ce3190ada0637dff202a46305#npm:3.2.5"],\
+            ["@types/less", null],\
+            ["@types/node", null],\
+            ["@types/sass", null],\
+            ["@types/stylus", null],\
+            ["@types/sugarss", null],\
+            ["@types/terser", null],\
+            ["esbuild", "npm:0.15.18"],\
+            ["fsevents", "patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"],\
+            ["less", null],\
+            ["postcss", "npm:8.4.19"],\
+            ["resolve", "patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"],\
+            ["rollup", "npm:2.79.1"],\
+            ["sass", null],\
+            ["stylus", null],\
+            ["sugarss", null],\
+            ["terser", null]\
+          ],\
+          "packagePeers": [\
+            "@types/less",\
+            "@types/node",\
+            "@types/sass",\
+            "@types/stylus",\
+            "@types/sugarss",\
+            "@types/terser",\
+            "less",\
+            "sass",\
+            "stylus",\
+            "sugarss",\
+            "terser"\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:3.2.5", {\
           "packageLocation": "./.yarn/__virtual__/vite-virtual-890bdbc4f0/0/cache/vite-npm-3.2.5-f23b9ecb5b-ad35b7008c.zip/node_modules/vite/",\
           "packageDependencies": [\
@@ -14215,6 +14323,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@angular/platform-browser", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/platform-browser-dynamic", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/router", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
+            ["@jscutlery/playwright-ct-angular", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."],\
             ["@playwright/test", "npm:1.28.1"],\
             ["@swc/core", "npm:1.3.21"],\
             ["@swc/jest", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:0.2.23"],\

@@ -1,14 +1,13 @@
-import { ComponentFixtures, expect, test } from '../../playwright-ct-angular';
-import type { Page } from '@playwright/test';
+import {
+  ComponentFixtures,
+  expect,
+  test,
+} from '@jscutlery/playwright-ct-angular';
 import { RecipeFilterComponent } from './recipe-filter.component';
 
 test.describe('<wm-recipe-filter>', () => {
-  test('should search recipes without keyword on load', async ({
-    page,
-    mount,
-  }) => {
+  test('should search recipes without keyword on load', async ({ mount }) => {
     const { filterChangeSpy, updateFilter } = await renderRecipeFilter({
-      page,
       mount,
     });
 
@@ -22,20 +21,15 @@ test.describe('<wm-recipe-filter>', () => {
     );
   });
 
-  async function renderRecipeFilter({
-    page,
-    mount,
-  }: {
-    page: Page;
-  } & ComponentFixtures) {
-    const result = await mount(RecipeFilterComponent, {
+  async function renderRecipeFilter({ mount }: ComponentFixtures) {
+    const locator = await mount(RecipeFilterComponent, {
       spyOutputs: ['filterChange'],
     });
 
     return {
-      filterChangeSpy: result.spies.filterChange,
+      filterChangeSpy: locator.spies.filterChange,
       async updateFilter({ keywords }: { keywords: string }) {
-        await page.getByLabel('Keywords').type(keywords);
+        await locator.getByLabel('Keywords').type(keywords);
       },
     };
   }

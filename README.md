@@ -16,4 +16,6 @@ This repository showcases the benefits of using the [Versatile Angular Style](ht
 - 🎭 out of the box Playwright Component Testing support. Try it: `yarn test:playwright-ct`
 
 ## 🚀 Getting Started
-`yarn install` and play!
+1. `git clone git@github.com:yjaaidi/experiments.git --branch versatile-angular`
+2. `yarn install`
+3. and play!

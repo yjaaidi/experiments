@@ -1,6 +1,6 @@
-import { devices } from '@playwright/test';
+import type { PlaywrightTestConfig } from '@jscutlery/playwright-ct-angular';
+import { devices } from '@jscutlery/playwright-ct-angular';
 import { env } from 'process';
-import type { PlaywrightTestConfig } from './playwright-ct-angular';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -20,6 +20,8 @@ const config: PlaywrightTestConfig = {
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    testIdAttribute: 'data-role',
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
 
