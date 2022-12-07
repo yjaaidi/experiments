@@ -52,8 +52,7 @@ test.describe('<wm-recipe-search>', () => {
       async verifyScreenshot() {
         /* Wait for images to load. */
         await page.waitForLoadState('networkidle');
-        /* jpg rendering might change a bit so let's reduce the threshold. */
-        await expect(page).toHaveScreenshot({ maxDiffPixelRatio: 0.05 });
+        await expect(page).toHaveScreenshot();
       },
     };
   }
