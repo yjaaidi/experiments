@@ -2158,9 +2158,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jscutlery/playwright-ct-angular@file:/tmp/playwright-ct-angular/::locator=whiskmate%40workspace%3A.":
-  version: 0.0.1
-  resolution: "@jscutlery/playwright-ct-angular@file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."
+"@jscutlery/playwright-ct-angular@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@jscutlery/playwright-ct-angular@npm:0.1.0"
   dependencies:
     jest-mock: ^28.1.3
     rxjs: ^7.5.7
@@ -2171,7 +2171,7 @@ __metadata:
     "@angular/platform-browser-dynamic": "*"
     "@playwright/test": ^1.28.0
     tslib: "*"
-  checksum: 8ad5dab8e2e7a67ee3dc4876466e23db05800c81ed6efe0f1d0f832bdb4b5ccd611fba532610f0afeb5d0240a1221820c22d5cf55f933ed4c2238a3f6cdc9c13
+  checksum: b9b6c23cf827e66c97f81199fee69691d2ed90a8d76a4fd54456a29910cd333320979ebfc558cf9cdf26bc5da9873eb971a2e58fd79c89c94d5cc2d9abbfde75
   languageName: node
   linkType: hard
 
@@ -11208,7 +11208,7 @@ __metadata:
     "@angular/platform-browser": 15.0.2
     "@angular/platform-browser-dynamic": 15.0.2
     "@angular/router": 15.0.2
-    "@jscutlery/playwright-ct-angular": /tmp/playwright-ct-angular/
+    "@jscutlery/playwright-ct-angular": 0.1.0
     "@playwright/test": 1.28.1
     "@swc/core": 1.3.21
     "@swc/jest": 0.2.23

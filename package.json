@@ -30,7 +30,7 @@
     "@angular-devkit/build-angular": "15.0.2",
     "@angular/cli": "15.0.2",
     "@angular/compiler-cli": "15.0.2",
-    "@jscutlery/playwright-ct-angular": "/tmp/playwright-ct-angular/",
+    "@jscutlery/playwright-ct-angular": "0.1.0",
     "@playwright/test": "1.28.1",
     "@swc/core": "1.3.21",
     "@swc/jest": "0.2.23",

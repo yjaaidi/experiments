@@ -41,7 +41,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@angular/platform-browser", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/platform-browser-dynamic", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/router", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
-            ["@jscutlery/playwright-ct-angular", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."],\
+            ["@jscutlery/playwright-ct-angular", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:0.1.0"],\
             ["@playwright/test", "npm:1.28.1"],\
             ["@swc/core", "npm:1.3.21"],\
             ["@swc/jest", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:0.2.23"],\
@@ -3786,17 +3786,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@jscutlery/playwright-ct-angular", [\
-        ["file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A.", {\
-          "packageLocation": "./.yarn/cache/@jscutlery-playwright-ct-angular-file-e09cc649de-8ad5dab8e2.zip/node_modules/@jscutlery/playwright-ct-angular/",\
+        ["npm:0.1.0", {\
+          "packageLocation": "./.yarn/cache/@jscutlery-playwright-ct-angular-npm-0.1.0-403cbe77b0-b9b6c23cf8.zip/node_modules/@jscutlery/playwright-ct-angular/",\
           "packageDependencies": [\
-            ["@jscutlery/playwright-ct-angular", "file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."]\
+            ["@jscutlery/playwright-ct-angular", "npm:0.1.0"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A.", {\
-          "packageLocation": "./.yarn/__virtual__/@jscutlery-playwright-ct-angular-virtual-1ec6f9467a/0/cache/@jscutlery-playwright-ct-angular-file-e09cc649de-8ad5dab8e2.zip/node_modules/@jscutlery/playwright-ct-angular/",\
+        ["virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:0.1.0", {\
+          "packageLocation": "./.yarn/__virtual__/@jscutlery-playwright-ct-angular-virtual-448c78fbdf/0/cache/@jscutlery-playwright-ct-angular-npm-0.1.0-403cbe77b0-b9b6c23cf8.zip/node_modules/@jscutlery/playwright-ct-angular/",\
           "packageDependencies": [\
-            ["@jscutlery/playwright-ct-angular", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."],\
+            ["@jscutlery/playwright-ct-angular", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:0.1.0"],\
             ["@angular/core", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/platform-browser", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/platform-browser-dynamic", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
@@ -3809,7 +3809,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest-mock", "npm:28.1.3"],\
             ["rxjs", "npm:7.6.0"],\
             ["tslib", "npm:2.4.1"],\
-            ["vite", "virtual:1ec6f9467ac75421bd9af8626ae2ff53932999deaaaec3bb941f9e7ded3dec25059e6bca57a9e6b8d6699f05ec3d785de95f0b9ce3190ada0637dff202a46305#npm:3.2.5"]\
+            ["vite", "virtual:448c78fbdf870bfe983fe6f4ef66cc8f37d525b9058975d8c6c599e344fd31a1ae773a52061e65c56c5afe80460462855f39ae832bff89bff25aa9a5c9d34705#npm:3.2.5"]\
           ],\
           "packagePeers": [\
             "@angular/core",\
@@ -13834,10 +13834,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:1ec6f9467ac75421bd9af8626ae2ff53932999deaaaec3bb941f9e7ded3dec25059e6bca57a9e6b8d6699f05ec3d785de95f0b9ce3190ada0637dff202a46305#npm:3.2.5", {\
-          "packageLocation": "./.yarn/__virtual__/vite-virtual-17ab85ac4d/0/cache/vite-npm-3.2.5-f23b9ecb5b-ad35b7008c.zip/node_modules/vite/",\
+        ["virtual:448c78fbdf870bfe983fe6f4ef66cc8f37d525b9058975d8c6c599e344fd31a1ae773a52061e65c56c5afe80460462855f39ae832bff89bff25aa9a5c9d34705#npm:3.2.5", {\
+          "packageLocation": "./.yarn/__virtual__/vite-virtual-160cd0483c/0/cache/vite-npm-3.2.5-f23b9ecb5b-ad35b7008c.zip/node_modules/vite/",\
           "packageDependencies": [\
-            ["vite", "virtual:1ec6f9467ac75421bd9af8626ae2ff53932999deaaaec3bb941f9e7ded3dec25059e6bca57a9e6b8d6699f05ec3d785de95f0b9ce3190ada0637dff202a46305#npm:3.2.5"],\
+            ["vite", "virtual:448c78fbdf870bfe983fe6f4ef66cc8f37d525b9058975d8c6c599e344fd31a1ae773a52061e65c56c5afe80460462855f39ae832bff89bff25aa9a5c9d34705#npm:3.2.5"],\
             ["@types/less", null],\
             ["@types/node", null],\
             ["@types/sass", null],\
@@ -14323,7 +14323,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@angular/platform-browser", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/platform-browser-dynamic", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
             ["@angular/router", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:15.0.2"],\
-            ["@jscutlery/playwright-ct-angular", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#file:/tmp/playwright-ct-angular/#/tmp/playwright-ct-angular/::hash=be3686&locator=whiskmate%40workspace%3A."],\
+            ["@jscutlery/playwright-ct-angular", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:0.1.0"],\
             ["@playwright/test", "npm:1.28.1"],\
             ["@swc/core", "npm:1.3.21"],\
             ["@swc/jest", "virtual:4dc3fa0353d2f82819cfa673def7d1dceb1ba85a4da039aa9f75dbbc3e065f3b4104d3b6b246702cf20589981351359b2df0c71eb480edefe39ba844b7bc1876#npm:0.2.23"],\
