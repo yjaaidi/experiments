@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 # Copy yarn berry's files just to make sure that we are
 # using the same version of yarn. 
 COPY .yarnrc.yml ./
+COPY .yarn/cache ./.yarn/cache/
 COPY .yarn/releases ./.yarn/releases/
 # Copy deps
 COPY package.json ./
@@ -19,4 +20,4 @@ RUN yarn --immutable
 COPY dist ./
 
 # Run the web service on container startup.
-CMD [ "node", "src/main.js" ]
+CMD [ "yarn", "node", "src/main.js" ]

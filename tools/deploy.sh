@@ -58,7 +58,7 @@ NEXT_URL=$(echo "$CLOUD_RUN_RESULT" | jq -r '.status.traffic[-1].url')
 REVISION_NAME=$(echo "$CLOUD_RUN_RESULT" | jq -r '.status.latestCreatedRevisionName')
 
 log "✅ Running smoke tests..."
-BASE_URL="$NEXT_URL" yarn test
+BASE_URL="$NEXT_URL" yarn test --quiet
 wait 60
 check_logs_and_rollback_on_error
 
