@@ -16,6 +16,7 @@ export interface Recipe {
     created_at: string;
     name?: string;
     type?: Recipe.TypeEnum;
+    picture_uri: string | null;
 }
 export namespace Recipe {
     export type TypeEnum = 'entree' | 'plat' | 'dessert';

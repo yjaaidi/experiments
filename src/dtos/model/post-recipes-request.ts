@@ -15,6 +15,7 @@ import { PostRecipesRequestAllOfIngredients } from './post-recipes-request-all-o
 export interface PostRecipesRequest { 
     name: string;
     type: PostRecipesRequest.TypeEnum;
+    picture_uri?: string | null;
     ingredients?: PostRecipesRequestAllOfIngredients;
 }
 export namespace PostRecipesRequest {

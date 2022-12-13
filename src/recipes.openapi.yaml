@@ -9,7 +9,7 @@ info:
     email: kitchen@marmicode.io
 servers:
   - description: Production
-    url: https://recipes-service-lrhkyo6iiq-ew.a.run.app
+    url: 'https://recipes-service-lrhkyo6iiq-ew.a.run.app'
   - description: Local
     url: 'http://localhost:3000'
 tags:
@@ -41,9 +41,10 @@ paths:
                     id: babaganoush
                     created_at: '2022-03-01T00:00:00Z'
                     name: Babaganoush
+                    picture_uri: null
                     type: entree
           headers: {}
-        '4XX':
+        4XX:
           $ref: '#/components/responses/4XX'
       requestBody:
         content:
@@ -91,7 +92,7 @@ paths:
                               items:
                                 $ref: '#/components/schemas/Ingredient'
               examples: {}
-        '4XX':
+        4XX:
           $ref: '#/components/responses/4XX'
       parameters:
         - schema:
@@ -99,6 +100,11 @@ paths:
           in: query
           name: embed
           description: 'e.g. ingredients, steps'
+        - schema:
+            type: string
+          in: query
+          name: q
+          description: Keywords
       tags:
         - Recipe
   '/recipes/{recipe_id}':
@@ -120,7 +126,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Recipe'
-        '4XX':
+        4XX:
           $ref: '#/components/responses/4XX'
       requestBody:
         content:
@@ -147,7 +153,8 @@ paths:
                     id: burger
                     created_at: '2019-08-24T14:15:22Z'
                     name: Burger
-        '4XX':
+                    picture_uri: null
+        4XX:
           $ref: '#/components/responses/4XX'
   '/recipes/{recipe_id}/ingredients':
     parameters:
@@ -167,7 +174,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ingredient'
-        '4XX':
+        4XX:
           $ref: '#/components/responses/4XX'
       description: ...
       requestBody:
@@ -192,7 +199,7 @@ paths:
       responses:
         '200':
           description: OK
-        '4XX':
+        4XX:
           $ref: '#/components/responses/4XX'
       tags:
         - Ingredient
@@ -204,13 +211,6 @@ components:
         example-1:
           name: Babaganoush
           type: entree
-          ingredients:
-            - salt
-        example-2:
-          name: Babaganoush
-          type: entree
-          ingredients:
-            - name: Salt
       allOf:
         - properties:
             name:
@@ -222,9 +222,15 @@ components:
                 - entree
                 - plat
                 - dessert
+            picture_uri:
+              type: string
+              format: uri
+              nullable: true
       type: object
     Recipe:
       title: Recipe
+      required:
+        - picture_uri
       x-examples:
         Babaganoush:
           id: babaganoush

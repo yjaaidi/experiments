@@ -1,18 +1,64 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { join } from 'path';
 import { GetRecipes200Response } from './dtos/model/get-recipes200-response';
 import { GetRecipes4XXResponse } from './dtos/model/get-recipes4-xx-response';
 import { Ingredient } from './dtos/model/ingredient';
 import { IngredientNew } from './dtos/model/ingredient-new';
 import { PostRecipesRequest } from './dtos/model/post-recipes-request';
-import { Recipe } from './dtos/model/recipe.js';
-import { getDirname, startService } from './start-service.js';
+import { Recipe } from './dtos/model/recipe';
+import { getDirname, startService } from './start-service';
 
-let recipes: Recipe[] = [];
-let ingredients: (Ingredient & { recipe_id: string })[] = [];
+let recipes: Recipe[] = [
+  {
+    id: 'rec-burger',
+    created_at: new Date().toISOString(),
+    name: 'Burger',
+    picture_uri:
+      'https://www.ninkasi.fr/wp-content/uploads/2022/06/header_burger.jpg',
+  },
+  {
+    id: 'rec-salad',
+    created_at: new Date().toISOString(),
+    name: 'Salad',
+    picture_uri:
+      'https://www.ninkasi.fr/wp-content/uploads/2022/10/lyonnaise.png',
+  },
+];
+let ingredients: (Ingredient & { recipe_id: string })[] = [
+  {
+    id: 'ing-burger-bun',
+    name: 'Burger bun',
+    recipe_id: 'rec-burger',
+  },
+  {
+    id: 'ing-burger-tomatoes',
+    name: 'Tomatoes',
+    recipe_id: 'rec-burger',
+  },
+  {
+    id: 'ing-burger-cheese',
+    name: 'Cheese',
+    recipe_id: 'rec-burger',
+  },
+  {
+    id: 'ing-burger-meat',
+    name: 'Meat',
+    recipe_id: 'rec-burger',
+  },
+  {
+    id: 'ing-salad-lettuce',
+    name: 'Lettuce',
+    recipe_id: 'rec-salad',
+  },
+  {
+    id: 'ing-salad-eggs',
+    name: 'Eggs',
+    recipe_id: 'rec-salad',
+  },
+];
 
 startService({
-  spec: join(getDirname(import.meta.url), 'recipes.openapi.yaml'),
+  spec: join(__dirname, 'recipes.openapi.yaml'),
   handlers: {
     'post-recipes': (req, res: Response<Recipe>) => {
       const body = req.body as PostRecipesRequest;
@@ -21,6 +67,7 @@ startService({
         id: recipeId,
         created_at: new Date().toISOString(),
         name: body.name,
+        picture_uri: body.picture_uri ?? null,
         type: body.type,
         ingredients: addIngredients({
           recipeId,
@@ -30,7 +77,10 @@ startService({
       recipes.push(recipe);
       res.status(201).send(recipe);
     },
-    'get-recipes': (req, res: Response<GetRecipes200Response>) => {
+    'get-recipes': (
+      req: Request<unknown>,
+      res: Response<GetRecipes200Response>
+    ) => {
       const shouldEmbedIngredients = (req.query['embed'] as string)
         ?.split(',')
         .includes('ingredients');
@@ -40,7 +90,12 @@ startService({
         ? recipes.map((recipe) => embedRecipeIngredients(recipe))
         : recipes;
 
-      res.send({ items });
+      const keywords = req.query['q'] as string | undefined;
+      const filteredItems = keywords
+        ? items.filter((item) => item.name?.toLowerCase().includes(keywords))
+        : items;
+
+      res.send({ items: filteredItems });
     },
     'get-recipe': (req, res: Response<Recipe | GetRecipes4XXResponse>) => {
       const recipe = recipes.find(

@@ -17,6 +17,7 @@ export interface GetRecipes200ResponseItemsInner {
     created_at: string;
     name?: string;
     type?: GetRecipes200ResponseItemsInner.TypeEnum;
+    picture_uri: string | null;
     ingredients?: Array<Ingredient>;
 }
 export namespace GetRecipes200ResponseItemsInner {
