@@ -2,7 +2,7 @@
 
 set -e
 
-PROJECT=marmicode-workshop-api-2022-09
+PROJECT=marmicode-workshop
 IMAGE="europe-west1-docker.pkg.dev/$PROJECT/marmicode/recipes-service"
 TAG="next"
 
@@ -11,7 +11,7 @@ log() {
 }
 
 update_traffic() {
-  gcloud run services update-traffic recipes-service --to-tags "$TAG=$1"
+  gcloud run services update-traffic recipes-service --project "$PROJECT" --to-tags "$TAG=$1"
 }
 
 wait() {
@@ -58,7 +58,7 @@ NEXT_URL=$(echo "$CLOUD_RUN_RESULT" | jq -r '.status.traffic[-1].url')
 REVISION_NAME=$(echo "$CLOUD_RUN_RESULT" | jq -r '.status.latestCreatedRevisionName')
 
 log "✅ Running smoke tests..."
-BASE_URL="$NEXT_URL" yarn test --quiet
+BASE_URL="$NEXT_URL" yarn test
 wait 60
 check_logs_and_rollback_on_error
 
