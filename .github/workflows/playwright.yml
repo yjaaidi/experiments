@@ -14,7 +14,7 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable
       - name: Run Playwright tests
-        run: yarn concurrently "yarn start" "yarn wait-on tcp:localhost:3000 && yarn test --reporter=html" --kill-others --success first
+        run: yarn test --reporter=html
       - uses: actions/upload-artifact@v2
         if: always()
         with:
