@@ -6,7 +6,7 @@ import { Ingredient } from './dtos/model/ingredient';
 import { IngredientNew } from './dtos/model/ingredient-new';
 import { PostRecipesRequest } from './dtos/model/post-recipes-request';
 import { Recipe } from './dtos/model/recipe';
-import { getDirname, startService } from './start-service';
+import { startService } from './start-service';
 
 let recipes: Recipe[] = [
   {

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import express, {
   NextFunction,
   Request,
@@ -22,6 +23,8 @@ export function startService({
   handlers: Record<string, RequestHandler>;
 }) {
   const app = express();
+
+  app.use(cors());
 
   app.use(bodyParser.json());
 

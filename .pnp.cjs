@@ -31,11 +31,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openapitools/openapi-generator-cli", "npm:2.5.2"],\
             ["@playwright/test", "npm:1.28.1"],\
             ["@types/body-parser", "npm:1.19.2"],\
+            ["@types/cors", "npm:2.8.13"],\
             ["@types/express", "npm:4.17.14"],\
             ["@types/jsonwebtoken", "npm:8.5.9"],\
             ["@types/memoizee", "npm:0.4.8"],\
             ["axios", "npm:1.2.1"],\
             ["body-parser", "npm:1.20.1"],\
+            ["cors", "npm:2.8.5"],\
             ["express", "npm:4.18.2"],\
             ["express-openapi-validator", "npm:4.13.5"],\
             ["jsonwebtoken", "npm:8.5.1"],\
@@ -348,6 +350,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-connect-npm-3.4.35-7337eee0a3-fe81351470.zip/node_modules/@types/connect/",\
           "packageDependencies": [\
             ["@types/connect", "npm:3.4.35"],\
+            ["@types/node", "npm:18.7.18"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/cors", [\
+        ["npm:2.8.13", {\
+          "packageLocation": "./.yarn/cache/@types-cors-npm-2.8.13-4b8ac1068f-7ef197ea19.zip/node_modules/@types/cors/",\
+          "packageDependencies": [\
+            ["@types/cors", "npm:2.8.13"],\
             ["@types/node", "npm:18.7.18"]\
           ],\
           "linkType": "HARD"\
@@ -1126,6 +1138,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/core-util-is-npm-1.0.3-ca74b76c90-9de8597363.zip/node_modules/core-util-is/",\
           "packageDependencies": [\
             ["core-util-is", "npm:1.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["cors", [\
+        ["npm:2.8.5", {\
+          "packageLocation": "./.yarn/cache/cors-npm-2.8.5-c9935a2d12-ced838404c.zip/node_modules/cors/",\
+          "packageDependencies": [\
+            ["cors", "npm:2.8.5"],\
+            ["object-assign", "npm:4.1.1"],\
+            ["vary", "npm:1.1.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -3230,11 +3253,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@openapitools/openapi-generator-cli", "npm:2.5.2"],\
             ["@playwright/test", "npm:1.28.1"],\
             ["@types/body-parser", "npm:1.19.2"],\
+            ["@types/cors", "npm:2.8.13"],\
             ["@types/express", "npm:4.17.14"],\
             ["@types/jsonwebtoken", "npm:8.5.9"],\
             ["@types/memoizee", "npm:0.4.8"],\
             ["axios", "npm:1.2.1"],\
             ["body-parser", "npm:1.20.1"],\
+            ["cors", "npm:2.8.5"],\
             ["express", "npm:4.18.2"],\
             ["express-openapi-validator", "npm:4.13.5"],\
             ["jsonwebtoken", "npm:8.5.1"],\
