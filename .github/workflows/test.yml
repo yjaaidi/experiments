@@ -1,0 +1,77 @@
+name: Test
+on:
+  push: {}
+  workflow_dispatch: {}
+jobs:
+  jest:
+    name: 🤹 Jest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: "18"
+      - uses: actions/cache@v3
+        with:
+          path: |
+            node_modules/.cache
+          key: cache
+      - name: Install
+        run: yarn install
+      - name: Test
+        run: yarn test:jest
+
+  vitest:
+    name: ⚡️ Vitest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: "18"
+      - uses: actions/cache@v3
+        with:
+          path: |
+            node_modules/.cache
+          key: cache
+      - name: Install
+        run: yarn install
+      - name: Test
+        run: yarn test:vitest
+
+  playwright:
+    name: 🎭 Playwright
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: "18"
+      - uses: actions/cache@v3
+        with:
+          path: |
+            node_modules/.cache
+          key: cache
+      - name: Install
+        run: yarn install
+      - name: Playwright install
+        run: yarn playwright install --with-deps
+      - name: Test
+        run: yarn test:playwright-ct
+      - name: Upload snapshots & reports on failure
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright
+          path: |
+            __snapshots__
+            playwright-report
