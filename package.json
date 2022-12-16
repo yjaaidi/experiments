@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "vite dev",
+    "start": "vite dev --open",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test:playwright-ct": "yarn playwright test -c playwright-ct.config.ts",
