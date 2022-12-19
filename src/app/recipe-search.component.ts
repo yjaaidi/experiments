@@ -1,15 +1,15 @@
+import { AsyncPipe, NgForOf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { BehaviorSubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { CatalogComponent } from './catalog.component';
+import { MealPlanner } from './meal-planner.service';
 import { Recipe } from './recipe';
 import { RecipeFilter } from './recipe-filter';
-import { RecipeRepository } from './recipe-repository.service';
-import { AsyncPipe, NgFor, NgForOf } from '@angular/common';
 import { RecipeFilterComponent } from './recipe-filter.component';
-import { CatalogComponent } from './catalog.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
-import { MealPlanner } from './meal-planner.service';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { RecipeRepository } from './recipe-repository.service';
 
 @Component({
   standalone: true,
