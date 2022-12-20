@@ -9,7 +9,7 @@ info:
     email: kitchen@marmicode.io
 servers:
   - description: Production
-    url: 'https://recipes-service-lrhkyo6iiq-ew.a.run.app'
+    url: 'https://recipes-api.marmicode.io'
   - description: Local
     url: 'http://localhost:3000'
 tags:
