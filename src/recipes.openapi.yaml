@@ -69,7 +69,7 @@ paths:
       tags:
         - Recipe
     get:
-      summary: Retrieve recipes
+      summary: Retrieve Recipes
       description: ...
       operationId: get-recipes
       responses:
@@ -116,7 +116,7 @@ paths:
         required: true
         description: Recipe's ID
     patch:
-      summary: Update a recipe
+      summary: Update a Recipe
       description: ...
       operationId: patch-recipe
       responses:
@@ -156,6 +156,7 @@ paths:
                     picture_uri: null
         4XX:
           $ref: '#/components/responses/4XX'
+      summary: Retrieve a Recipe
   '/recipes/{recipe_id}/ingredients':
     parameters:
       - schema:
@@ -165,7 +166,7 @@ paths:
         required: true
         description: Recipe's ID
     post:
-      summary: Add an ingredient to the recipe
+      summary: Add an Ingredient to the Recipe
       operationId: post-ingredient
       responses:
         '201':
@@ -193,7 +194,7 @@ paths:
         in: path
         required: true
     delete:
-      summary: Remove an ingredient
+      summary: Remove an Ingredient
       description: ...
       operationId: delete-ingredient
       responses:
