@@ -50,8 +50,14 @@ export function startService({
             const kid = jwt.decode(token, { complete: true })?.header?.kid;
 
             /* Check token. */
-            const jwkClient = await getJwkClient(scheme.openIdConnectUrl);
-            const key = await jwkClient.getSigningKey(kid);
+            const jwksClient = await tryGetJwkClient(
+              `${scheme.openIdConnectUrl}/.well-known/openid-configuration`
+            );
+            if (jwksClient == null) {
+              return false;
+            }
+
+            const key = await jwksClient.getSigningKey(kid);
             const claims = jwt.verify(
               token,
               key.getPublicKey()
@@ -124,11 +130,23 @@ const createNotFoundHandler =
 /**
  * Get JwkClient from open id config.
  */
-const getJwkClient = memoize(async (openIdConnectUrl) => {
-  const { data } = await axios.get(openIdConnectUrl);
-  const jwksUri = data['jwks_uri'];
+const tryGetJwkClient = memoize(
+  async (openIdConnectUrl) => {
+    try {
+      const { data } = await axios.get(openIdConnectUrl, {
+        headers: {
+          'Accept-Encoding': '*',
+        },
+      });
+      const jwksUri = data['jwks_uri'];
 
-  return jwksClient({
-    jwksUri,
-  });
-});
+      return jwksClient({
+        jwksUri,
+      });
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+  { promise: true }
+);

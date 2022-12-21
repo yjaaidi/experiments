@@ -226,7 +226,7 @@ components:
   securitySchemes:
     openId:
       type: openIdConnect
-      openIdConnectUrl: 'https://whiskmate.eu.auth0.com/.well-known/openid-configuration'
+      openIdConnectUrl: 'https://whiskmate.eu.auth0.com'
   schemas:
     RecipeNew:
       title: RecipeNew
