@@ -8,9 +8,7 @@
   "include": [
     "support/**/*.ts",
     "../src/**/*.cy.ts",
-    "../src/**/*.cy.tsx",
-    "../src/**/*.cy.js",
-    "../src/**/*.cy.jsx",
+    "../src/**/*.ct.ts",
     "../src/**/*.d.ts"
   ]
 }

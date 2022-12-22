@@ -6,6 +6,6 @@ module.exports = defineConfig({
       framework: "angular",
       bundler: "webpack",
     },
-    specPattern: "**/*.cy.ts",
+    specPattern: "**/*.ct.ts",
   },
 });

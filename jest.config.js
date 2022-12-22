@@ -4,5 +4,6 @@ module.exports = {
   transform: {
     "^.+\\.m?(t|j)sx?$": ["@swc/jest"],
   },
+  testRegex: "(/__tests__/.*|(\\.|/)(test|spec|ct))\\.[jt]sx?$",
   transformIgnorePatterns: ["/node_modules/(?!(@angular|@testing-library)/)"],
 };
