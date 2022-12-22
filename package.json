@@ -6,7 +6,7 @@
     "start": "vite dev --open",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test:cypress": "cypress run --component",
+    "test:cypress-ct": "cypress run --component",
     "test:playwright-ct": "playwright test -c playwright-ct.config.ts",
     "test:jest": "jest",
     "test:vitest": "vitest run"
