@@ -27,20 +27,20 @@ octopus.setPlatform({
   describe,
   it: testWrapper,
   test: testWrapper,
-  find(selector) {
-    return new Promise((resolve) =>
-      cy.get(selector).then((jqEl) => resolve(jqEl.get(0) as any))
-    );
+  async find(selector) {
+    const jqEl = await cy.now('get', selector);
+    return jqEl.get(0);
   },
   findAll(selector) {
-    return new Promise((resolve) =>
-      cy.get(selector).then((jqEl) => resolve(jqEl.toArray() as any[]))
-    );
+    const anyCy: any = cy;
+    const jqEl = anyCy.queryFns['get'].apply(
+      anyCy.state('current') ?? { set() {} },
+      [selector]
+    )();
+    return jqEl.toArray();
   },
   mount(componentType, options) {
-    return new Promise((resolve) =>
-      cy.mount(componentType, options).then(() => resolve())
-    );
+    return cy.now('mount', componentType, options) as any;
   },
   expect: (value) => {
     return {
