@@ -27,20 +27,14 @@ octopus.setPlatform({
   describe,
   it: testWrapper,
   test: testWrapper,
-  async find(selector) {
-    const jqEl = await cy.now('get', selector);
-    return jqEl.get(0);
+  find(selector) {
+    return runQuery('get', selector).first();
   },
   findAll(selector) {
-    const anyCy: any = cy;
-    const jqEl = anyCy.queryFns['get'].apply(
-      anyCy.state('current') ?? { set() {} },
-      [selector]
-    )();
-    return jqEl.toArray();
+    return runQuery('get', selector).toArray();
   },
-  mount(componentType, options) {
-    return cy.now('mount', componentType, options) as any;
+  async mount(componentType, options) {
+    await runCommand('mount', componentType, options);
   },
   expect: (value) => {
     return {
@@ -50,3 +44,15 @@ octopus.setPlatform({
     };
   },
 });
+
+function runCommand(command: string, ...args: any[]) {
+  return cy.now(command, ...args) as Promise<unknown>;
+}
+
+function runQuery(query: string, ...args: any[]) {
+  const anyCy: any = cy;
+  return anyCy.queryFns[query].apply(
+    anyCy.state('current') ?? { set() {} },
+    args
+  )();
+}
