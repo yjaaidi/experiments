@@ -9,6 +9,8 @@ export interface Platform {
   findAll<ELEMENT extends Element>(selector: string): Promise<ELEMENT[]>;
   mount<T>(componentType: Type<T>, options?: MountOptions): Promise<void>;
 
+  click(element: Element): Promise<void>;
+
   expect<T>(value: T): {
     toEqual(expected: T): void;
   };
@@ -26,6 +28,7 @@ class Octopus {
     this._platform = platform;
   }
 
+  click = this._wrap('click');
   describe = this._wrap('describe');
   it = this._wrap('it');
   test = this._wrap('test');

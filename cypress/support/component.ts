@@ -27,12 +27,20 @@ octopus.setPlatform({
   describe,
   it: testWrapper,
   test: testWrapper,
+
   find(selector) {
-    return runQuery('get', selector).first();
+    return runQuery('get', selector).get(0);
   },
   findAll(selector) {
     return runQuery('get', selector).toArray();
   },
+
+  async click(element) {
+    // @todo use cypress command
+    // runCommand('click', Cypress.$(element), { $el: Cypress.$(element) });
+    (element as any).click();
+  },
+
   async mount(componentType, options) {
     await runCommand('mount', componentType, options);
   },

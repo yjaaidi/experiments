@@ -6,7 +6,7 @@ import {
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
 import { octopus, Platform } from './app/testing/octopus';
-import { render } from '@testing-library/angular';
+import { render, fireEvent } from '@testing-library/angular';
 
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
@@ -24,12 +24,18 @@ octopus.setPlatform({
   describe,
   it: testWrapper,
   test: testWrapper,
+
   async find(selector) {
     return document.querySelector(selector) as any;
   },
   async findAll(selector) {
     return document.querySelectorAll(selector) as any;
   },
+
+  async click(element) {
+    fireEvent.click(element);
+  },
+
   async mount(componentType, options) {
     await render(componentType, options);
   },
