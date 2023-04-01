@@ -1,5 +1,7 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, NgZone, ɵNoopNgZone } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
-  providers: [],
+  providers: [
+    // { provide: NgZone, useClass: ɵNoopNgZone }
+  ],
 };
