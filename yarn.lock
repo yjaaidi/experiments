@@ -25,7 +25,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular-devkit/build-angular@npm:^16.0.0-next.5":
+"@angular-devkit/build-angular@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular-devkit/build-angular@npm:16.0.0-next.5"
   dependencies:
@@ -166,7 +166,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/animations@npm:^16.0.0-next.0":
+"@angular/animations@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/animations@npm:16.0.0-next.5"
   dependencies:
@@ -177,7 +177,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/cli@npm:~16.0.0-next.5":
+"@angular/cli@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/cli@npm:16.0.0-next.5"
   dependencies:
@@ -205,7 +205,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/common@npm:^16.0.0-next.0":
+"@angular/common@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/common@npm:16.0.0-next.5"
   dependencies:
@@ -217,7 +217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/compiler-cli@npm:^16.0.0-next.0":
+"@angular/compiler-cli@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/compiler-cli@npm:16.0.0-next.5"
   dependencies:
@@ -239,7 +239,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/compiler@npm:^16.0.0-next.0":
+"@angular/compiler@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/compiler@npm:16.0.0-next.5"
   dependencies:
@@ -253,7 +253,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/core@npm:^16.0.0-next.0":
+"@angular/core@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/core@npm:16.0.0-next.5"
   dependencies:
@@ -265,7 +265,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/forms@npm:^16.0.0-next.0":
+"@angular/forms@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/forms@npm:16.0.0-next.5"
   dependencies:
@@ -279,7 +279,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/platform-browser-dynamic@npm:^16.0.0-next.0":
+"@angular/platform-browser-dynamic@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/platform-browser-dynamic@npm:16.0.0-next.5"
   dependencies:
@@ -293,7 +293,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/platform-browser@npm:^16.0.0-next.0":
+"@angular/platform-browser@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/platform-browser@npm:16.0.0-next.5"
   dependencies:
@@ -309,7 +309,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/router@npm:^16.0.0-next.0":
+"@angular/router@npm:16.0.0-next.5":
   version: 16.0.0-next.5
   resolution: "@angular/router@npm:16.0.0-next.5"
   dependencies:
@@ -3553,17 +3553,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "demo@workspace:."
   dependencies:
-    "@angular-devkit/build-angular": ^16.0.0-next.5
-    "@angular/animations": ^16.0.0-next.0
-    "@angular/cli": ~16.0.0-next.5
-    "@angular/common": ^16.0.0-next.0
-    "@angular/compiler": ^16.0.0-next.0
-    "@angular/compiler-cli": ^16.0.0-next.0
-    "@angular/core": ^16.0.0-next.0
-    "@angular/forms": ^16.0.0-next.0
-    "@angular/platform-browser": ^16.0.0-next.0
-    "@angular/platform-browser-dynamic": ^16.0.0-next.0
-    "@angular/router": ^16.0.0-next.0
+    "@angular-devkit/build-angular": 16.0.0-next.5
+    "@angular/animations": 16.0.0-next.5
+    "@angular/cli": 16.0.0-next.5
+    "@angular/common": 16.0.0-next.5
+    "@angular/compiler": 16.0.0-next.5
+    "@angular/compiler-cli": 16.0.0-next.5
+    "@angular/core": 16.0.0-next.5
+    "@angular/forms": 16.0.0-next.5
+    "@angular/platform-browser": 16.0.0-next.5
+    "@angular/platform-browser-dynamic": 16.0.0-next.5
+    "@angular/router": 16.0.0-next.5
     "@types/jasmine": ~4.3.0
     jasmine-core: ~4.6.0
     karma: ~6.4.0
@@ -3575,6 +3575,11 @@ __metadata:
     tslib: ^2.3.0
     typescript: ~5.0.2
     zone.js: ~0.13.0
+  dependenciesMeta:
+    "@angular/core@16.0.0-next.5":
+      unplugged: true
+    "@angular/platform-browser@16.0.0-next.5":
+      unplugged: true
   languageName: unknown
   linkType: soft
 
