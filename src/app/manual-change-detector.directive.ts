@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-const REACTIVE_HOST_BINDING_CONSUMER = 24;
+const REACTIVE_TEMPLATE_CONSUMER = 23;
 
 @Directive({
   standalone: true,
@@ -43,7 +43,7 @@ export class ManualChangeDetector implements OnInit {
     /* Let's take control of change detection. */
     this._viewRef.detach();
     const reactiveViewConsumer = (this._viewRef as any)['_lView'][
-      REACTIVE_HOST_BINDING_CONSUMER
+      REACTIVE_TEMPLATE_CONSUMER
     ];
 
     reactiveViewConsumer.onConsumerDependencyMayHaveChanged = () =>
