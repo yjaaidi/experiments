@@ -2028,6 +2028,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jscutlery/operators@npm:2.0.1":
+  version: 2.0.1
+  resolution: "@jscutlery/operators@npm:2.0.1"
+  peerDependencies:
+    "@jest/globals": 28.1.3
+    rxjs: ">=6.0.0"
+  checksum: 6d23f5d3c7fbcb4a6cf17f96bea41567c6b70176023897f4de8b6d8e1e3ddb477e96ffe0c2b64ada74cce336496620ab1684c2ebe81b9d56bcc266aebd76925b
+  languageName: node
+  linkType: hard
+
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.4
   resolution: "@leichtgewicht/ip-codec@npm:2.0.4"
@@ -7845,6 +7855,7 @@ __metadata:
     "@angular/platform-browser": ^16.0.0-rc.2
     "@angular/platform-browser-dynamic": ^16.0.0-rc.2
     "@angular/router": ^16.0.0-rc.2
+    "@jscutlery/operators": 2.0.1
     "@types/jasmine": ~4.3.0
     jasmine-core: ~4.6.0
     karma: ~6.4.0
