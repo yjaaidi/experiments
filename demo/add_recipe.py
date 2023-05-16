@@ -11,6 +11,8 @@ class UserRecipeIntoleranceError(Exception):
 
 
 def add_recipe(user_id: str, recipe: Recipe):
+    # todo: use dependency injection (e.g. https://fastapi.tiangolo.com/advanced/testing-dependencies/)
+    # or a simple service locator
     user_intolerances_repo = UserIntolerancesRepositoryImpl()
     recipes_repo = RecipesRepositoryImpl()
 
