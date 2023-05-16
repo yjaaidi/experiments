@@ -6,10 +6,12 @@ authors = ["Younes Jaaidi <younes@marmicode.io>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+requests = "^2.30.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"
 pytest-watch = "^4.2.0"
+mypy = "^1.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
