@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2022",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@whiskmate/admin/feature-user-management": [
+        "libs/admin/feature-user-management/src/index.ts"
+      ],
+      "@whiskmate/recipe/data-access": ["libs/recipe/data-access/src/index.ts"],
+      "@whiskmate/recipe/feature-recipe-search": [
+        "libs/recipe/feature-recipe-search/src/index.ts"
+      ],
+      "@whiskmate/recipe/ui": ["libs/recipe/ui/src/index.ts"],
+      "@whiskmate/shared/ui": ["libs/shared/ui/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

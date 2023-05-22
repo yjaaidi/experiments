@@ -1,22 +1,25 @@
 {
-  "name": "whiskmate",
-  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "name": "recipe-finder",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "whiskmate",
-  "sourceRoot": "./src",
-  "tags": [],
+  "sourceRoot": "apps/recipe-finder/src",
+  "tags": ["scope:recipe", "type:app"],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/whiskmate",
-        "index": "./src/index.html",
-        "main": "./src/main.ts",
+        "outputPath": "dist/apps/recipe-finder",
+        "index": "apps/recipe-finder/src/index.html",
+        "main": "apps/recipe-finder/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "./tsconfig.app.json",
-        "assets": ["./src/favicon.ico", "./src/assets"],
-        "styles": ["./src/styles.css"],
+        "tsConfig": "apps/recipe-finder/tsconfig.app.json",
+        "assets": [
+          "apps/recipe-finder/src/favicon.ico",
+          "apps/recipe-finder/src/assets"
+        ],
+        "styles": ["apps/recipe-finder/src/styles.css"],
         "scripts": []
       },
       "configurations": {
@@ -50,10 +53,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "whiskmate:build:production"
+          "browserTarget": "recipe-finder:build:production"
         },
         "development": {
-          "browserTarget": "whiskmate:build:development"
+          "browserTarget": "recipe-finder:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -61,21 +64,24 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "whiskmate:build"
+        "browserTarget": "recipe-finder:build"
       }
     },
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["./src/**/*.ts", "./src/**/*.html"]
+        "lintFilePatterns": [
+          "apps/recipe-finder/**/*.ts",
+          "apps/recipe-finder/**/*.html"
+        ]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "jest.config.app.ts",
+        "jestConfig": "apps/recipe-finder/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
@@ -88,7 +94,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "whiskmate:build"
+        "buildTarget": "recipe-finder:build"
       }
     }
   }
