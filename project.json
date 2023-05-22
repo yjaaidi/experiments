@@ -2,17 +2,17 @@
   "name": "whiskmate",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "whiskmate",
+  "prefix": "wm",
   "sourceRoot": "./src",
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular-devkit/build-angular:browser-esbuild",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/whiskmate",
-        "index": "./src/index.html",
-        "main": "./src/main.ts",
+        "index": "./src/ngc/index.html",
+        "main": "./src/ngc/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "./tsconfig.app.json",
         "assets": ["./src/favicon.ico", "./src/assets"],

@@ -15,7 +15,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "whiskmate",
+            "prefix": "wm",
             "style": "camelCase"
           }
         ],
@@ -23,7 +23,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "whiskmate",
+            "prefix": "wm",
             "style": "kebab-case"
           }
         ]

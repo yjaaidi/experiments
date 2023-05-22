@@ -1,14 +1,10 @@
+import { RecipeSearchComponent } from './recipe/recipe-search.component';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
-  selector: 'whiskmate-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: 'wm-root',
+  imports: [RecipeSearchComponent],
+  template: `<wm-recipe-search/>`,
 })
-export class AppComponent {
-  title = 'whiskmate';
-}
+export class AppComponent {}
