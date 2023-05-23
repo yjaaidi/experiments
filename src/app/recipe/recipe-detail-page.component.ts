@@ -9,13 +9,13 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { of, switchMap } from 'rxjs';
 import { RecipeRepository } from './recipe-repository.service';
 import { NgForOf, NgIf } from '@angular/common';
-import { RecipeDetailComponent } from './recipe-detail.component';
+import { RecipeDetailModule } from './recipe-detail.component';
 
 @Component({
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-recipe-detail-page',
-  imports: [RecipeDetailComponent, NgIf, NgForOf],
+  imports: [RecipeDetailModule, NgIf, NgForOf],
   template: `
         <wm-recipe-detail *ngIf="recipe() as recipeValue" [recipe]="recipeValue"/>
     `,

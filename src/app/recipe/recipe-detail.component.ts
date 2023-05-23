@@ -1,13 +1,16 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  NgModule,
+} from '@angular/core';
 import { NgForOf } from '@angular/common';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { Recipe } from './recipe';
 
 @Component({
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-recipe-detail',
-  imports: [NgForOf, RecipePreviewComponent],
   template: `
         <wm-recipe-preview [recipe]="recipe"/>
 
@@ -31,3 +34,10 @@ import { Recipe } from './recipe';
 export class RecipeDetailComponent {
   @Input({ required: true }) recipe!: Recipe;
 }
+
+@NgModule({
+  declarations: [RecipeDetailComponent],
+  exports: [RecipeDetailComponent],
+  imports: [NgForOf, RecipePreviewComponent],
+})
+export class RecipeDetailModule {}
