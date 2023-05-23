@@ -30,17 +30,11 @@ import { RecipeRepository } from './recipe-repository.service';
       <wm-recipe-preview
         *ngFor="let recipe of recipes$ | async; trackBy: trackById"
         [recipe]="recipe"
-      />
+      >
+        <button mat-button color="primary">ADD</button>
+      </wm-recipe-preview>
     </wm-catalog>
   `,
-  styles: [
-    `
-      .add-recipe-button {
-        display: block;
-        margin: auto;
-      }
-    `,
-  ],
 })
 export class RecipeSearchComponent {
   filter$ = new BehaviorSubject<RecipeFilter>({});
