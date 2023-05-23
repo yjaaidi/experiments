@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   Input,
   signal,
@@ -10,6 +11,7 @@ import { of, switchMap } from 'rxjs';
 import { RecipeRepository } from './recipe-repository.service';
 import { NgForOf, NgIf } from '@angular/common';
 import { RecipeDetailModule } from './recipe-detail.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -21,19 +23,15 @@ import { RecipeDetailModule } from './recipe-detail.component';
     `,
 })
 export class RecipeDetailPageComponent {
-  @Input() set recipeId(recipeId: string) {
-    this.recipeIdSig.set(recipeId);
-  }
-
-  recipeIdSig = signal<string | null>(null);
+  recipeId = computed(() => this._paramMap()?.get('recipeId'));
   recipe = toSignal(
-    toObservable(this.recipeIdSig).pipe(
+    toObservable(this.recipeId).pipe(
       switchMap((recipeId) =>
         recipeId ? this._recipeRepository.getRecipe(recipeId) : of(null)
       )
     )
   );
-
+  private _paramMap = toSignal(inject(ActivatedRoute).paramMap);
   private _recipeRepository = inject(RecipeRepository);
 }
 

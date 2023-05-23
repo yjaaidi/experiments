@@ -1,17 +1,22 @@
 import { Route } from '@angular/router';
+import WelcomeComponent from './welcome.component';
+import RecipeDetailPageComponent from './recipe/recipe-detail-page.component';
 
 export const appRoutes: Route[] = [
   {
     path: 'welcome',
-    loadComponent: () => import('./welcome.component'),
+    component: WelcomeComponent,
   },
   {
     path: 'search',
-    loadComponent: () => import('./recipe/recipe-search.component'),
+    loadChildren: () =>
+      import('./recipe/recipe-search.routing.module').then(
+        (m) => m.RecipeSearchRoutingModule
+      ),
   },
   {
     path: 'recipe/:recipeId',
-    loadComponent: () => import('./recipe/recipe-detail-page.component'),
+    component: RecipeDetailPageComponent,
   },
   {
     path: '**',
