@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import RecipeSearchComponent from './recipe-search.component';
+import { RecipeSearchComponent } from './recipe-search.component';
 
 @NgModule({
   imports: [

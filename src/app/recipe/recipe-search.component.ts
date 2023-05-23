@@ -57,5 +57,3 @@ export class RecipeSearchComponent {
     return recipe.id;
   }
 }
-
-export default RecipeSearchComponent;
