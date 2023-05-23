@@ -1,38 +1,34 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  Input,
-  signal,
-} from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { of, switchMap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { map, Observable, of, switchMap } from 'rxjs';
 import { RecipeRepository } from './recipe-repository.service';
-import { NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { RecipeDetailModule } from './recipe-detail.component';
 import { ActivatedRoute } from '@angular/router';
+import { Recipe } from './recipe';
 
 @Component({
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-recipe-detail-page',
-  imports: [RecipeDetailModule, NgIf, NgForOf],
+  imports: [RecipeDetailModule, NgIf, NgForOf, AsyncPipe],
   template: `
-        <wm-recipe-detail *ngIf="recipe() as recipeValue" [recipe]="recipeValue"/>
+        <wm-recipe-detail *ngIf="recipe$ | async as recipe" [recipe]="recipe"/>
     `,
 })
 export class RecipeDetailPageComponent {
-  recipeId = computed(() => this._paramMap()?.get('recipeId'));
-  recipe = toSignal(
-    toObservable(this.recipeId).pipe(
+  recipe$: Observable<Recipe | null>;
+
+  private _recipeRepository = inject(RecipeRepository);
+  private _route = inject(ActivatedRoute);
+
+  constructor() {
+    this.recipe$ = this._route.paramMap.pipe(
+      map((params) => params.get('recipeId')),
       switchMap((recipeId) =>
         recipeId ? this._recipeRepository.getRecipe(recipeId) : of(null)
       )
-    )
-  );
-  private _paramMap = toSignal(inject(ActivatedRoute).paramMap);
-  private _recipeRepository = inject(RecipeRepository);
+    );
+  }
 }
 
 export default RecipeDetailPageComponent;
