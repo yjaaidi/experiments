@@ -1,9 +1,9 @@
 import { AsyncPipe, NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule } from '@angular/material/legacy-button';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { CatalogComponent } from './../shared/catalog.component';
+import { CatalogComponent } from '../shared/catalog.component';
 import { Recipe } from './recipe';
 import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
@@ -18,7 +18,7 @@ import { RouterLink } from '@angular/router';
   imports: [
     AsyncPipe,
     CatalogComponent,
-    MatButtonModule,
+    MatLegacyButtonModule,
     NgFor,
     RecipeFilterComponent,
     RecipePreviewComponent,

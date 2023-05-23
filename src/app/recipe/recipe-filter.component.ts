@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatLegacyFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { createRecipeFilter, RecipeFilter } from './recipe-filter';
@@ -10,7 +10,11 @@ import { createRecipeFilter, RecipeFilter } from './recipe-filter';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'wm-recipe-filter',
-  imports: [MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+  imports: [
+    MatLegacyFormFieldModule,
+    MatLegacyInputModule,
+    ReactiveFormsModule,
+  ],
   template: `
     <form [formGroup]="filterFormGroup">
       <mat-form-field>
