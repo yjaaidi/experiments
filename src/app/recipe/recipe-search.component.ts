@@ -9,6 +9,7 @@ import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +22,7 @@ import { RecipeRepository } from './recipe-repository.service';
     NgFor,
     RecipeFilterComponent,
     RecipePreviewComponent,
+    RouterLink,
   ],
   template: `
     <wm-recipe-filter
@@ -32,6 +34,9 @@ import { RecipeRepository } from './recipe-repository.service';
         [recipe]="recipe"
       >
         <button mat-button color="primary">ADD</button>
+        <a [routerLink]="['/recipe', recipe.id]"
+          ><button mat-button>LET'S COOK</button></a
+        >
       </wm-recipe-preview>
     </wm-catalog>
   `,
@@ -52,3 +57,5 @@ export class RecipeSearchComponent {
     return recipe.id;
   }
 }
+
+export default RecipeSearchComponent;

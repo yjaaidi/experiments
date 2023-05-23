@@ -49,6 +49,27 @@ export class RecipeRepository implements RecipeRepositoryDef {
         )
       );
   }
+
+  getRecipe(recipeId: string) {
+    return this._httpClient
+      .get<RecipeDto>(
+        `https://recipe-api.marmicode.io/recipes/${encodeURIComponent(
+          recipeId
+        )}`
+      )
+      .pipe(
+        map((item) =>
+          createRecipe({
+            id: item.id,
+            name: item.name,
+            description: null,
+            pictureUri: item.picture_uri,
+            ingredients: item.ingredients ?? [],
+            steps: [],
+          })
+        )
+      );
+  }
 }
 
 type ResponseListQueryParams = {

@@ -1,16 +1,17 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { ToolbarChipComponent } from './toolbar-chip.component';
 
 @Component({
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-toolbar',
-  imports: [MatToolbarModule],
+  imports: [MatToolbarModule, ToolbarChipComponent],
   template: `
     <mat-toolbar color="primary">
       <h1>{{ title }}</h1>
       <div class="spacer"></div>
-      <ng-content/>
+      <wm-toolbar-chip>🛒</wm-toolbar-chip>
     </mat-toolbar>
   `,
   styles: [
