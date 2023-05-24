@@ -1,7 +1,12 @@
 import { AsyncPipe, NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { CatalogComponent } from './../shared/catalog.component';
 import { Recipe } from './recipe';
@@ -10,6 +15,8 @@ import { RecipeFilterComponent } from './recipe-filter.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository.service';
 import { RouterLink } from '@angular/router';
+import { Cart } from '../cart/cart.service';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,14 +33,21 @@ import { RouterLink } from '@angular/router';
   ],
   template: `
     <wm-recipe-filter
-      (filterChange)="onFilterChange($event)"
+      (filterChange)="presenter.filter.set($event)"
     ></wm-recipe-filter>
     <wm-catalog>
       <wm-recipe-preview
-        *ngFor="let recipe of recipes$ | async; trackBy: trackById"
+        *ngFor="let recipe of presenter.recipes(); trackBy: trackById"
         [recipe]="recipe"
       >
-        <button mat-button color="primary">ADD</button>
+        <button
+          [disabled]="!recipe.canAdd"
+          (click)="addRecipe(recipe)"
+          mat-button
+          color="primary"
+        >
+          ADD
+        </button>
         <a [routerLink]="['/recipe', recipe.id]"
           ><button mat-button>LET'S COOK</button></a
         >
@@ -42,20 +56,42 @@ import { RouterLink } from '@angular/router';
   `,
 })
 export class RecipeSearchComponent {
-  filter$ = new BehaviorSubject<RecipeFilter>({});
-  recipes$ = this.filter$.pipe(
-    switchMap((filter) => this._recipeRepository.search(filter))
-  );
+  presenter = createRecipeSearchPresenter();
 
-  private _recipeRepository = inject(RecipeRepository);
-
-  onFilterChange(filter: RecipeFilter) {
-    this.filter$.next(filter);
-  }
+  private _cart = inject(Cart);
 
   trackById(_: number, recipe: Recipe) {
     return recipe.id;
   }
+
+  addRecipe(recipe: Recipe) {
+    this._cart.addRecipe(recipe);
+  }
 }
 
 export default RecipeSearchComponent;
+
+function createRecipeSearchPresenter() {
+  const cart = inject(Cart);
+  const repo = inject(RecipeRepository);
+
+  const filter = signal<RecipeFilter>({});
+
+  const searchedRecipes = toSignal(
+    toObservable(filter).pipe(switchMap((_filter) => repo.search(_filter)))
+  );
+
+  const recipes = computed(() => {
+    return searchedRecipes()?.map((recipe) => {
+      return {
+        ...recipe,
+        canAdd: cart.canAdd(recipe),
+      };
+    });
+  });
+
+  return {
+    filter,
+    recipes,
+  };
+}
