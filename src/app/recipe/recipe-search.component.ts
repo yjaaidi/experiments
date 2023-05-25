@@ -7,7 +7,6 @@ import {
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { switchMap } from 'rxjs/operators';
 import { CatalogComponent } from './../shared/catalog.component';
 import { Recipe } from './recipe';
 import { RecipeFilter } from './recipe-filter';
@@ -16,7 +15,7 @@ import { RecipePreviewComponent } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository.service';
 import { RouterLink } from '@angular/router';
 import { Cart } from '../cart/cart.service';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { rxComputed } from '@jscutlery/rx-computed';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -77,9 +76,7 @@ function createRecipeSearchPresenter() {
 
   const filter = signal<RecipeFilter>({});
 
-  const searchedRecipes = toSignal(
-    toObservable(filter).pipe(switchMap((_filter) => repo.search(_filter)))
-  );
+  const searchedRecipes = rxComputed(() => repo.search(filter()));
 
   const recipes = computed(() => {
     return searchedRecipes()?.map((recipe) => {
