@@ -1,1 +1,1 @@
-export * from './lib/title-adaptors';
+export { LocaleFinder } from './lib/title-adaptors'
