@@ -1,5 +1,5 @@
 import { Locale } from './locale';
 
-export interface LocaleRepository {
-  getLocales(): Locale[]
+export abstract class LocaleRepository {
+  abstract getLocales(): Locale[]
 }

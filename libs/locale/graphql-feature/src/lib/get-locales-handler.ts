@@ -1,9 +1,11 @@
 import {Request, Response} from 'express';
 import {LocaleService} from '@demo/locale/domain';
-import {LocaleRepositoryImpl} from '@demo/locale/adapters';
+import {provideLocaleAdapters} from '@demo/locale/adapters';
+import {inject} from '@demo/shared/injector';
 
-const localeService = new LocaleService(new LocaleRepositoryImpl());
+provideLocaleAdapters({endpoint: 'my-dynamo-endpoint'});
 
 export function getLocalesHandler(req: Request, res: Response) {
-  res.send(localeService.getLocales());
+    const localeService = inject(LocaleService);
+    res.send(localeService.getLocales());
 }

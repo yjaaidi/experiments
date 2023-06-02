@@ -19,7 +19,8 @@
       "@demo/locale/domain": ["libs/locale/domain/src/index.ts"],
       "@demo/locale/graphql-feature": [
         "libs/locale/graphql-feature/src/index.ts"
-      ]
+      ],
+      "@demo/shared/injector": ["libs/shared/injector/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
