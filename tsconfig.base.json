@@ -14,7 +14,13 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@demo/locale/adapters": ["libs/locale/adapters/src/index.ts"],
+      "@demo/locale/domain": ["libs/locale/domain/src/index.ts"],
+      "@demo/locale/graphql-feature": [
+        "libs/locale/graphql-feature/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
