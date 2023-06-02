@@ -1,21 +1,21 @@
 {
-  "name": "title-adaptors",
+  "name": "title-adapters",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/title/adaptors/src",
+  "sourceRoot": "/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/title/adaptors/**/*.ts"]
+        "lintFilePatterns": ["libs/title/adapters/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/title/adaptors/jest.config.ts",
+        "jestConfig": "libs/title/adapters/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
@@ -26,5 +26,5 @@
       }
     }
   },
-  "tags": ["scope:title", "type:adaptors"]
+  "tags": ["scope:title", "type:adapters"]
 }
