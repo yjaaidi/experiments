@@ -20,7 +20,10 @@
       "@demo/locale/graphql-feature": [
         "libs/locale/graphql-feature/src/index.ts"
       ],
-      "@demo/shared/injector": ["libs/shared/injector/src/index.ts"]
+      "@demo/shared/injector": ["libs/shared/injector/src/index.ts"],
+      "@demo/title/adaptors": ["libs/title/adaptors/src/index.ts"],
+      "@demo/title/domain": ["libs/title/domain/src/index.ts"],
+      "@demo/title/feature": ["libs/title/feature/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
