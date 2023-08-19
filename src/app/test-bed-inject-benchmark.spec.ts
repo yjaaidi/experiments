@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Injectable } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -7,6 +9,10 @@ import { Injectable } from '@angular/core';
 export class Service {}
 
 test('bench', () => {
+  TestBed.configureTestingModule({
+    imports: [RouterTestingModule],
+  });
+  
   const results = [
     measure({
       fn: () => new Service(),
@@ -33,6 +39,11 @@ test('bench', () => {
       iterations: 1_000_000,
       fn: () => TestBed.inject(Service),
       name: 'TestBed.inject(Service)',
+    }),
+    measure({
+      iterations: 1_000_000,
+      fn: () => TestBed.inject(Router),
+      name: 'TestBed.inject(Router)',
     }),
   ];
 
