@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GetRecipes200ResponseItemsInnerDto } from './get-recipes200-response-items-inner-dto-dto';
+import { GetRecipes200ResponseItemsInnerDto } from './get-recipes200-response-items-inner-dto';
 
 
 export interface GetRecipes200ResponseDto { 

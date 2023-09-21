@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { IngredientNewDto } from './ingredient-new-dto-dto';
+import { IngredientNewDto } from './ingredient-new-dto';
 
 
 /**

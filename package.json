@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "rm -Rf dist && tsc && cp src/*.openapi.yaml dist/src/",
-    "codegen": "rm -Rf src/dtos && openapi-generator-cli generate -i src/recipes.openapi.yaml -g typescript-angular -o src/dtos --additional-properties fileNaming=kebab-case,modelSuffix=dto --global-property models",
+    "codegen": "toos/generate-dtos.sh",
     "deploy": "tools/deploy.sh",
     "start": "nodemon src/main.ts --watch src --ext ts,yaml",
     "test-narrow": "vitest",

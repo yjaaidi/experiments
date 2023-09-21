@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { IngredientDto } from './ingredient-dto-dto';
+import { IngredientDto } from './ingredient-dto';
 
 
 export interface GetRecipes200ResponseItemsInnerDto { 
