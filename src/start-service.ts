@@ -22,6 +22,23 @@ export function startService({
   spec: string;
   handlers: Record<string, RequestHandler>;
 }) {
+  const app = createApp({ spec, handlers });
+
+  const port = process.env.PORT ?? 3000;
+  const server = http.createServer(app);
+  server.listen(port);
+  server.on('listening', () =>
+    console.log(`Listening at http://localhost:${port}`)
+  );
+}
+
+export function createApp({
+  spec,
+  handlers,
+}: {
+  spec: string;
+  handlers: Record<string, RequestHandler>;
+}) {
   const app = express();
 
   app.use(cors());
@@ -89,13 +106,7 @@ export function startService({
       errors: err.errors,
     });
   });
-
-  const port = process.env.PORT ?? 3000;
-  const server = http.createServer(app);
-  server.listen(port);
-  server.on('listening', () =>
-    console.log(`Listening at http://localhost:${port}`)
-  );
+  return app;
 }
 
 export function getDirname(url: string) {
