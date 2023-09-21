@@ -1,15 +1,15 @@
-import { join } from 'path';
 import supertest from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
-import { PostRecipesRequestDto } from './dtos/model/post-recipes-request-dto';
-import { postRecipes } from './main';
-import { createApp } from './start-service';
+import { PostRecipesRequestDto } from '../dtos/model/post-recipes-request-dto';
+import { openapiSpecPath } from '../infra/openapi-spec';
+import { createApp } from '../start-service';
+import { postRecipesRouter } from './post-recipes.router';
 
 vi.useFakeTimers({
   now: new Date('2023-09-01T10:00:00Z'),
 });
 
-describe(postRecipes.name, () => {
+describe('POST /recipes', () => {
   it('should create recipes', async () => {
     const { client } = setUp();
 
@@ -48,8 +48,8 @@ describe(postRecipes.name, () => {
 
   function setUp() {
     const app = createApp({
-      spec: join(__dirname, 'recipes.openapi.yaml'),
-      handlers: { 'post-recipes': postRecipes },
+      spec: openapiSpecPath,
+      handlers: postRecipesRouter,
     });
     return {
       client: supertest(app),

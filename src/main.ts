@@ -1,10 +1,7 @@
-import { Request, RequestHandler, Response } from 'express';
+import { Request, Response } from 'express';
 import { join } from 'path';
 import { GetRecipes200ResponseDto } from './dtos/model/get-recipes200-response-dto';
-import { GetRecipes200ResponseItemsInnerDto } from './dtos/model/get-recipes200-response-items-inner-dto';
-import { GetRecipes4XXResponseDto } from './dtos/model/get-recipes4-xx-response-dto';
 import { IngredientDto } from './dtos/model/ingredient-dto';
-import { PostRecipesRequestDto } from './dtos/model/post-recipes-request-dto';
 import { RecipeDto } from './dtos/model/recipe-dto';
 import {
   Ingredient,
@@ -15,36 +12,10 @@ import {
   RecipeNotFoundError,
   recipeRepository,
 } from './infra/recipe.repository';
+import { postRecipesRouter } from './routes/post-recipes.router';
 import { startService } from './start-service';
 
-export const postRecipes: RequestHandler = (
-  req,
-  res: Response<GetRecipes200ResponseItemsInnerDto>
-) => {
-  const body = req.body as PostRecipesRequestDto;
-
-  const recipe = recipeRepository.addRecipe({
-    name: body.name,
-    pictureUri: body.picture_uri ?? null,
-    type: body.type,
-  });
-
-  const ingredients = body.ingredients?.map((ingredient) => {
-    const ingredientData =
-      typeof ingredient === 'string' ? { name: ingredient } : ingredient;
-    return ingredientRepository.addIngredient({
-      recipeId: recipe.id,
-      ...ingredientData,
-    });
-  });
-
-  res.status(201).send({
-    ...toRecipeDto(recipe),
-    ingredients: ingredients?.map(toIngredientDto),
-  });
-};
-
-function toRecipeDto(recipe: Recipe): RecipeDto {
+export function toRecipeDto(recipe: Recipe): RecipeDto {
   return {
     id: recipe.id,
     created_at: recipe.createdAt.toISOString(),
@@ -53,7 +24,7 @@ function toRecipeDto(recipe: Recipe): RecipeDto {
   };
 }
 
-function toIngredientDto(ingredient: Ingredient): IngredientDto {
+export function toIngredientDto(ingredient: Ingredient): IngredientDto {
   return {
     id: ingredient.id,
     name: ingredient.name,
@@ -63,7 +34,7 @@ function toIngredientDto(ingredient: Ingredient): IngredientDto {
 startService({
   spec: join(__dirname, 'recipes.openapi.yaml'),
   handlers: {
-    'post-recipes': postRecipes,
+    ...postRecipesRouter,
     'get-recipes': (
       req: Request<unknown>,
       res: Response<GetRecipes200ResponseDto>
