@@ -40,12 +40,10 @@ describe(postRecipes.name, () => {
     } as PostRecipesRequestDto);
 
     expect(response.statusCode).toEqual(201);
-    expect(response.body.ingredients).toContainEqual(
-      expect.objectContaining({
-        id: expect.any(String),
-        name: '🥯 Bun',
-      })
-    );
+    expect(response.body.ingredients).toContainEqual({
+      id: expect.any(String),
+      name: '🥯 Bun',
+    });
   });
 
   function setUp() {

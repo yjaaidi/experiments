@@ -1,3 +1,4 @@
+import { RecipeRepository } from './app/recipe/recipe-repository.service';
 import { Request, RequestHandler, Response } from 'express';
 import { join } from 'path';
 import { GetRecipes200ResponseDto } from './dtos/model/get-recipes200-response-dto';
@@ -8,6 +9,7 @@ import { PostRecipesRequestDto } from './dtos/model/post-recipes-request-dto';
 import { RecipeDto } from './dtos/model/recipe-dto';
 import { generateId } from './infra/generate-id';
 import { startService } from './start-service';
+import { ingredientRepository } from './infra/ingredient.repository';
 
 let recipes: RecipeDto[] = [
   {
@@ -60,18 +62,24 @@ let ingredients: (IngredientDto & { recipe_id: string })[] = [
 
 export const postRecipes: RequestHandler = (req, res: Response<RecipeDto>) => {
   const body = req.body as PostRecipesRequestDto;
+
   const recipeId = generateId('rec');
+
+  const ingredients = body.ingredients?.map((ingredient) => {
+    const ingredientData =
+      typeof ingredient === 'string' ? { name: ingredient } : ingredient;
+    return ingredientRepository.addIngredient({ recipeId, ...ingredientData });
+  });
+
   const recipe = {
     id: recipeId,
     created_at: new Date().toISOString(),
     name: body.name,
     picture_uri: body.picture_uri ?? null,
     type: body.type,
-    ingredients: addIngredients({
-      recipeId,
-      ingredients: body.ingredients,
-    }),
+    ingredients,
   };
+
   recipes.push(recipe);
   res.status(201).send(recipe);
 };
