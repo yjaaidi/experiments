@@ -6,16 +6,19 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: pnpm/action-setup@v2
         with:
-          cache: yarn
+          version: 8
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:          
+          cache: pnpm
           node-version: '18.3.0'
       - name: Install dependencies
-        run: yarn --immutable
+        run: pnpm install
       - name: Run Playwright tests
-        run: yarn test --reporter=html
-      - uses: actions/upload-artifact@v2
+        run: pnpm test --reporter=html
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report
