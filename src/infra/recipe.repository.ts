@@ -58,8 +58,8 @@ class RecipeRepository {
 
   searchRecipes(keywords?: string): Recipe[] {
     return keywords != null
-      ? this._recipes.filter((recipe) =>
-          recipe.name?.toLowerCase().includes(keywords)
+      ? this._recipes.filter(
+          (recipe) => recipe.name?.toLowerCase().includes(keywords)
         )
       : this._recipes;
   }

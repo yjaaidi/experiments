@@ -2,6 +2,7 @@ import supertest from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
 import { PostRecipesRequestDto } from '../../dtos/model/post-recipes-request-dto';
 import { openapiSpecPath } from '../../infra/openapi-spec';
+import { recipeRepository } from '../../infra/recipe.repository';
 import { createApp } from '../../start-service';
 import { postRecipesRouter } from './post-recipes.router';
 
@@ -28,6 +29,21 @@ describe('POST /recipes', () => {
       picture_uri:
         'https://www.ninkasi.fr/wp-content/uploads/2022/06/header_burger.jpg',
     });
+  });
+
+  it('should persist recipe when created', async () => {
+    const { client } = setUp();
+
+    await client.post('/recipes').send({
+      name: 'Pizza',
+      type: 'plat',
+    } as PostRecipesRequestDto);
+
+    expect(recipeRepository.searchRecipes()).toContainEqual(
+      expect.objectContaining({
+        name: 'Pizza',
+      })
+    );
   });
 
   it('should create recipe with ingredients', async () => {
