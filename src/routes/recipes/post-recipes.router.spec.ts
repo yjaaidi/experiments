@@ -1,8 +1,8 @@
 import supertest from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
-import { PostRecipesRequestDto } from '../dtos/model/post-recipes-request-dto';
-import { openapiSpecPath } from '../infra/openapi-spec';
-import { createApp } from '../start-service';
+import { PostRecipesRequestDto } from '../../dtos/model/post-recipes-request-dto';
+import { openapiSpecPath } from '../../infra/openapi-spec';
+import { createApp } from '../../start-service';
 import { postRecipesRouter } from './post-recipes.router';
 
 vi.useFakeTimers({

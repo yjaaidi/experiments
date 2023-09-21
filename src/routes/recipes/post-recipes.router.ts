@@ -1,10 +1,10 @@
 import { RequestHandler, Response } from 'express';
-import { GetRecipes200ResponseItemsInnerDto } from '../dtos/model/get-recipes200-response-items-inner-dto';
-import { PostRecipesRequestDto } from '../dtos/model/post-recipes-request-dto';
-import { ingredientRepository } from '../infra/ingredient.repository';
-import { recipeRepository } from '../infra/recipe.repository';
-import { toIngredientDto } from '../infra/to-ingredient-dto';
-import { toRecipeDto } from '../infra/to-recipe-dto';
+import { GetRecipes200ResponseItemsInnerDto } from '../../dtos/model/get-recipes200-response-items-inner-dto';
+import { PostRecipesRequestDto } from '../../dtos/model/post-recipes-request-dto';
+import { ingredientRepository } from '../../infra/ingredient.repository';
+import { recipeRepository } from '../../infra/recipe.repository';
+import { toIngredientDto } from '../../infra/to-ingredient-dto';
+import { toRecipeDto } from '../../infra/to-recipe-dto';
 
 const postRecipesHander: RequestHandler = (
   req,

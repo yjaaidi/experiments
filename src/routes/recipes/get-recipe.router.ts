@@ -2,10 +2,10 @@ import { RequestHandler } from 'express';
 import {
   RecipeNotFoundError,
   recipeRepository,
-} from '../infra/recipe.repository';
-import { toRecipeDto } from '../infra/to-recipe-dto';
-import { ingredientRepository } from '../infra/ingredient.repository';
-import { createResourceNotFoundError } from '../infra/create-resource-not-fund-error';
+} from '../../infra/recipe.repository';
+import { toRecipeDto } from '../../infra/to-recipe-dto';
+import { ingredientRepository } from '../../infra/ingredient.repository';
+import { createResourceNotFoundError } from '../../infra/create-resource-not-fund-error';
 
 const getRecipeHandler: RequestHandler = (req, res) => {
   try {
