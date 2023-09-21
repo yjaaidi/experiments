@@ -6,18 +6,14 @@ WORKDIR /usr/src/app
 
 # Copy yarn berry's files just to make sure that we are
 # using the same version of yarn. 
-COPY .yarnrc.yml ./
-COPY .yarn/cache ./.yarn/cache/
-COPY .yarn/releases ./.yarn/releases/
-# Copy deps
 COPY package.json ./
-COPY yarn.lock ./
+COPY pnpm-lock.yaml ./
 
 # Install dependencies.
-RUN yarn --immutable
+RUN pnpm --frozen-lockfile
 
 # Copy local code to the container image.
 COPY dist ./
 
 # Run the web service on container startup.
-CMD [ "yarn", "node", "src/main.js" ]
+CMD [ "pnpm", "node", "src/main.js" ]
