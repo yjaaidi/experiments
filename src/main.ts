@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, RequestHandler, Response } from 'express';
 import { join } from 'path';
 import { GetRecipes200Response } from './dtos/model/get-recipes200-response';
 import { GetRecipes4XXResponse } from './dtos/model/get-recipes4-xx-response';
@@ -57,26 +57,28 @@ let ingredients: (Ingredient & { recipe_id: string })[] = [
   },
 ];
 
+export const postRecipes: RequestHandler = (req, res: Response<Recipe>) => {
+  const body = req.body as PostRecipesRequest;
+  const recipeId = generateId('rec');
+  const recipe = {
+    id: recipeId,
+    created_at: new Date().toISOString(),
+    name: body.name,
+    picture_uri: body.picture_uri ?? null,
+    type: body.type,
+    ingredients: addIngredients({
+      recipeId,
+      ingredients: body.ingredients,
+    }),
+  };
+  recipes.push(recipe);
+  res.status(201).send(recipe);
+};
+
 startService({
   spec: join(__dirname, 'recipes.openapi.yaml'),
   handlers: {
-    'post-recipes': (req, res: Response<Recipe>) => {
-      const body = req.body as PostRecipesRequest;
-      const recipeId = generateId('rec');
-      const recipe = {
-        id: recipeId,
-        created_at: new Date().toISOString(),
-        name: body.name,
-        picture_uri: body.picture_uri ?? null,
-        type: body.type,
-        ingredients: addIngredients({
-          recipeId,
-          ingredients: body.ingredients,
-        }),
-      };
-      recipes.push(recipe);
-      res.status(201).send(recipe);
-    },
+    'post-recipes': postRecipes,
     'get-recipes': (
       req: Request<unknown>,
       res: Response<GetRecipes200Response>
