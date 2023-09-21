@@ -1,8 +1,8 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
-import { GetRecipes200Response } from '../dtos/model/get-recipes200-response';
-import { GetRecipes200ResponseItemsInner } from '../dtos/model/get-recipes200-response-items-inner';
-import { Recipe } from '../dtos/model/recipe';
-import { PostRecipesRequest } from './../dtos/model/post-recipes-request';
+import { GetRecipes200Response } from '../../src/dtos/model/get-recipes200-response';
+import { GetRecipes200ResponseItemsInner } from '../../src/dtos/model/get-recipes200-response-items-inner';
+import { Recipe } from '../../src/dtos/model/recipe';
+import { PostRecipesRequest } from '../../src/dtos/model/post-recipes-request';
 
 /**
  * This is the (Domain-Specific Language) DSL.

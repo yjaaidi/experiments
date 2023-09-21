@@ -4,7 +4,7 @@ const config: PlaywrightTestConfig = {
   webServer: process.env.BASE_URL
     ? undefined
     : {
-        command: 'yarn start',
+        command: 'pnpm start',
         url: 'http://127.0.0.1:3000/recipes',
         timeout: 20 * 1000,
         reuseExistingServer: !process.env.CI,
@@ -12,5 +12,6 @@ const config: PlaywrightTestConfig = {
   use: {
     baseURL: process.env.BASE_URL ?? 'http://127.0.0.1:3000',
   },
+  testDir: 'playwright',
 };
 export default config;
