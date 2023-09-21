@@ -1,9 +1,9 @@
 import { join } from 'path';
 import supertest from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
+import { PostRecipesRequestDto } from './dtos/model/post-recipes-request-dto';
 import { postRecipes } from './main';
 import { createApp } from './start-service';
-import { PostRecipesRequestDto } from './dtos/model/post-recipes-request-dto';
 
 vi.useFakeTimers({
   now: new Date('2023-09-01T10:00:00Z'),

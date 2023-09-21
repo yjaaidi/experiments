@@ -6,7 +6,38 @@ export interface Ingredient {
 }
 
 class IngredientRepository {
-  private _ingredients: (Ingredient & { recipeId: string })[] = [];
+  private _ingredients: (Ingredient & { recipeId: string })[] = [
+    {
+      id: 'ing-burger-bun',
+      name: 'Burger bun',
+      recipeId: 'rec-burger',
+    },
+    {
+      id: 'ing-burger-tomatoes',
+      name: 'Tomatoes',
+      recipeId: 'rec-burger',
+    },
+    {
+      id: 'ing-burger-cheese',
+      name: 'Cheese',
+      recipeId: 'rec-burger',
+    },
+    {
+      id: 'ing-burger-meat',
+      name: 'Meat',
+      recipeId: 'rec-burger',
+    },
+    {
+      id: 'ing-salad-lettuce',
+      name: 'Lettuce',
+      recipeId: 'rec-salad',
+    },
+    {
+      id: 'ing-salad-eggs',
+      name: 'Eggs',
+      recipeId: 'rec-salad',
+    },
+  ];
 
   addIngredient({ name, recipeId }: { name: string; recipeId: string }) {
     const ingredient = {
@@ -26,6 +57,12 @@ class IngredientRepository {
         id: ingredient.id,
         name: ingredient.name,
       }));
+  }
+
+  removeIngredient(ingredient_id: string) {
+    this._ingredients = this._ingredients.filter(
+      (ingredient) => ingredient.id != ingredient_id
+    );
   }
 }
 

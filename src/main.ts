@@ -1,15 +1,13 @@
-import { RecipeRepository } from './app/recipe/recipe-repository.service';
 import { Request, RequestHandler, Response } from 'express';
 import { join } from 'path';
 import { GetRecipes200ResponseDto } from './dtos/model/get-recipes200-response-dto';
 import { GetRecipes4XXResponseDto } from './dtos/model/get-recipes4-xx-response-dto';
 import { IngredientDto } from './dtos/model/ingredient-dto';
-import { IngredientNewDto } from './dtos/model/ingredient-new-dto';
 import { PostRecipesRequestDto } from './dtos/model/post-recipes-request-dto';
 import { RecipeDto } from './dtos/model/recipe-dto';
 import { generateId } from './infra/generate-id';
-import { startService } from './start-service';
 import { ingredientRepository } from './infra/ingredient.repository';
+import { startService } from './start-service';
 
 let recipes: RecipeDto[] = [
   {
@@ -25,38 +23,6 @@ let recipes: RecipeDto[] = [
     name: 'Salad',
     picture_uri:
       'https://www.ninkasi.fr/wp-content/uploads/2022/10/lyonnaise.png',
-  },
-];
-let ingredients: (IngredientDto & { recipe_id: string })[] = [
-  {
-    id: 'ing-burger-bun',
-    name: 'Burger bun',
-    recipe_id: 'rec-burger',
-  },
-  {
-    id: 'ing-burger-tomatoes',
-    name: 'Tomatoes',
-    recipe_id: 'rec-burger',
-  },
-  {
-    id: 'ing-burger-cheese',
-    name: 'Cheese',
-    recipe_id: 'rec-burger',
-  },
-  {
-    id: 'ing-burger-meat',
-    name: 'Meat',
-    recipe_id: 'rec-burger',
-  },
-  {
-    id: 'ing-salad-lettuce',
-    name: 'Lettuce',
-    recipe_id: 'rec-salad',
-  },
-  {
-    id: 'ing-salad-eggs',
-    name: 'Eggs',
-    recipe_id: 'rec-salad',
   },
 ];
 
@@ -98,7 +64,10 @@ startService({
 
       /* Embed recipe ingredients. */
       const items = shouldEmbedIngredients
-        ? recipes.map((recipe) => embedRecipeIngredients(recipe))
+        ? recipes.map((recipe) => ({
+            ...recipe,
+            ingredients: ingredientRepository.getRecipeIngredients(recipe.id),
+          }))
         : recipes;
 
       const keywords = req.query['q'] as string | undefined;
@@ -117,22 +86,21 @@ startService({
       );
 
       if (recipe != null) {
-        res.status(200).send(embedRecipeIngredients(recipe));
+        res.status(200).send(recipe);
       } else {
         res.status(404).send(createResourceNotFoundError('recipe'));
       }
     },
     'post-ingredient': (req, res: Response<IngredientDto>) => {
-      const ingredient = addIngredient({
-        recipeId: req.params.recipe_id,
-        ingredient: req.body,
-      });
-      res.status(201).send(ingredient);
+      res.status(201).send(
+        ingredientRepository.addIngredient({
+          recipeId: req.params.recipe_id,
+          ...req.body,
+        })
+      );
     },
     'delete-ingredient': (req, res) => {
-      ingredients = ingredients.filter(
-        (ingredient) => ingredient.id != req.params.ingredient_id
-      );
+      ingredientRepository.removeIngredient(req.params.ingredient_id);
       res.sendStatus(204);
     },
   },
@@ -145,49 +113,10 @@ function toIngredientDto(ingredient: IngredientDto) {
   };
 }
 
-function embedRecipeIngredients(recipe: RecipeDto) {
-  return {
-    ...recipe,
-    ingredients: ingredients
-      .filter((ingredient) => ingredient.recipe_id === recipe.id)
-      .map((ingredient) => toIngredientDto(ingredient)),
-  };
-}
-
 function createResourceNotFoundError(resourceType: string) {
   return {
     type: 'https://errors.marmicode.io/resource-not-found',
     title: 'Resource Not found',
     resource_type: resourceType,
   };
-}
-
-function addIngredients({
-  recipeId,
-  ingredients,
-}: {
-  recipeId: string;
-  ingredients?: (string | IngredientNewDto)[];
-}) {
-  return ingredients?.map((ingredient) => {
-    const newIngredient =
-      typeof ingredient === 'string' ? { name: ingredient } : ingredient;
-    return addIngredient({ recipeId, ingredient: newIngredient });
-  });
-}
-
-function addIngredient({
-  recipeId,
-  ingredient,
-}: {
-  recipeId: string;
-  ingredient: IngredientNewDto;
-}) {
-  const newIngredient = {
-    id: generateId('ing'),
-    recipe_id: recipeId,
-    ...ingredient,
-  };
-  ingredients.push(newIngredient);
-  return newIngredient;
 }
