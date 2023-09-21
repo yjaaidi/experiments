@@ -9,10 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PostRecipesRequestAllOfIngredientsDto } from './post-recipes-request-all-of-ingredients-dto-dto';
 
 
-export interface Ingredient { 
-    id: string;
-    name: string;
+export interface PostRecipesRequestAllOfDto { 
+    ingredients?: PostRecipesRequestAllOfIngredientsDto;
 }
 

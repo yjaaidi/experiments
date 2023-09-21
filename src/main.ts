@@ -1,14 +1,15 @@
 import { Request, RequestHandler, Response } from 'express';
 import { join } from 'path';
-import { GetRecipes200Response } from './dtos/model/get-recipes200-response';
-import { GetRecipes4XXResponse } from './dtos/model/get-recipes4-xx-response';
-import { Ingredient } from './dtos/model/ingredient';
-import { IngredientNew } from './dtos/model/ingredient-new';
-import { PostRecipesRequest } from './dtos/model/post-recipes-request';
-import { Recipe } from './dtos/model/recipe';
+import { GetRecipes200ResponseDto } from './dtos/model/get-recipes200-response-dto';
+import { GetRecipes4XXResponseDto } from './dtos/model/get-recipes4-xx-response-dto';
+import { IngredientDto } from './dtos/model/ingredient-dto';
+import { IngredientNewDto } from './dtos/model/ingredient-new-dto';
+import { PostRecipesRequestDto } from './dtos/model/post-recipes-request-dto';
+import { RecipeDto } from './dtos/model/recipe-dto';
+import { generateId } from './infra/generate-id';
 import { startService } from './start-service';
 
-let recipes: Recipe[] = [
+let recipes: RecipeDto[] = [
   {
     id: 'rec-burger',
     created_at: new Date().toISOString(),
@@ -24,7 +25,7 @@ let recipes: Recipe[] = [
       'https://www.ninkasi.fr/wp-content/uploads/2022/10/lyonnaise.png',
   },
 ];
-let ingredients: (Ingredient & { recipe_id: string })[] = [
+let ingredients: (IngredientDto & { recipe_id: string })[] = [
   {
     id: 'ing-burger-bun',
     name: 'Burger bun',
@@ -57,8 +58,8 @@ let ingredients: (Ingredient & { recipe_id: string })[] = [
   },
 ];
 
-export const postRecipes: RequestHandler = (req, res: Response<Recipe>) => {
-  const body = req.body as PostRecipesRequest;
+export const postRecipes: RequestHandler = (req, res: Response<RecipeDto>) => {
+  const body = req.body as PostRecipesRequestDto;
   const recipeId = generateId('rec');
   const recipe = {
     id: recipeId,
@@ -81,7 +82,7 @@ startService({
     'post-recipes': postRecipes,
     'get-recipes': (
       req: Request<unknown>,
-      res: Response<GetRecipes200Response>
+      res: Response<GetRecipes200ResponseDto>
     ) => {
       const shouldEmbedIngredients = (req.query['embed'] as string)
         ?.split(',')
@@ -99,7 +100,10 @@ startService({
 
       res.send({ items: filteredItems });
     },
-    'get-recipe': (req, res: Response<Recipe | GetRecipes4XXResponse>) => {
+    'get-recipe': (
+      req,
+      res: Response<RecipeDto | GetRecipes4XXResponseDto>
+    ) => {
       const recipe = recipes.find(
         (recipe) => recipe.id === req.params.recipe_id
       );
@@ -110,7 +114,7 @@ startService({
         res.status(404).send(createResourceNotFoundError('recipe'));
       }
     },
-    'post-ingredient': (req, res: Response<Ingredient>) => {
+    'post-ingredient': (req, res: Response<IngredientDto>) => {
       const ingredient = addIngredient({
         recipeId: req.params.recipe_id,
         ingredient: req.body,
@@ -126,14 +130,14 @@ startService({
   },
 });
 
-function toIngredientDto(ingredient: Ingredient) {
+function toIngredientDto(ingredient: IngredientDto) {
   return {
     id: ingredient.id,
     name: ingredient.name,
   };
 }
 
-function embedRecipeIngredients(recipe: Recipe) {
+function embedRecipeIngredients(recipe: RecipeDto) {
   return {
     ...recipe,
     ingredients: ingredients
@@ -155,7 +159,7 @@ function addIngredients({
   ingredients,
 }: {
   recipeId: string;
-  ingredients?: (string | IngredientNew)[];
+  ingredients?: (string | IngredientNewDto)[];
 }) {
   return ingredients?.map((ingredient) => {
     const newIngredient =
@@ -169,7 +173,7 @@ function addIngredient({
   ingredient,
 }: {
   recipeId: string;
-  ingredient: IngredientNew;
+  ingredient: IngredientNewDto;
 }) {
   const newIngredient = {
     id: generateId('ing'),
@@ -178,9 +182,4 @@ function addIngredient({
   };
   ingredients.push(newIngredient);
   return newIngredient;
-}
-
-let index = 0;
-function generateId(prefix: string) {
-  return `${prefix}_${index++}`;
 }

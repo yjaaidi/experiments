@@ -9,14 +9,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { IngredientDto } from './ingredient-dto-dto';
 
 
-export interface RecipeNew { 
+export interface GetRecipes200ResponseItemsInnerDto { 
+    id: string;
+    created_at: string;
     name?: string;
-    type?: RecipeNew.TypeEnum;
-    picture_uri?: string | null;
+    type?: GetRecipes200ResponseItemsInnerDto.TypeEnum;
+    picture_uri: string | null;
+    ingredients?: Array<IngredientDto>;
 }
-export namespace RecipeNew {
+export namespace GetRecipes200ResponseItemsInnerDto {
     export type TypeEnum = 'entree' | 'plat' | 'dessert';
     export const TypeEnum = {
         Entree: 'entree' as TypeEnum,

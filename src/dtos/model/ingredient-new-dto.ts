@@ -9,10 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Ingredient } from './ingredient';
 
 
-export interface GetRecipes200ResponseItemsInnerAllOf { 
-    ingredients?: Array<Ingredient>;
+export interface IngredientNewDto { 
+    name: string;
 }
 

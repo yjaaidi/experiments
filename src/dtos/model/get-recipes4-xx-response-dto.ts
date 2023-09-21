@@ -9,10 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PostRecipesRequestAllOfIngredients } from './post-recipes-request-all-of-ingredients';
 
 
-export interface PostRecipesRequestAllOf { 
-    ingredients?: PostRecipesRequestAllOfIngredients;
+export interface GetRecipes4XXResponseDto { 
+    type?: string;
+    title?: string;
+    status?: number;
+    detail?: string;
+    instance?: string;
 }
 

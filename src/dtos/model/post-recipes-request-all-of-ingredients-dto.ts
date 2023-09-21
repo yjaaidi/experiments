@@ -9,16 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { IngredientNew } from './ingredient-new';
+import { IngredientNewDto } from './ingredient-new-dto-dto';
 
 
 /**
  * Prefer using POST /recipes/{recipe_id}/ingredients
  */
 /**
- * @type PostRecipesRequestAllOfIngredients
+ * @type PostRecipesRequestAllOfIngredientsDto
  * Prefer using POST /recipes/{recipe_id}/ingredients
  * @export
  */
-export type PostRecipesRequestAllOfIngredients = Array<IngredientNew> | Array<string>;
+export type PostRecipesRequestAllOfIngredientsDto = Array<IngredientNewDto> | Array<string>;
 

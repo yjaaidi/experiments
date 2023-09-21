@@ -9,16 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PostRecipesRequestAllOfIngredients } from './post-recipes-request-all-of-ingredients';
 
 
-export interface PostRecipesRequest { 
-    name: string;
-    type: PostRecipesRequest.TypeEnum;
+export interface RecipeNewAllOfDto { 
+    name?: string;
+    type?: RecipeNewAllOfDto.TypeEnum;
     picture_uri?: string | null;
-    ingredients?: PostRecipesRequestAllOfIngredients;
 }
-export namespace PostRecipesRequest {
+export namespace RecipeNewAllOfDto {
     export type TypeEnum = 'entree' | 'plat' | 'dessert';
     export const TypeEnum = {
         Entree: 'entree' as TypeEnum,

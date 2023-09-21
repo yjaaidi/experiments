@@ -11,7 +11,8 @@
  */
 
 
-export interface IngredientNew { 
-    name: string;
+export interface RecipeAllOfDto { 
+    id: string;
+    created_at: string;
 }
 

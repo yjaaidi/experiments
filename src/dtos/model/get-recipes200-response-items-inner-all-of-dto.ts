@@ -9,10 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { IngredientDto } from './ingredient-dto-dto';
 
 
-export interface RecipeAllOf { 
-    id: string;
-    created_at: string;
+export interface GetRecipes200ResponseItemsInnerAllOfDto { 
+    ingredients?: Array<IngredientDto>;
 }
 

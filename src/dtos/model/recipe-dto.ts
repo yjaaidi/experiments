@@ -11,12 +11,14 @@
  */
 
 
-export interface RecipeNewAllOf { 
+export interface RecipeDto { 
+    id: string;
+    created_at: string;
     name?: string;
-    type?: RecipeNewAllOf.TypeEnum;
-    picture_uri?: string | null;
+    type?: RecipeDto.TypeEnum;
+    picture_uri: string | null;
 }
-export namespace RecipeNewAllOf {
+export namespace RecipeDto {
     export type TypeEnum = 'entree' | 'plat' | 'dessert';
     export const TypeEnum = {
         Entree: 'entree' as TypeEnum,

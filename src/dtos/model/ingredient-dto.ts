@@ -11,7 +11,8 @@
  */
 
 
-export interface IngredientAllOf { 
+export interface IngredientDto { 
     id: string;
+    name: string;
 }
 

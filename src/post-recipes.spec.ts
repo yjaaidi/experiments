@@ -1,9 +1,9 @@
 import { join } from 'path';
+import supertest from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
 import { postRecipes } from './main';
 import { createApp } from './start-service';
-import supertest from 'supertest';
-import { PostRecipesRequest } from './dtos/model/post-recipes-request';
+import { PostRecipesRequestDto } from './dtos/model/post-recipes-request-dto';
 
 vi.useFakeTimers({
   now: new Date('2023-09-01T10:00:00Z'),
@@ -18,7 +18,7 @@ describe(postRecipes.name, () => {
       picture_uri:
         'https://www.ninkasi.fr/wp-content/uploads/2022/06/header_burger.jpg',
       type: 'plat',
-    } as PostRecipesRequest);
+    } as PostRecipesRequestDto);
 
     expect(response.statusCode).toEqual(201);
     expect(response.body).toMatchObject({
@@ -37,7 +37,7 @@ describe(postRecipes.name, () => {
       name: 'Burger',
       type: 'plat',
       ingredients: ['🥯 Bun', '🍅 Tomatoes', '🧀 Cheese', '🥩 Meat'],
-    } as PostRecipesRequest);
+    } as PostRecipesRequestDto);
 
     expect(response.statusCode).toEqual(201);
     expect(response.body.ingredients).toContainEqual(

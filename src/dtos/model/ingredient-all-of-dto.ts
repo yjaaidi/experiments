@@ -9,10 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GetRecipes200ResponseItemsInner } from './get-recipes200-response-items-inner';
 
 
-export interface GetRecipes200Response { 
-    items?: Array<GetRecipes200ResponseItemsInner>;
+export interface IngredientAllOfDto { 
+    id: string;
 }
 
