@@ -1,54 +1,64 @@
 import { Request, RequestHandler, Response } from 'express';
 import { join } from 'path';
 import { GetRecipes200ResponseDto } from './dtos/model/get-recipes200-response-dto';
+import { GetRecipes200ResponseItemsInnerDto } from './dtos/model/get-recipes200-response-items-inner-dto';
 import { GetRecipes4XXResponseDto } from './dtos/model/get-recipes4-xx-response-dto';
 import { IngredientDto } from './dtos/model/ingredient-dto';
 import { PostRecipesRequestDto } from './dtos/model/post-recipes-request-dto';
 import { RecipeDto } from './dtos/model/recipe-dto';
-import { generateId } from './infra/generate-id';
-import { ingredientRepository } from './infra/ingredient.repository';
+import {
+  Ingredient,
+  ingredientRepository,
+} from './infra/ingredient.repository';
+import {
+  Recipe,
+  RecipeNotFoundError,
+  recipeRepository,
+} from './infra/recipe.repository';
 import { startService } from './start-service';
 
-let recipes: RecipeDto[] = [
-  {
-    id: 'rec-burger',
-    created_at: new Date().toISOString(),
-    name: 'Burger',
-    picture_uri:
-      'https://www.ninkasi.fr/wp-content/uploads/2022/06/header_burger.jpg',
-  },
-  {
-    id: 'rec-salad',
-    created_at: new Date().toISOString(),
-    name: 'Salad',
-    picture_uri:
-      'https://www.ninkasi.fr/wp-content/uploads/2022/10/lyonnaise.png',
-  },
-];
-
-export const postRecipes: RequestHandler = (req, res: Response<RecipeDto>) => {
+export const postRecipes: RequestHandler = (
+  req,
+  res: Response<GetRecipes200ResponseItemsInnerDto>
+) => {
   const body = req.body as PostRecipesRequestDto;
 
-  const recipeId = generateId('rec');
+  const recipe = recipeRepository.addRecipe({
+    name: body.name,
+    pictureUri: body.picture_uri ?? null,
+    type: body.type,
+  });
 
   const ingredients = body.ingredients?.map((ingredient) => {
     const ingredientData =
       typeof ingredient === 'string' ? { name: ingredient } : ingredient;
-    return ingredientRepository.addIngredient({ recipeId, ...ingredientData });
+    return ingredientRepository.addIngredient({
+      recipeId: recipe.id,
+      ...ingredientData,
+    });
   });
 
-  const recipe = {
-    id: recipeId,
-    created_at: new Date().toISOString(),
-    name: body.name,
-    picture_uri: body.picture_uri ?? null,
-    type: body.type,
-    ingredients,
-  };
-
-  recipes.push(recipe);
-  res.status(201).send(recipe);
+  res.status(201).send({
+    ...toRecipeDto(recipe),
+    ingredients: ingredients?.map(toIngredientDto),
+  });
 };
+
+function toRecipeDto(recipe: Recipe): RecipeDto {
+  return {
+    id: recipe.id,
+    created_at: recipe.createdAt.toISOString(),
+    name: recipe.name,
+    picture_uri: recipe.pictureUri ?? null,
+  };
+}
+
+function toIngredientDto(ingredient: Ingredient): IngredientDto {
+  return {
+    id: ingredient.id,
+    name: ingredient.name,
+  };
+}
 
 startService({
   spec: join(__dirname, 'recipes.openapi.yaml'),
@@ -62,33 +72,36 @@ startService({
         ?.split(',')
         .includes('ingredients');
 
-      /* Embed recipe ingredients. */
-      const items = shouldEmbedIngredients
-        ? recipes.map((recipe) => ({
-            ...recipe,
-            ingredients: ingredientRepository.getRecipeIngredients(recipe.id),
-          }))
-        : recipes;
-
       const keywords = req.query['q'] as string | undefined;
-      const filteredItems = keywords
-        ? items.filter((item) => item.name?.toLowerCase().includes(keywords))
-        : items;
 
-      res.send({ items: filteredItems });
+      res.send({
+        items: recipeRepository.searchRecipes(keywords).map((recipe) => {
+          const recipeDto = toRecipeDto(recipe);
+
+          if (shouldEmbedIngredients) {
+            return {
+              ...recipeDto,
+              ingredients: ingredientRepository.getRecipeIngredients(recipe.id),
+            };
+          }
+
+          return recipeDto;
+        }),
+      });
     },
-    'get-recipe': (
-      req,
-      res: Response<RecipeDto | GetRecipes4XXResponseDto>
-    ) => {
-      const recipe = recipes.find(
-        (recipe) => recipe.id === req.params.recipe_id
-      );
-
-      if (recipe != null) {
-        res.status(200).send(recipe);
-      } else {
-        res.status(404).send(createResourceNotFoundError('recipe'));
+    'get-recipe': (req, res) => {
+      try {
+        const recipeId = req.params.recipe_id;
+        res.status(200).send({
+          ...toRecipeDto(recipeRepository.getRecipe(recipeId)),
+          ingredients: ingredientRepository.getRecipeIngredients(recipeId),
+        });
+      } catch (e) {
+        if (e instanceof RecipeNotFoundError) {
+          res.status(404).send(createResourceNotFoundError('recipe'));
+          return;
+        }
+        throw e;
       }
     },
     'post-ingredient': (req, res: Response<IngredientDto>) => {
@@ -105,13 +118,6 @@ startService({
     },
   },
 });
-
-function toIngredientDto(ingredient: IngredientDto) {
-  return {
-    id: ingredient.id,
-    name: ingredient.name,
-  };
-}
 
 function createResourceNotFoundError(resourceType: string) {
   return {

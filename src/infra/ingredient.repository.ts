@@ -59,9 +59,9 @@ class IngredientRepository {
       }));
   }
 
-  removeIngredient(ingredient_id: string) {
+  removeIngredient(ingredientId: string) {
     this._ingredients = this._ingredients.filter(
-      (ingredient) => ingredient.id != ingredient_id
+      (ingredient) => ingredient.id != ingredientId
     );
   }
 }
