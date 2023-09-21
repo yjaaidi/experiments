@@ -48,7 +48,7 @@ gcloud artifacts repositories describe marmicode --project "$PROJECT" --location
 || gcloud artifacts repositories create marmicode --project "$PROJECT" --location europe-west1 --repository-format docker
 
 log "📦 Packaging application..."
-yarn build
+pnpm build
 docker build . -f src/Dockerfile -t "$IMAGE"
 docker push "$IMAGE"
 
@@ -58,7 +58,7 @@ NEXT_URL=$(echo "$CLOUD_RUN_RESULT" | jq -r '.status.traffic[-1].url')
 REVISION_NAME=$(echo "$CLOUD_RUN_RESULT" | jq -r '.status.latestCreatedRevisionName')
 
 log "✅ Running smoke tests..."
-BASE_URL="$NEXT_URL" CI=true yarn test
+BASE_URL="$NEXT_URL" CI=true pnpm test
 wait 60
 check_logs_and_rollback_on_error
 
