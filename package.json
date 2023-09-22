@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "rm -Rf dist && tsc && cp src/*.openapi.yaml dist/src/",
-    "codegen": "toos/generate-dtos.sh",
+    "codegen": "tools/generate-dtos.sh",
     "deploy": "tools/deploy.sh",
     "start": "nodemon src/main.ts --watch src --ext ts,yaml",
     "test-narrow": "vitest",
