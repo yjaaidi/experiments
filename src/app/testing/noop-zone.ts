@@ -3,12 +3,11 @@
  * This could be quickly fixed. */
 class NoopZone {
   static root = new NoopZone();
-  static current = NoopZone.root;
+  static current = this.root;
   static currentTask = null;
+  static ProxyZoneSpec = this.root;
   /* This is used by TestBed's teardown. */
-  static fakeAsyncTest = {
-    resetFakeAsyncZone() {},
-  };
+  static fakeAsyncTest = this.root;
 
   static assertZonePatched() {
     return true;
@@ -31,6 +30,18 @@ class NoopZone {
   run(callback: Function, applyThis?: any, applyArgs?: any[]) {
     return callback.apply(applyThis, applyArgs);
   }
+
+  onHasTask(callback: Function, applyThis?: any, applyArgs?: any[]) {
+    return callback.apply(applyThis, applyArgs);
+  }
+
+  flush() {}
+
+  assertPresent() {
+    return NoopZone.root;
+  }
+
+  resetFakeAsyncZone() {}
 }
 
 (globalThis as any).Zone = NoopZone;
