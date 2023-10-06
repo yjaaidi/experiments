@@ -5,9 +5,6 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [RouterOutlet],
   selector: 'wm-app',
-  template: `
-    <h1>Hello!</h1>
-    <router-outlet />
-  `,
+  template: ` <router-outlet /> `,
 })
 export class AppComponent {}

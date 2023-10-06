@@ -6,10 +6,12 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "17.0.0-next.7",
+    "@angular/cdk": "16.2.7",
     "@angular/common": "17.0.0-next.7",
     "@angular/compiler": "17.0.0-next.7",
     "@angular/core": "17.0.0-next.7",
     "@angular/forms": "17.0.0-next.7",
+    "@angular/material": "16.2.7",
     "@angular/platform-browser": "17.0.0-next.7",
     "@angular/platform-browser-dynamic": "17.0.0-next.7",
     "@angular/router": "17.0.0-next.7",
@@ -54,4 +56,3 @@
     "typescript": "~5.2.0"
   }
 }
-
