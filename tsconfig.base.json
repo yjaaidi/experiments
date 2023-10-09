@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@whiskmate/recipe-core": ["libs/recipe-core/src/index.ts"]
+      "@whiskmate/recipe-core": ["libs/recipe-core/src/index.ts"],
+      "@whiskmate/shared-ui": ["libs/shared-ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

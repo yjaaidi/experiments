@@ -4,16 +4,16 @@ import {
   inject,
   Input,
 } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { map } from 'rxjs/operators';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
-import { rxComputed } from '@jscutlery/rx-computed';
+import { MatListModule } from '@angular/material/list';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { rxComputed } from '@jscutlery/rx-computed';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { map } from 'rxjs/operators';
 
 export interface Link {
   name: string;

@@ -5,11 +5,10 @@ import {
   Input,
   TemplateRef,
 } from '@angular/core';
-import { GridComponent } from '../shared/grid.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
-import { trackById } from '../shared/track-by-id';
 import { Recipe } from '@whiskmate/recipe-core';
+import { GridComponent, trackById } from '@whiskmate/shared-ui';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

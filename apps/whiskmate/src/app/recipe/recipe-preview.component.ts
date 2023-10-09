@@ -1,7 +1,7 @@
-import { CardComponent } from './../shared/card.component';
 import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Recipe } from '@whiskmate/recipe-core';
+import { CardComponent } from '@whiskmate/shared-ui';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

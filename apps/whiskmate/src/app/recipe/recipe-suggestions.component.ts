@@ -7,15 +7,17 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RecipePreviewComponent } from './recipe-preview.component';
-import { GridComponent } from '../shared/grid.component';
-import { trackById } from '../shared/track-by-id';
 import { RecipeAddButtonComponent } from './recipe-add-button.component';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, defer, of } from 'rxjs';
 import { rxComputed } from '@jscutlery/rx-computed';
 import { pending, suspensify } from '@jscutlery/operators';
-import { MessageComponent } from '../shared/message.component';
+import {
+  GridComponent,
+  MessageComponent,
+  trackById,
+} from '@whiskmate/shared-ui';
 
 @Component({
   standalone: true,

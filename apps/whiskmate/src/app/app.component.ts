@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavComponent } from './shared/nav.component';
+
+import { NavComponent } from '@whiskmate/shared-ui';
 
 @Component({
   standalone: true,

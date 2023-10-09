@@ -8,14 +8,13 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { rxComputed } from '@jscutlery/rx-computed';
 import { pending, suspensify } from '@jscutlery/operators';
-import { GridComponent } from '../shared/grid.component';
 import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository.service';
 import { RecipeListComponent } from './recipe-list.component';
 import { RecipeAddButtonComponent } from './recipe-add-button.component';
-import { MessageComponent } from '../shared/message.component';
+import { GridComponent, MessageComponent } from '@whiskmate/shared-ui';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
