@@ -57,5 +57,8 @@
       "style": "css"
     }
   },
-  "defaultProject": "whiskmate"
+  "defaultProject": "whiskmate",
+  "cli": {
+    "defaultCollection": "@nx/angular"
+  }
 }
