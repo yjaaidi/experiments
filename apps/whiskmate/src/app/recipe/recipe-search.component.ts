@@ -17,6 +17,7 @@ import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository.service';
+import { RecipeListComponent } from './recipe-list.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,19 +31,17 @@ import { RecipeRepository } from './recipe-repository.service';
     RecipeFilterComponent,
     RecipePreviewComponent,
     NgForOf,
+    RecipeListComponent,
   ],
   template: `
     <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
 
-    <wm-grid>
-      <span *ngIf="recipesSuspense().pending">⏳ Searching...</span>
+    <div *ngIf="recipesSuspense().pending">⏳ Searching...</div>
 
-      <span *ngIf="recipesSuspense().hasError">💥 Something went wrong.</span>
+    <div *ngIf="recipesSuspense().hasError">💥 Something went wrong.</div>
 
-      <wm-recipe-preview
-        *ngFor="let recipe of recipes(); trackBy: trackById"
-        [recipe]="recipe"
-      >
+    <wm-recipe-list *ngIf="recipesSuspense().hasValue" [recipes]="recipes()">
+      <ng-template #actions let-recipe>
         <button
           [disabled]="!canAddRecord()[recipe.id]"
           (click)="addRecipe(recipe)"
@@ -53,11 +52,15 @@ import { RecipeRepository } from './recipe-repository.service';
         >
           ADD
         </button>
-      </wm-recipe-preview>
-    </wm-grid>
+      </ng-template>
+    </wm-recipe-list>
   `,
   styles: [
     `
+      :host {
+        text-align: center;
+      }
+
       .add-recipe-button {
         display: block;
         margin: auto;

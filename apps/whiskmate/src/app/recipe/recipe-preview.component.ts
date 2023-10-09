@@ -25,5 +25,5 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   ],
 })
 export class RecipePreviewComponent {
-  @Input() recipe?: Recipe;
+  @Input({ required: true }) recipe!: Recipe;
 }
