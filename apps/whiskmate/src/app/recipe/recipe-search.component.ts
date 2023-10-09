@@ -1,8 +1,13 @@
 import { AsyncPipe, NgForOf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Signal,
+  signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { BehaviorSubject } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 import { MealPlanner } from './../meal-planner/meal-planner.service';
 import { CatalogComponent } from './../shared/catalog.component';
 import { Recipe } from './recipe';
@@ -10,6 +15,7 @@ import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository.service';
+import { rxComputed } from '@jscutlery/rx-computed';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,17 +30,13 @@ import { RecipeRepository } from './recipe-repository.service';
     RecipePreviewComponent,
   ],
   template: `
-    <wm-recipe-filter
-      (filterChange)="onFilterChange($event)"
-    ></wm-recipe-filter>
+    <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
     <wm-catalog>
-      <wm-recipe-preview
-        *ngFor="let item of items$ | async; trackBy: trackById"
-        [recipe]="item.recipe"
-      >
+      @for(recipe of recipes(); track recipe.id) {
+      <wm-recipe-preview [recipe]="recipe">
         <button
-          [disabled]="(item.canAdd$ | async) === false"
-          (click)="addRecipe(item.recipe)"
+          [disabled]="!canAddRecord()[recipe.id]"
+          (click)="addRecipe(recipe)"
           class="add-recipe-button"
           color="primary"
           data-role="add-recipe"
@@ -43,6 +45,7 @@ import { RecipeRepository } from './recipe-repository.service';
           ADD
         </button>
       </wm-recipe-preview>
+      }
     </wm-catalog>
   `,
   styles: [
@@ -55,30 +58,25 @@ import { RecipeRepository } from './recipe-repository.service';
   ],
 })
 export class RecipeSearchComponent {
-  filter$ = new BehaviorSubject<RecipeFilter>({});
-  items$ = this.filter$.pipe(
-    switchMap((filter) => this._recipeRepository.search(filter)),
-    map((recipes) =>
-      recipes.map((recipe) => ({
-        canAdd$: this._mealPlanner.watchCanAddRecipe(recipe),
-        recipe,
-      }))
-    )
-  );
+  filter = signal<RecipeFilter>({});
+  recipes = rxComputed(() => this._recipeRepository.search(this.filter()));
+  canAddRecord: Signal<Record<string, boolean>> = rxComputed(() => {
+    const canAddObsRecord =
+      this.recipes()?.reduce(
+        (acc, recipe) => ({
+          ...acc,
+          [recipe.id]: this._mealPlanner.watchCanAddRecipe(recipe),
+        }),
+        {}
+      ) ?? {};
+    return combineLatest(canAddObsRecord);
+  });
 
   private _mealPlanner = inject(MealPlanner);
   private _recipeRepository = inject(RecipeRepository);
 
   addRecipe(recipe: Recipe) {
     this._mealPlanner.addRecipe(recipe);
-  }
-
-  onFilterChange(filter: RecipeFilter) {
-    this.filter$.next(filter);
-  }
-
-  trackById(_: number, { recipe }: { recipe: Recipe }) {
-    return recipe.id;
   }
 }
 

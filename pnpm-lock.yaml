@@ -35,6 +35,12 @@ dependencies:
   '@angular/router':
     specifier: 17.0.0-next.7
     version: 17.0.0-next.7(@angular/common@17.0.0-next.7)(@angular/core@17.0.0-next.7)(@angular/platform-browser@17.0.0-next.7)(rxjs@7.8.1)
+  '@jscutlery/operators':
+    specifier: 2.1.2
+    version: 2.1.2(@jest/globals@29.5.0)(rxjs@7.8.1)
+  '@jscutlery/rx-computed':
+    specifier: 0.2.2
+    version: 0.2.2(@angular/core@17.0.0-next.7)(@jscutlery/operators@2.1.2)
   '@nx/angular':
     specifier: 16.9.1
     version: 16.9.1(@angular-devkit/build-angular@17.0.0-next.7)(@angular-devkit/core@17.0.0-next.7)(@angular-devkit/schematics@17.0.0-next.7)(@schematics/angular@16.2.4)(@swc/core@1.3.92)(@types/node@16.11.7)(eslint@8.46.0)(nx@16.9.1)(rxjs@7.8.1)(ts-node@10.9.1)(typescript@5.2.2)
@@ -2399,6 +2405,18 @@ packages:
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
+  /@jest/globals@29.5.0:
+    resolution: {integrity: sha512-S02y0qMWGihdzNbUiqSAiKSpSozSuHX5UYc7QbnHP+D9Lyw8DgGGCinrN9uSuHPeKgSSzvPom2q1nAtBvUsvPQ==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    dependencies:
+      '@jest/environment': 29.7.0
+      '@jest/expect': 29.7.0
+      '@jest/types': 29.6.3
+      jest-mock: 29.7.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /@jest/globals@29.7.0:
     resolution: {integrity: sha512-mpiz3dutLbkW2MNFubUGUEVLkTGiqW6yLVTA+JbP6fI6J5iL9Y0Nlg8k95pcF8ctKwCS7WVxteBs29hhfAotzQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -2558,6 +2576,27 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@jscutlery/operators@2.1.2(@jest/globals@29.5.0)(rxjs@7.8.1):
+    resolution: {integrity: sha512-eIDwK1R3c3RVLtpk3fDkb3Q784rplCijbv2t6eiaASY5kEQJrtBwE78EElcLhH6wyBmCCBiiDVAOUgLb4O9o8A==}
+    peerDependencies:
+      '@jest/globals': 29.5.0
+      rxjs: '>=6.0.0'
+    dependencies:
+      '@jest/globals': 29.5.0
+      rxjs: 7.8.1
+    dev: false
+
+  /@jscutlery/rx-computed@0.2.2(@angular/core@17.0.0-next.7)(@jscutlery/operators@2.1.2):
+    resolution: {integrity: sha512-RSb3BxXWD4ES9xMx5T4fRk+7xlAlf181DqOyIx55fI8kcdgYdze9sGRoWZy5pO6YXA+FHZmtUBoqb7q/aQnL/w==}
+    peerDependencies:
+      '@angular/core': ^16.0.0
+      '@jscutlery/operators': ^2.0.0
+    dependencies:
+      '@angular/core': 17.0.0-next.7(rxjs@7.8.1)(zone.js@0.14.0)
+      '@jscutlery/operators': 2.1.2(@jest/globals@29.5.0)(rxjs@7.8.1)
+      tslib: 2.6.2
+    dev: false
 
   /@leichtgewicht/ip-codec@2.0.4:
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
