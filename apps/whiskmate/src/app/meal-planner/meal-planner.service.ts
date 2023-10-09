@@ -44,6 +44,12 @@ export class MealPlanner implements OnDestroy {
     );
   }
 
+  removeMeal(recipeId: string) {
+    this._recipes$.next(
+      this._recipes$.value.filter(({ id }) => id !== recipeId)
+    );
+  }
+
   private _canAddRecipe({
     recipes,
     recipe,
