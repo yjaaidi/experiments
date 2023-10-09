@@ -11,6 +11,6 @@ export const appRoutes: Route[] = [
   },
   {
     path: '**',
-    redirectTo: '/search',
+    redirectTo: '/search?country=fr',
   },
 ];
