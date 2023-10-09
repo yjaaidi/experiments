@@ -19,9 +19,26 @@ import { RecipeAddButtonComponent } from './recipe-add-button.component';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
+  selector: 'wm-error',
+  template: `<ng-content />`,
+  styles: [
+    `
+      :host {
+        display: block;
+        font-size: 1.5em;
+        font-style: italic;
+      }
+    `,
+  ],
+})
+export class ErrorComponent {}
+
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   selector: 'wm-recipe-search',
   imports: [
-    AsyncPipe,
+    ErrorComponent,
     GridComponent,
     MatButtonModule,
     NgIf,
@@ -34,9 +51,15 @@ import { RecipeAddButtonComponent } from './recipe-add-button.component';
   template: `
     <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
 
-    <div *ngIf="recipesSuspense().pending">⏳ Searching...</div>
+    <wm-error *ngIf="recipesSuspense().pending">⏳ Searching...</wm-error>
 
-    <div *ngIf="recipesSuspense().hasError">💥 Something went wrong.</div>
+    <wm-error *ngIf="recipesSuspense().hasError">
+      💥 Something went wrong
+    </wm-error>
+
+    <wm-error *ngIf="recipesSuspense().hasValue && recipes().length === 0">
+      😿 no results
+    </wm-error>
 
     <wm-recipe-list *ngIf="recipesSuspense().hasValue" [recipes]="recipes()">
       <ng-template #actions let-recipe>

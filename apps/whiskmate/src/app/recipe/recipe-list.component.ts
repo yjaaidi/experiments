@@ -8,7 +8,8 @@ import {
 import { Recipe } from './recipe';
 import { GridComponent } from '../shared/grid.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
-import { NgForOf, NgTemplateOutlet } from '@angular/common';
+import { NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
+import { trackById } from '../shared/track-by-id';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,7 +27,13 @@ import { NgForOf, NgTemplateOutlet } from '@angular/common';
       </wm-recipe-preview>
     </wm-grid>
   `,
-  imports: [GridComponent, RecipePreviewComponent, NgForOf, NgTemplateOutlet],
+  imports: [
+    GridComponent,
+    RecipePreviewComponent,
+    NgForOf,
+    NgTemplateOutlet,
+    NgIf,
+  ],
 })
 export class RecipeListComponent {
   @Input({ required: true }) recipes!: Recipe[];
@@ -35,7 +42,5 @@ export class RecipeListComponent {
     $implicit: Recipe;
   }>;
 
-  trackById(_: number, recipe: Recipe) {
-    return recipe.id;
-  }
+  trackById = trackById;
 }
