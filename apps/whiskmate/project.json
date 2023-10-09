@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "whiskmate",
   "sourceRoot": "apps/whiskmate/src",
-  "tags": [],
+  "tags": ["type:app"],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser-esbuild",
