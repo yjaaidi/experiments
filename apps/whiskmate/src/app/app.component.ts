@@ -1,10 +1,20 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavComponent } from './shared/nav.component';
 
 @Component({
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NavComponent],
   selector: 'wm-app',
-  template: ` <router-outlet /> `,
+  template: `
+    <wm-nav [links]="links" title="👨🏻‍🍳 Whiskmate">
+      <router-outlet />
+    </wm-nav>
+  `,
 })
-export class AppComponent {}
+export class AppComponent {
+  links = [
+    { name: 'Search', route: ['/search'] },
+    { name: 'My Meals', route: ['/meals'] },
+  ];
+}

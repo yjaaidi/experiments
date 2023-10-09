@@ -6,6 +6,10 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./recipe/recipe-search.component'),
   },
   {
+    path: 'meals',
+    loadComponent: () => import('./meal-planner/meals.component'),
+  },
+  {
     path: '**',
     redirectTo: '/search',
   },
