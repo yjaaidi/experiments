@@ -1,4 +1,4 @@
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,31 +15,15 @@ import { RecipePreviewComponent } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository.service';
 import { RecipeListComponent } from './recipe-list.component';
 import { RecipeAddButtonComponent } from './recipe-add-button.component';
-
-@Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  selector: 'wm-error',
-  template: `<ng-content />`,
-  styles: [
-    `
-      :host {
-        display: block;
-        font-size: 1.5em;
-        font-style: italic;
-      }
-    `,
-  ],
-})
-export class ErrorComponent {}
+import { MessageComponent } from '../shared/message.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'wm-recipe-search',
   imports: [
-    ErrorComponent,
     GridComponent,
+    MessageComponent,
     MatButtonModule,
     NgIf,
     RecipeFilterComponent,
@@ -51,15 +35,15 @@ export class ErrorComponent {}
   template: `
     <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
 
-    <wm-error *ngIf="recipesSuspense().pending">⏳ Searching...</wm-error>
+    <wm-message *ngIf="recipesSuspense().pending">⏳ Searching...</wm-message>
 
-    <wm-error *ngIf="recipesSuspense().hasError">
+    <wm-message *ngIf="recipesSuspense().hasError">
       💥 Something went wrong
-    </wm-error>
+    </wm-message>
 
-    <wm-error *ngIf="recipesSuspense().hasValue && recipes().length === 0">
+    <wm-message *ngIf="recipesSuspense().hasValue && recipes().length === 0">
       😿 no results
-    </wm-error>
+    </wm-message>
 
     <wm-recipe-list *ngIf="recipesSuspense().hasValue" [recipes]="recipes()">
       <ng-template #actions let-recipe>
@@ -67,13 +51,6 @@ export class ErrorComponent {}
       </ng-template>
     </wm-recipe-list>
   `,
-  styles: [
-    `
-      :host {
-        text-align: center;
-      }
-    `,
-  ],
 })
 export class RecipeSearchComponent {
   filter = signal<RecipeFilter>({});
