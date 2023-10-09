@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  selector: 'wm-catalog',
+  selector: 'wm-grid',
   template: `<ng-content></ng-content>`,
   styles: [
     `
@@ -18,4 +18,4 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     `,
   ],
 })
-export class CatalogComponent {}
+export class GridComponent {}

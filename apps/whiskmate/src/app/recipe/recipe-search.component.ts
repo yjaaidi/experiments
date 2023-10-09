@@ -11,7 +11,7 @@ import { rxComputed } from '@jscutlery/rx-computed';
 import { pending, suspensify } from '@jscutlery/operators';
 import { combineLatest } from 'rxjs';
 import { MealPlanner } from '../meal-planner/meal-planner.service';
-import { CatalogComponent } from '../shared/catalog.component';
+import { GridComponent } from '../shared/grid.component';
 import { Recipe } from './recipe';
 import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
@@ -24,7 +24,7 @@ import { RecipeRepository } from './recipe-repository.service';
   selector: 'wm-recipe-search',
   imports: [
     AsyncPipe,
-    CatalogComponent,
+    GridComponent,
     MatButtonModule,
     NgIf,
     RecipeFilterComponent,
@@ -34,7 +34,7 @@ import { RecipeRepository } from './recipe-repository.service';
   template: `
     <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
 
-    <wm-catalog>
+    <wm-grid>
       <span *ngIf="recipesSuspense().pending">⏳ Searching...</span>
 
       <span *ngIf="recipesSuspense().hasError">💥 Something went wrong.</span>
@@ -54,7 +54,7 @@ import { RecipeRepository } from './recipe-repository.service';
           ADD
         </button>
       </wm-recipe-preview>
-    </wm-catalog>
+    </wm-grid>
   `,
   styles: [
     `
