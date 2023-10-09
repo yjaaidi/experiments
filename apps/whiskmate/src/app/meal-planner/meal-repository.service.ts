@@ -7,6 +7,8 @@ export interface MealRepositoryDef {
   addMeal(recipe: Recipe): Observable<void>;
 
   getMeals(): Observable<Recipe[]>;
+
+  removeMeal(mealId: string): Observable<void>;
 }
 
 @Injectable({
@@ -27,6 +29,11 @@ export class MealRepository implements MealRepositoryDef {
 
   getMeals(): Observable<Recipe[]> {
     return of(this._meals);
+  }
+
+  removeMeal(mealId: string): Observable<void> {
+    this._updateMeals(this._meals.filter(({ id }) => id !== mealId));
+    return of(undefined);
   }
 
   private _loadMeals(): Recipe[] {

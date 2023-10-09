@@ -14,6 +14,11 @@ export class MealRepositoryFake implements MealRepositoryDef {
     return of(undefined);
   }
 
+  removeMeal(mealId: string): Observable<void> {
+    this._meals = this._meals.filter(({ id }) => id !== mealId);
+    return of(undefined);
+  }
+
   getMeals(): Observable<Recipe[]> {
     return of(this._meals);
   }
