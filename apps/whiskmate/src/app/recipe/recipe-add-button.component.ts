@@ -5,10 +5,10 @@ import {
   Input,
   signal,
 } from '@angular/core';
-import { Recipe } from './recipe';
 import { MatButtonModule } from '@angular/material/button';
 import { rxComputed } from '@jscutlery/rx-computed';
 import { MealPlanner } from '../meal-planner/meal-planner.service';
+import { Recipe } from '@whiskmate/recipe-core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

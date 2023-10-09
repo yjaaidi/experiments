@@ -7,10 +7,10 @@ import {
 import { RecipeListComponent } from '../recipe/recipe-list.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MealPlanner } from './meal-planner.service';
-import { Recipe } from '../recipe/recipe';
 import { MatButtonModule } from '@angular/material/button';
 import { NgIf } from '@angular/common';
 import { MessageComponent } from '../shared/message.component';
+import { Recipe } from '@whiskmate/recipe-core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

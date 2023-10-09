@@ -1,5 +1,4 @@
-import { createRecipe } from '../recipe/recipe';
-import { Recipe } from '../recipe/recipe';
+import { createRecipe, Recipe } from '@whiskmate/recipe-core';
 
 class RecipeMother {
   private _recipePictures = [

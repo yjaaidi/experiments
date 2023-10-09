@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Recipe } from '../recipe/recipe';
 import { MealRepositoryDef } from './meal-repository.service';
+import { Recipe } from '@whiskmate/recipe-core';
 
 @Injectable({
   providedIn: 'root',

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Recipe } from '../recipe/recipe';
 import { LocalStorage } from '../shared/local-storage';
+import { Recipe } from '@whiskmate/recipe-core';
 
 export interface MealRepositoryDef {
   addMeal(recipe: Recipe): Observable<void>;

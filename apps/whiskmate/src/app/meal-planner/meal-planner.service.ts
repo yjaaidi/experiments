@@ -8,9 +8,9 @@ import {
   tap,
 } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { Recipe } from '../recipe/recipe';
 import { MealRepository } from './meal-repository.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Recipe } from '@whiskmate/recipe-core';
 
 @Injectable({
   providedIn: 'root',

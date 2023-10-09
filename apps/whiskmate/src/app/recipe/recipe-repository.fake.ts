@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { RecipeFilter } from './recipe-filter';
 import { Observable, of } from 'rxjs';
-import { Recipe } from './recipe';
 import { RecipeRepositoryDef } from './recipe-repository.service';
+import { Recipe } from '@whiskmate/recipe-core';
 
 @Injectable({
   providedIn: 'root',

@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { createRecipe, Recipe } from './recipe';
 import { RecipeFilter } from './recipe-filter';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { createRecipe, Recipe } from '@whiskmate/recipe-core';
 
 export interface RecipeRepositoryDef {
   search(filter: RecipeFilter): Observable<Recipe[]>;
