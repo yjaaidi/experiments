@@ -1,4 +1,4 @@
-import { AsyncPipe, NgForOf } from '@angular/common';
+import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,15 +7,16 @@ import {
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { rxComputed } from '@jscutlery/rx-computed';
+import { pending, suspensify } from '@jscutlery/operators';
 import { combineLatest } from 'rxjs';
-import { MealPlanner } from './../meal-planner/meal-planner.service';
-import { CatalogComponent } from './../shared/catalog.component';
+import { MealPlanner } from '../meal-planner/meal-planner.service';
+import { CatalogComponent } from '../shared/catalog.component';
 import { Recipe } from './recipe';
 import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository.service';
-import { rxComputed } from '@jscutlery/rx-computed';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,15 +26,23 @@ import { rxComputed } from '@jscutlery/rx-computed';
     AsyncPipe,
     CatalogComponent,
     MatButtonModule,
-    NgForOf,
+    NgIf,
     RecipeFilterComponent,
     RecipePreviewComponent,
+    NgForOf,
   ],
   template: `
     <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
+
     <wm-catalog>
-      @for(recipe of recipes(); track recipe.id) {
-      <wm-recipe-preview [recipe]="recipe">
+      <span *ngIf="recipesSuspense().pending">⏳ Searching...</span>
+
+      <span *ngIf="recipesSuspense().hasError">💥 Something went wrong.</span>
+
+      <wm-recipe-preview
+        *ngFor="let recipe of recipes(); trackBy: trackById"
+        [recipe]="recipe"
+      >
         <button
           [disabled]="!canAddRecord()[recipe.id]"
           (click)="addRecipe(recipe)"
@@ -45,7 +54,6 @@ import { rxComputed } from '@jscutlery/rx-computed';
           ADD
         </button>
       </wm-recipe-preview>
-      }
     </wm-catalog>
   `,
   styles: [
@@ -59,10 +67,19 @@ import { rxComputed } from '@jscutlery/rx-computed';
 })
 export class RecipeSearchComponent {
   filter = signal<RecipeFilter>({});
-  recipes = rxComputed(() => this._recipeRepository.search(this.filter()));
+  recipesSuspense = rxComputed(
+    () => this._recipeRepository.search(this.filter()).pipe(suspensify()),
+    { initialValue: pending }
+  );
+  recipes = () => {
+    const suspense = this.recipesSuspense();
+    return suspense.hasValue ? suspense.value : [];
+  };
   canAddRecord: Signal<Record<string, boolean>> = rxComputed(() => {
+    const suspense = this.recipesSuspense();
+    const recipes = suspense?.hasValue ? suspense.value : [];
     const canAddObsRecord =
-      this.recipes()?.reduce(
+      recipes?.reduce(
         (acc, recipe) => ({
           ...acc,
           [recipe.id]: this._mealPlanner.watchCanAddRecipe(recipe),
@@ -77,6 +94,10 @@ export class RecipeSearchComponent {
 
   addRecipe(recipe: Recipe) {
     this._mealPlanner.addRecipe(recipe);
+  }
+
+  trackById(_: number, recipe: Recipe) {
+    return recipe.id;
   }
 }
 
