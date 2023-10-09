@@ -14,7 +14,7 @@ import { NavComponent } from './shared/nav.component';
 })
 export class AppComponent {
   links = [
-    { name: 'Search', route: ['/'] },
+    { name: 'Search', route: ['/search'], queryParams: { country: 'fr' } },
     { name: 'My Meals', route: ['/meals'] },
   ];
 }

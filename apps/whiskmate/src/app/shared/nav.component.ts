@@ -18,6 +18,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 export interface Link {
   name: string;
   route: string[];
+  queryParams?: Record<string, string>;
 }
 
 @Component({
@@ -52,6 +53,7 @@ export interface Link {
             #routerLinkActive="routerLinkActive"
             [activated]="routerLinkActive.isActive"
             [routerLink]="link.route"
+            [queryParams]="link.queryParams"
             (click)="drawer.mode === 'over' && drawer.toggle()"
             mat-list-item
             routerLinkActive
