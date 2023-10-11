@@ -96,7 +96,7 @@
     "deploy": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "echo 🚀 firebase deploy --only hosting:whiskmate"
+        "command": "sleep 30 && echo 🚀 firebase deploy --only hosting:whiskmate"
       }
     }
   }
