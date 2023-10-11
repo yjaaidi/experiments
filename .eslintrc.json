@@ -1,10 +1,19 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["@nx"],
+  "ignorePatterns": [
+    "**/*"
+  ],
+  "plugins": [
+    "@nx"
+  ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {
         "@nx/enforce-module-boundaries": [
           "error",
@@ -13,8 +22,121 @@
             "allow": [],
             "depConstraints": [
               {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
+                "sourceTag": "scope:meal-planner",
+                "onlyDependOnLibsWithTags": [
+                  "scope:meal-planner",
+                  "scope:recipe-shared",
+                  "scope:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:recipe",
+                "onlyDependOnLibsWithTags": [
+                  "scope:recipe",
+                  "scope:recipe-shared",
+                  "scope:shared",
+                  "type:api"
+                ]
+              },
+              {
+                "sourceTag": "scope:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:shared"
+                ]
+              },
+              {
+                "sourceTag": "type:app",
+                "onlyDependOnLibsWithTags": [
+                  "type:feature",
+                  "type:ui"
+                ]
+              },
+              {
+                "sourceTag": "type:feature",
+                "onlyDependOnLibsWithTags": [
+                  "type:feature",
+                  "type:ui",
+                  "type:store",
+                  "type:infra",
+                  "type:core",
+                  "type:util"
+                ],
+                "allowedExternalImports": [
+                  "@angular/*",
+                  "@jscutlery/*",
+                  "jest-preset-angular/*",
+                  "rxjs"
+                ],
+                "bannedExternalImports": [
+                  "@angular/common/http"
+                ]
+              },
+              {
+                "sourceTag": "type:ui",
+                "onlyDependOnLibsWithTags": [
+                  "type:ui",
+                  "type:core",
+                  "type:util"
+                ],
+                "allowedExternalImports": [
+                  "@angular/*",
+                  "@jscutlery/*",
+                  "jest-preset-angular/*",
+                  "rxjs"
+                ],
+                "bannedExternalImports": [
+                  "@angular/common/http"
+                ]
+              },
+              {
+                "sourceTag": "type:store",
+                "onlyDependOnLibsWithTags": [
+                  "type:store",
+                  "type:infra",
+                  "type:core",
+                  "type:util"
+                ],
+                "allowedExternalImports": [
+                  "@angular/*",
+                  "jest-preset-angular/*",
+                  "rxjs"
+                ],
+                "bannedExternalImports": [
+                  "@angular/common/http"
+                ]
+              },
+              {
+                "sourceTag": "type:infra",
+                "onlyDependOnLibsWithTags": [
+                  "type:infra",
+                  "type:core",
+                  "type:util"
+                ],
+                "allowedExternalImports": [
+                  "@angular/*",
+                  "jest-preset-angular/*",
+                  "rxjs"
+                ]
+              },
+              {
+                "sourceTag": "type:core",
+                "onlyDependOnLibsWithTags": [
+                  "type:core",
+                  "type:util"
+                ],
+                "allowedExternalImports": [
+                  "jest-preset-angular/*"
+                ]
+              },
+              {
+                "sourceTag": "type:util",
+                "onlyDependOnLibsWithTags": [
+                  "type:util"
+                ],
+                "allowedExternalImports": [
+                  "jest-preset-angular/*",
+                  "rxjs"
+                ]
               }
             ]
           }
@@ -22,17 +144,32 @@
       }
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nx/typescript"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "plugin:@nx/typescript"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nx/javascript"],
+      "files": [
+        "*.js",
+        "*.jsx"
+      ],
+      "extends": [
+        "plugin:@nx/javascript"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
+      "files": [
+        "*.spec.ts",
+        "*.spec.tsx",
+        "*.spec.js",
+        "*.spec.jsx"
+      ],
       "env": {
         "jest": true
       },

@@ -1,13 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import {
   BehaviorSubject,
+  distinctUntilChanged,
+  map,
   merge,
   mergeMap,
   Observable,
   Subject,
   tap,
 } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Recipe } from '@whiskmate/recipe-shared/core';
 import { MealRepository } from '@whiskmate/libs/meal-planner/infra';
