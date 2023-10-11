@@ -1,9 +1,9 @@
 {
-  "name": "whiskmate",
+  "name": "suggestions",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "whiskmate",
-  "sourceRoot": "apps/whiskmate/src",
+  "prefix": "wm",
+  "sourceRoot": "apps/suggestions/src",
   "tags": [
     "type:app"
   ],
@@ -14,20 +14,20 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/apps/whiskmate",
-        "index": "apps/whiskmate/src/index.html",
-        "main": "apps/whiskmate/src/main.ts",
+        "outputPath": "dist/apps/suggestions",
+        "index": "apps/suggestions/src/index.html",
+        "main": "apps/suggestions/src/main.ts",
         "polyfills": [
           "zone.js"
         ],
-        "tsConfig": "apps/whiskmate/tsconfig.app.json",
+        "tsConfig": "apps/suggestions/tsconfig.app.json",
         "assets": [
-          "apps/whiskmate/src/favicon.ico",
-          "apps/whiskmate/src/assets"
+          "apps/suggestions/src/favicon.ico",
+          "apps/suggestions/src/assets"
         ],
         "styles": [
-          "@angular/material/prebuilt-themes/deeppurple-amber.css",
-          "apps/whiskmate/src/styles.css"
+          "@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/suggestions/src/styles.css"
         ],
         "scripts": []
       },
@@ -59,12 +59,15 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "port": 4300
+      },
       "configurations": {
         "production": {
-          "browserTarget": "whiskmate:build:production"
+          "browserTarget": "suggestions:build:production"
         },
         "development": {
-          "browserTarget": "whiskmate:build:development"
+          "browserTarget": "suggestions:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -72,7 +75,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "whiskmate:build"
+        "browserTarget": "suggestions:build"
       }
     },
     "lint": {
@@ -82,8 +85,8 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "apps/whiskmate/**/*.ts",
-          "apps/whiskmate/**/*.html"
+          "apps/suggestions/**/*.ts",
+          "apps/suggestions/**/*.html"
         ]
       }
     },
@@ -93,7 +96,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "apps/whiskmate/jest.config.ts",
+        "jestConfig": "apps/suggestions/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
@@ -106,7 +109,7 @@
     "deploy": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "sleep 30 && echo 🚀 firebase deploy --only hosting:whiskmate"
+        "command": "sleep 30 && echo 🚀 firebase deploy --only hosting:suggestions"
       }
     }
   }
