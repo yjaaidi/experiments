@@ -1,5 +1,5 @@
 {
-  "name": "libs/meal-planner/infra",
+  "name": "meal-planner/infra",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/meal-planner/infra/src",
   "prefix": "wm",
