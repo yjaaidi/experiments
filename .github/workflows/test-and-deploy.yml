@@ -12,6 +12,8 @@ jobs:
           fetch-depth: 0
 
       - uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: ${{ github.ref_name }}
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -21,8 +23,11 @@ jobs:
       - name: Cache Nx
         uses: actions/cache@v3
         with:
-          path: .nx/cache
-          key: ${{ runner.os }}-nx
+          path: |
+            .nx/cache
+            node_modules/.cache/nx
+          key: ${{ runner.os }}-nx-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-nx
 
       - uses: pnpm/action-setup@v2
         with:
