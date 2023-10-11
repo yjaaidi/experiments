@@ -92,6 +92,12 @@
           "codeCoverage": true
         }
       }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 🚀 firebase deploy --only hosting:whiskmate"
+      }
     }
   }
 }

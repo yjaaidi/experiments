@@ -1,0 +1,34 @@
+name: 🚀 Test & Deploy
+on:
+  push:
+
+jobs:
+  test-and-deploy:
+    name: 🚀 Test & Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: nrwl/nx-set-shas@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Cache Nx
+        uses: actions/cache@v3
+        with:
+          path: .nx/cache
+          key: ${{ runner.os }}-nx
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - run: pnpm install
+
+      - run: pnpm nx run-many --targets lint,test --parallel=4
+      - run: pnpm nx run-many -t deploy --parallel=4
