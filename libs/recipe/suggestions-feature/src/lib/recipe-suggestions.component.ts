@@ -6,7 +6,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { RecipeAddButtonComponent } from './recipe-add-button.component';
+
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, defer, of } from 'rxjs';
@@ -18,6 +18,7 @@ import {
   trackById,
 } from '@whiskmate/shared/ui';
 import { RecipePreviewComponent } from '@whiskmate/recipe-shared/ui';
+import { RecipeAddButtonComponent } from '@whiskmate/meal-planner/recipe-add-button-feature';
 
 @Component({
   standalone: true,
