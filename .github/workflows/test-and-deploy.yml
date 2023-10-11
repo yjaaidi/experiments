@@ -35,5 +35,5 @@ jobs:
 
       - run: pnpm install
 
-      - run: pnpm nx run-many --targets lint,test --parallel=4
-      - run: pnpm nx run-many -t deploy --parallel=4
+      - run: pnpm nx run-many --parallel=4 -t lint,test
+      - run: pnpm nx run-many --parallel=4 -t deploy
