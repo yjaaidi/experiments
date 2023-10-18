@@ -53,9 +53,9 @@
       "e2eTestRunner": "playwright"
     },
     "@nx/angular:library": {
-      "projectNameAndRootFormat": "as-provided",
       "linter": "eslint",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "jest",
+      "projectNameAndRootFormat": "as-provided"
     },
     "@nx/angular:component": {
       "style": "css"
