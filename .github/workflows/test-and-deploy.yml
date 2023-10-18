@@ -2,6 +2,10 @@ name: 🚀 Test & Deploy
 on:
   push:
 
+env:
+  # Using Nx Cloud is safer
+  NX_REJECT_UNKNOWN_LOCAL_CACHE: 0
+
 jobs:
   test-and-deploy:
     name: 🚀 Test & Deploy
