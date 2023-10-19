@@ -63,7 +63,8 @@
     "@nx/angular:library": {
       "linter": "eslint",
       "unitTestRunner": "jest",
-      "projectNameAndRootFormat": "as-provided"
+      "projectNameAndRootFormat": "as-provided",
+      "prefix": "wm"
     },
     "@nx/angular:component": {
       "style": "css"
