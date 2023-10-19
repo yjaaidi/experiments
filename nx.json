@@ -56,7 +56,8 @@
       "e2eTestRunner": "none",
       "prefix": "wm",
       "routing": true,
-      "standalone": true
+      "standalone": true,
+      "tags": "type:app"
     },
     "@nx/angular:library": {
       "linter": "eslint",
