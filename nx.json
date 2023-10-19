@@ -47,13 +47,13 @@
   },
   "generators": {
     "@nx/angular:application": {
-      "e2eTestRunner": "none",
+      "style": "css",
       "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "none",
       "prefix": "wm",
       "routing": true,
-      "standalone": true,
-      "style": "css",
-      "unitTestRunner": "jest"
+      "standalone": true
     },
     "@nx/angular:library": {
       "linter": "eslint",
