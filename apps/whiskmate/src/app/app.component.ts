@@ -1,12 +1,17 @@
-import {Component} from '@angular/core';
-import {RouterModule} from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { NavComponent } from './shared/nav.component';
 
 @Component({
   standalone: true,
-  imports: [RouterModule],
-  selector: 'whiskmate-root',
-  template: `{{title}}`,
+  imports: [RouterOutlet, NavComponent],
+  selector: 'wm-app',
+  template: `
+    <wm-nav [links]="links" title="👨🏻‍🍳 Whiskmate">
+      <router-outlet />
+    </wm-nav>
+  `,
 })
 export class AppComponent {
-  title = 'whiskmate';
+  links = [{ name: 'Search', route: ['/search'] }];
 }
