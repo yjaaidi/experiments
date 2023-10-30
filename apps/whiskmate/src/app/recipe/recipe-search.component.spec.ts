@@ -1,17 +1,14 @@
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TestBed } from '@angular/core/testing';
+import { render, screen } from '@testing-library/angular';
+import { recipeMother } from '../testing/recipe.mother';
+import { RecipeRepositoryFake } from './recipe-repository.fake';
 import { RecipeRepository } from './recipe-repository.service';
 import { RecipeSearchComponent } from './recipe-search.component';
-import { RecipeSearchHarness } from './recipe-search.harness';
-import { RecipeRepositoryFake } from './recipe-repository.fake';
-import { recipeMother } from '../testing/recipe.mother';
 
 describe(RecipeSearchComponent.name, () => {
   it('should search recipes without filtering', async () => {
-    const { harness } = await renderComponent();
+    const { getRecipeNames } = await renderComponent();
 
-    expect(await harness.getRecipeNames()).toEqual(['Burger', 'Salad']);
+    expect(getRecipeNames()).toEqual(['Burger', 'Salad']);
   });
 
   async function renderComponent() {
@@ -22,8 +19,7 @@ describe(RecipeSearchComponent.name, () => {
       recipeMother.withBasicInfo('Salad').build(),
     ]);
 
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule],
+    await render(RecipeSearchComponent, {
       providers: [
         {
           provide: RecipeRepository,
@@ -32,14 +28,12 @@ describe(RecipeSearchComponent.name, () => {
       ],
     });
 
-    const fixture = TestBed.createComponent(RecipeSearchComponent);
-    fixture.detectChanges();
-
     return {
-      harness: await TestbedHarnessEnvironment.harnessForFixture(
-        fixture,
-        RecipeSearchHarness
-      ),
+      getRecipeNames() {
+        return screen
+          .getAllByRole('heading', { level: 2 })
+          .map((el) => el.textContent);
+      },
     };
   }
 });
