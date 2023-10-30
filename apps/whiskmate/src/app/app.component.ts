@@ -1,13 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import {Component} from '@angular/core';
+import {RouterModule} from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
+  imports: [RouterModule],
   selector: 'whiskmate-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  template: `{{title}}`,
 })
 export class AppComponent {
   title = 'whiskmate';

@@ -7,7 +7,7 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular-devkit/build-angular:browser-esbuild",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/whiskmate",
@@ -41,7 +41,6 @@
         "development": {
           "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true
@@ -53,10 +52,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "whiskmate:build:production"
+          "buildTarget": "whiskmate:build:production"
         },
         "development": {
-          "browserTarget": "whiskmate:build:development"
+          "buildTarget": "whiskmate:build:development"
         }
       },
       "defaultConfiguration": "development"
