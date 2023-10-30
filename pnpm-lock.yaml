@@ -70,6 +70,9 @@ devDependencies:
   '@angular/language-service':
     specifier: 17.0.0-rc.1
     version: 17.0.0-rc.1
+  '@nx/cypress':
+    specifier: 17.0.2
+    version: 17.0.2(@swc-node/register@1.6.8)(@swc/core@1.3.95)(@types/node@16.11.7)(eslint@8.46.0)(nx@17.0.2)(typescript@5.2.2)
   '@nx/eslint':
     specifier: 17.0.2
     version: 17.0.2(@swc-node/register@1.6.8)(@swc/core@1.3.95)(@types/node@16.11.7)(eslint@8.46.0)(nx@17.0.2)
@@ -82,6 +85,9 @@ devDependencies:
   '@nx/js':
     specifier: 17.0.2
     version: 17.0.2(@swc-node/register@1.6.8)(@swc/core@1.3.95)(@types/node@16.11.7)(nx@17.0.2)(typescript@5.2.2)
+  '@nx/playwright':
+    specifier: 17.0.2
+    version: 17.0.2(@swc-node/register@1.6.8)(@swc/core@1.3.95)(@types/node@16.11.7)(eslint@8.46.0)(nx@17.0.2)
   '@nx/workspace':
     specifier: 17.0.2
     version: 17.0.2(@swc-node/register@1.6.8)(@swc/core@1.3.95)
@@ -2536,7 +2542,6 @@ packages:
       - supports-color
       - typescript
       - verdaccio
-    dev: false
 
   /@nrwl/devkit@17.0.2(nx@17.0.2):
     resolution: {integrity: sha512-zgqTFYmvs80D3T/TwmR/EBdV1OU2c96YYHngAe3DX8kXhjlV3dq+VPZVBROM0AzYLGaSckW3mHBhgL+JrDp5Pg==}
@@ -2787,7 +2792,6 @@ packages:
       - supports-color
       - typescript
       - verdaccio
-    dev: false
 
   /@nx/devkit@17.0.2(nx@17.0.2):
     resolution: {integrity: sha512-gtJNrFtGZa96qAM4ijAvoCLj/LuUr+Jq91QITsYE4cvYL0qan4zGcAOBMclzpaXVN9pwpko+veDwHwnmp/SXTg==}
@@ -3085,6 +3089,30 @@ packages:
     os: [win32]
     requiresBuild: true
     optional: true
+
+  /@nx/playwright@17.0.2(@swc-node/register@1.6.8)(@swc/core@1.3.95)(@types/node@16.11.7)(eslint@8.46.0)(nx@17.0.2):
+    resolution: {integrity: sha512-1082NrSrydK49wRFjkON7syf+sUJfxydh+e6zkH9DMYI9Rykx2QA58PwF5LZNpDhzZf/8M8dghOIq5xbekBwnw==}
+    peerDependencies:
+      '@playwright/test': ^1.36.0
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
+    dependencies:
+      '@nx/devkit': 17.0.2(nx@17.0.2)
+      '@nx/eslint': 17.0.2(@swc-node/register@1.6.8)(@swc/core@1.3.95)(@types/node@16.11.7)(eslint@8.46.0)(nx@17.0.2)
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - '@babel/traverse'
+      - '@swc-node/register'
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
+      - debug
+      - eslint
+      - nx
+      - supports-color
+      - verdaccio
+    dev: true
 
   /@nx/web@17.0.2(@swc-node/register@1.6.8)(@swc/core@1.3.95)(@types/node@16.11.7)(nx@17.0.2)(typescript@5.2.2):
     resolution: {integrity: sha512-M8bausXzgkeFlNn43uO3pxtn/1EDoIs/7xgWPoGAdqV4l4RKG0JHqeLi68tP6YVA30RSAZ7UmvKQlKo14uDp0w==}
