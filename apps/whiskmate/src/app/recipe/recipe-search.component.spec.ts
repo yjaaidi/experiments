@@ -21,7 +21,7 @@ describe(RecipeSearchComponent.name, () => {
       async typeKeywords(keywords: string) {
         userEvent.type(screen.getByLabelText('Keywords'), keywords);
         /* wait for debounce. */
-        await jest.advanceTimersByTimeAsync(1_000);
+        await jest.runAllTimersAsync();
         detectChanges();
       },
     };
