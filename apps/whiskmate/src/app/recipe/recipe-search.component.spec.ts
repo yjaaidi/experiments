@@ -42,7 +42,7 @@ describe(RecipeSearchComponent.name, () => {
     return {
       getRecipeNames() {
         return screen
-          .getAllByRole('heading', { level: 2 })
+          .queryAllByRole('heading', { level: 2 })
           .map((el) => el.textContent);
       },
       async typeKeywords(keywords: string) {
