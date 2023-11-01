@@ -1,9 +1,11 @@
 import { render, screen } from '@testing-library/angular';
 import { RecipeSearchComponent } from './recipe-search.component';
 import { userEvent } from '@testing-library/user-event';
-import { RecipeRepository } from './recipe-repository.service';
 import { recipeMother } from '../testing/recipe.mother';
-import { RecipeRepositoryFake } from './recipe-repository.fake';
+import {
+  provideRecipeRepositoryFake,
+  RecipeRepositoryFake,
+} from './recipe-repository.fake';
 
 jest.useFakeTimers();
 
@@ -36,20 +38,15 @@ describe(RecipeSearchComponent.name, () => {
   });
 
   async function renderComponent() {
-    const repo = new RecipeRepositoryFake();
-
-    repo.setRecipes([
-      recipeMother.withBasicInfo('Burger').build(),
-      recipeMother.withBasicInfo('Salad').build(),
-    ]);
-
     const { detectChanges } = await render(RecipeSearchComponent, {
-      providers: [
-        {
-          provide: RecipeRepository,
-          useValue: repo,
-        },
-      ],
+      configureTestBed: (testBed) =>
+        testBed
+          .inject(RecipeRepositoryFake)
+          .setRecipes([
+            recipeMother.withBasicInfo('Burger').build(),
+            recipeMother.withBasicInfo('Salad').build(),
+          ]),
+      providers: [provideRecipeRepositoryFake()],
     });
 
     return {
