@@ -1,7 +1,10 @@
 import { render, screen } from '@testing-library/angular';
 import { RecipeSearchComponent } from './recipe-search.component';
 import { userEvent } from '@testing-library/user-event';
-import { RecipeRepository } from './recipe-repository.service';
+import {
+  RecipeRepository,
+  RecipeRepositoryDef,
+} from './recipe-repository.service';
 import { of } from 'rxjs';
 import { recipeMother } from '../testing/recipe.mother';
 
@@ -32,10 +35,8 @@ describe(RecipeSearchComponent.name, () => {
   });
 
   async function renderComponent() {
-    const repo = {
-      search: jest.fn().mockImplementation(() => {
-        throw new Error('😱 Not implemented yet!');
-      }),
+    const repo: jest.Mocked<RecipeRepositoryDef> = {
+      search: jest.fn(),
     };
 
     repo.search.mockReturnValue(
