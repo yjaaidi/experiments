@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { RecipeFilter, createRecipeFilter } from './recipe-filter';
+import { createRecipeFilter, RecipeFilter } from './recipe-filter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,7 +41,7 @@ export class RecipeFilterComponent {
 
   constructor() {
     this.filterChange = this.filterFormGroup.valueChanges.pipe(
-      debounceTime(100),
+      debounceTime(50),
       map((value) => createRecipeFilter(value))
     );
   }
