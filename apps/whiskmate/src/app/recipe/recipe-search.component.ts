@@ -55,7 +55,7 @@ import { MessageComponent } from '../shared/message.component';
 export class RecipeSearchComponent {
   filter = signal<RecipeFilter>({});
   recipesSuspense = rxComputed(
-    () => this._recipeRepository.search(this.filter()).pipe(suspensify()),
+    () => this._recipeRepository.search(this.filter().keywords).pipe(suspensify()),
     { initialValue: pending }
   );
   recipes = () => {

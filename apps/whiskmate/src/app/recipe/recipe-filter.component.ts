@@ -3,8 +3,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { createRecipeFilter, RecipeFilter } from './recipe-filter';
+import { debounceTime, map } from 'rxjs/operators';
+import { RecipeFilter, createRecipeFilter } from './recipe-filter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,26 +22,6 @@ import { createRecipeFilter, RecipeFilter } from './recipe-filter';
           type="text"
         />
       </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Max Ingredients</mat-label>
-        <input
-          data-role="max-ingredient-count-input"
-          formControlName="maxIngredientCount"
-          matInput
-          type="number"
-        />
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Max Steps</mat-label>
-        <input
-          data-role="max-step-count-input"
-          formControlName="maxStepCount"
-          matInput
-          type="number"
-        />
-      </mat-form-field>
     </form>
   `,
   styles: [
@@ -57,12 +37,11 @@ export class RecipeFilterComponent {
 
   filterFormGroup = new FormGroup({
     keywords: new FormControl(),
-    maxIngredientCount: new FormControl(),
-    maxStepCount: new FormControl(),
   });
 
   constructor() {
     this.filterChange = this.filterFormGroup.valueChanges.pipe(
+      debounceTime(100),
       map((value) => createRecipeFilter(value))
     );
   }
