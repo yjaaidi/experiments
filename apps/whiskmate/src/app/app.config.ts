@@ -17,20 +17,20 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideHttpClient(),
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
-    // provideRecipeRepositoryFake(),
-    // {
-    //   provide: APP_INITIALIZER,
-    //   multi: true,
-    //   useFactory() {
-    //     const fake = inject(RecipeRepositoryFake);
-    //     return () => {
-    //       fake.setRecipes([
-    //         recipeMother.withBasicInfo('Burger').build(),
-    //         recipeMother.withBasicInfo('Salad').build(),
-    //         recipeMother.withBasicInfo('Beer').build(),
-    //       ]);
-    //     };
-    //   },
-    // }
+    provideRecipeRepositoryFake(),
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory() {
+        const fake = inject(RecipeRepositoryFake);
+        return () => {
+          fake.setRecipes([
+            recipeMother.withBasicInfo('Burger').build(),
+            recipeMother.withBasicInfo('Salad').build(),
+            recipeMother.withBasicInfo('Beer').build(),
+          ]);
+        };
+      },
+    },
   ],
 };
