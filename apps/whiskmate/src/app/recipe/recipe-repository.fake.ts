@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
-import { RecipeRepositoryDef } from './recipe-repository.service';
+import { Injectable, Provider } from '@angular/core';
+import {
+  RecipeRepository,
+  RecipeRepositoryDef,
+} from './recipe-repository.service';
 import { defer, Observable, of } from 'rxjs';
 import { Recipe } from './recipe';
 
@@ -23,4 +26,19 @@ export class RecipeRepositoryFake implements RecipeRepositoryDef {
   setRecipes(recipes: Recipe[]) {
     this._recipes = recipes;
   }
+}
+
+/**
+ * This provides both `RecipeRepository` and `RecipeRepositoryFake`
+ * using the same instance of `RecipeRepositoryFake`.
+ * This avoids having to manually cast `RecipeRepository` into `RecipeRepositoryFake`.
+ */
+export function provideRecipeRepositoryFake(): Provider[] {
+  return [
+    RecipeRepositoryFake,
+    {
+      provide: RecipeRepository,
+      useExisting: RecipeRepositoryFake,
+    },
+  ];
 }
