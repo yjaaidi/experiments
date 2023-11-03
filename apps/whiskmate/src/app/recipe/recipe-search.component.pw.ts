@@ -20,7 +20,7 @@ test('should filter recipes by keyword', async ({ mount }) => {
   ]);
 });
 
-test('should show "no results" messagee when no recipes match', async ({
+test('should show "no results" message when no recipes match', async ({
   mount,
 }) => {
   const locator = await mount(RecipeSearchTestContainer);
