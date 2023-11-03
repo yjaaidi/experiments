@@ -30,8 +30,8 @@ describe(RecipeSearchComponent.name, () => {
     await typeKeywords('Bur');
 
     expect(getRecipeNames()).toEqual(['Burger']);
-    expect(repo.search).toBeCalledTimes(1);
-    expect(repo.search).toBeCalledWith('Bur');
+    expect(repo.search).toHaveBeenCalledTimes(1);
+    expect(repo.search).toHaveBeenCalledWith('Bur');
   });
 
   it.todo('should show "no results" message when no recipes match');
