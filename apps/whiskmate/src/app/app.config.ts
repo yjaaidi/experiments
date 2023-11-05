@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, inject } from '@angular/core';
+import { ApplicationConfig, inject } from '@angular/core';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
@@ -11,6 +11,7 @@ import {
   RecipeRepositoryFake,
 } from './recipe/recipe-repository.fake';
 import { recipeMother } from './testing/recipe.mother';
+import { provideAppInitializer } from './shared/provide-app-initializer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,19 +19,12 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
     // provideRecipeRepositoryFake(),
-    // {
-    //   provide: APP_INITIALIZER,
-    //   multi: true,
-    //   useFactory() {
-    //     const fake = inject(RecipeRepositoryFake);
-    //     return () => {
-    //       fake.setRecipes([
-    //         recipeMother.withBasicInfo('Burger').build(),
-    //         recipeMother.withBasicInfo('Salad').build(),
-    //         recipeMother.withBasicInfo('Beer').build(),
-    //       ]);
-    //     };
-    //   },
-    // }
+    // provideAppInitializer(() => {
+    //   inject(RecipeRepositoryFake).setRecipes([
+    //     recipeMother.withBasicInfo('Burger').build(),
+    //     recipeMother.withBasicInfo('Salad').build(),
+    //     recipeMother.withBasicInfo('Beer').build(),
+    //   ]);
+    // }),
   ],
 };
