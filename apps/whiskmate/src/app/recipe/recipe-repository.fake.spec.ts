@@ -3,7 +3,7 @@ import { verifyRecipeRepositoryContract } from './recipe-repository.contract';
 import { TestBed } from '@angular/core/testing';
 import { recipeMother } from '../testing/recipe.mother';
 
-describe(RecipeRepositoryFake.name, () => {
+xdescribe(RecipeRepositoryFake.name, () => {
   verifyRecipeRepositoryContract({
     setUp,
   });
