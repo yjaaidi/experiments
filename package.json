@@ -2,7 +2,11 @@
   "name": "@whiskmate/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test": "nx test",
+    "test:narrow": "nx test -- --testPathIgnorePatterns wide",
+    "test:wide": "nx test -- --testPathPattern wide"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "17.0.0-rc.1",
