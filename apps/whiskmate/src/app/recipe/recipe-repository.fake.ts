@@ -16,13 +16,18 @@ export class RecipeRepositoryFake implements RecipeRepositoryDef {
    * This imitates some parts of the real implementation with the following rules:
    * - If keywords is provided, this will filter recipes using keywords (case-insensitive) applied on "name" field only.
    * - If keywords contain "error", an error will be thrown.
-   * - If keywords contain "delay", the observable will be delayed by 1 second.
+   * - If keywords contain "delay", the observable will be delayed by 1 second and "delay" will be removed from keywords.
    * - If no keywords are provided, all recipes will be returned.
    * - If no recipes are found, an empty array will be returned.
    */
   search(keywords?: string): Observable<Recipe[]> {
     return defer(() => {
       keywords = keywords?.toLowerCase();
+
+      const withDelay = keywords?.includes('delay');
+      if (keywords && withDelay) {
+        keywords = keywords.replace('delay', '').trim();
+      }
 
       /* Oh! You are reading this!? So you might be really curious about fakes!
        * We are happy to see you here🤗!
@@ -51,7 +56,7 @@ export class RecipeRepositoryFake implements RecipeRepositoryDef {
 
       const result$ = of(recipes);
 
-      if (keywords?.includes('delay')) {
+      if (withDelay) {
         return result$.pipe(delay(1000));
       }
 
