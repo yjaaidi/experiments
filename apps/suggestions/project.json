@@ -64,10 +64,10 @@
       },
       "configurations": {
         "production": {
-          "browserTarget": "suggestions:build:production"
+          "buildTarget": "suggestions:build:production"
         },
         "development": {
-          "browserTarget": "suggestions:build:development"
+          "buildTarget": "suggestions:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -75,11 +75,11 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "suggestions:build"
+        "buildTarget": "suggestions:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "outputs": [
         "{options.outputFile}"
       ],
@@ -96,14 +96,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "apps/suggestions/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
+        "jestConfig": "apps/suggestions/jest.config.ts"
       }
     },
     "deploy": {
