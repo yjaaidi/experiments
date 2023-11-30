@@ -3,24 +3,17 @@
   "workspaceLayout": {
     "projectNameAndRootFormat": "as-provided"
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
-      }
-    }
-  },
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "inputs": [
+        "production",
+        "^production"
+      ],
+      "cache": true
     },
     "deploy": {
       "dependsOn": ["^build"]
-    },
-    "test": {
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
     },
     "lint": {
       "inputs": [
@@ -28,10 +21,25 @@
         "{workspaceRoot}/.eslintrc.json",
         "{workspaceRoot}/.eslintignore",
         "{workspaceRoot}/eslint.config.js"
-      ]
+      ],
+      "cache": true
     },
-    "e2e": {
-      "inputs": ["default", "^production"]
+    "@nx/jest:jest": {
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/jest.preset.js"
+      ],
+      "cache": true,
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
     }
   },
   "namedInputs": {
@@ -72,8 +80,5 @@
       "projectNameAndRootFormat": "as-provided"
     }
   },
-  "defaultProject": "whiskmate",
-  "cli": {
-    "defaultCollection": "@nx/angular"
-  }
+  "defaultProject": "whiskmate"
 }
