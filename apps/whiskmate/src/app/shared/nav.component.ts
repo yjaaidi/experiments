@@ -11,7 +11,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { map } from 'rxjs/operators';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { rxComputed } from '@jscutlery/rx-computed';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -32,11 +32,9 @@ export interface Link {
     MatIconModule,
     MatListModule,
     MatToolbarModule,
-    NgIf,
-    NgForOf,
     RouterLink,
-    RouterLinkActive,
-  ],
+    RouterLinkActive
+],
   template: `
     <mat-sidenav-container class="sidenav-container">
       <mat-sidenav
@@ -46,39 +44,40 @@ export interface Link {
         [attr.role]="isHandset() ? 'dialog' : 'navigation'"
         [mode]="isHandset() ? 'over' : 'side'"
         [opened]="!isHandset()"
-      >
+        >
         <mat-nav-list>
-          <a
-            *ngFor="let link of links"
-            #routerLinkActive="routerLinkActive"
-            [activated]="routerLinkActive.isActive"
-            [routerLink]="link.route"
-            [queryParams]="link.queryParams"
-            (click)="drawer.mode === 'over' && drawer.toggle()"
-            mat-list-item
-            routerLinkActive
-            >{{ link.name }}</a
-          >
-        </mat-nav-list>
-      </mat-sidenav>
-
-      <mat-sidenav-content>
-        <mat-toolbar color="primary">
-          <button
-            type="button"
-            aria-label="Toggle sidenav"
-            mat-icon-button
-            (click)="drawer.toggle()"
-            *ngIf="isHandset()"
-          >
-            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-          </button>
-          <span>{{ title }}</span>
-        </mat-toolbar>
-        <ng-content />
-      </mat-sidenav-content>
-    </mat-sidenav-container>
-  `,
+          @for (link of links; track link) {
+            <a
+              #routerLinkActive="routerLinkActive"
+              [activated]="routerLinkActive.isActive"
+              [routerLink]="link.route"
+              [queryParams]="link.queryParams"
+              (click)="drawer.mode === 'over' && drawer.toggle()"
+              mat-list-item
+              routerLinkActive
+              >{{ link.name }}</a
+              >
+            }
+          </mat-nav-list>
+        </mat-sidenav>
+        <mat-sidenav-content>
+          <mat-toolbar color="primary">
+            @if (isHandset()) {
+              <button
+                type="button"
+                aria-label="Toggle sidenav"
+                mat-icon-button
+                (click)="drawer.toggle()"
+                >
+                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+              </button>
+            }
+            <span>{{ title }}</span>
+          </mat-toolbar>
+          <ng-content />
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+      `,
   styles: [
     `
       .sidenav-container {
