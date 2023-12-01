@@ -4,22 +4,16 @@
   "projectType": "application",
   "prefix": "wm",
   "sourceRoot": "apps/suggestions/src",
-  "tags": [
-    "type:app"
-  ],
+  "tags": ["type:app"],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser-esbuild",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/suggestions",
         "index": "apps/suggestions/src/index.html",
         "main": "apps/suggestions/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/suggestions/tsconfig.app.json",
         "assets": [
           "apps/suggestions/src/favicon.ico",
@@ -80,9 +74,7 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
           "apps/suggestions/**/*.ts",
@@ -92,9 +84,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/suggestions/jest.config.ts"
       }

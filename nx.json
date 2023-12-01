@@ -7,10 +7,7 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": [
-        "production",
-        "^production"
-      ],
+      "inputs": ["production", "^production"],
       "cache": true
     },
     "deploy": {
@@ -26,11 +23,7 @@
       "cache": true
     },
     "@nx/jest:jest": {
-      "inputs": [
-        "default",
-        "^production",
-        "{workspaceRoot}/jest.preset.js"
-      ],
+      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
       "cache": true,
       "options": {
         "passWithNoTests": true
