@@ -1,4 +1,4 @@
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,11 +13,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, defer, of } from 'rxjs';
 import { rxComputed } from '@jscutlery/rx-computed';
 import { pending, suspensify } from '@jscutlery/operators';
-import {
-  GridComponent,
-  MessageComponent,
-  trackById,
-} from '@whiskmate/shared-ui';
+import { GridComponent, MessageComponent } from '@whiskmate/shared-ui';
 
 @Component({
   standalone: true,
@@ -27,26 +23,21 @@ import {
     AsyncPipe,
     GridComponent,
     MatButtonModule,
-    NgForOf,
     RecipePreviewComponent,
     RecipeAddButtonComponent,
-    NgIf,
     MessageComponent,
   ],
   template: `
     <h2>Suggestions d'Ottolenghi</h2>
-
-    <wm-message *ngIf="suggestionsSuspense().hasError">
-      💥 Something went wrong
-    </wm-message>
-
+    @if (suggestionsSuspense().hasError) {
+    <wm-message> 💥 Something went wrong</wm-message>
+    }
     <wm-grid>
-      <wm-recipe-preview
-        *ngFor="let recipe of suggestions(); trackBy: trackById"
-        [recipe]="recipe"
-      >
+      @for (recipe of suggestions();track recipe.id) {
+      <wm-recipe-preview [recipe]="recipe">
         <wm-recipe-add-button [recipe]="recipe" />
       </wm-recipe-preview>
+      }
     </wm-grid>
   `,
   styles: [
@@ -73,8 +64,6 @@ export class RecipeSuggestionsComponent {
     const suspense = this.suggestionsSuspense();
     return suspense.hasValue ? suspense.value : [];
   };
-
-  trackById = trackById;
 
   private _route = inject(ActivatedRoute);
   private _queryParamMap = toSignal(this._route.queryParamMap);
