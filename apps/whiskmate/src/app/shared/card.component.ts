@@ -5,8 +5,9 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'wm-card',
-  imports: [NgIf],
-  template: ` <img *ngIf="pictureUri" class="picture" [src]="pictureUri" />
+  template: `@if (pictureUri) {
+    <img class="picture" [src]="pictureUri" />
+    }
     <div class="content">
       <ng-content></ng-content>
     </div>`,
