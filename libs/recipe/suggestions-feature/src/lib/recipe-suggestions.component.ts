@@ -1,7 +1,5 @@
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { GridComponent, MessageComponent } from '@whiskmate/shared/ui';
+import { GridComponent } from '@whiskmate/shared/ui';
 import { RecipePreviewComponent } from '@whiskmate/recipe-shared/ui';
 import { RecipeAddButtonComponent } from '@whiskmate/meal-planner/recipe-add-button-feature';
 
@@ -9,26 +7,16 @@ import { RecipeAddButtonComponent } from '@whiskmate/meal-planner/recipe-add-but
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-recipe-suggestions',
-  imports: [
-    AsyncPipe,
-    GridComponent,
-    MatButtonModule,
-    NgForOf,
-    RecipePreviewComponent,
-    RecipeAddButtonComponent,
-    NgIf,
-    MessageComponent,
-  ],
+  imports: [GridComponent, RecipePreviewComponent, RecipeAddButtonComponent],
   template: `
     <h2>Suggestions d'Ottolenghi</h2>
 
     <wm-grid>
-      <wm-recipe-preview
-        *ngFor="let recipe of recipes; trackBy: trackById"
-        [recipe]="recipe"
-      >
+      @for (recipe of recipes;track recipe.id) {
+      <wm-recipe-preview [recipe]="recipe">
         <wm-recipe-add-button [recipe]="recipe" />
       </wm-recipe-preview>
+      }
     </wm-grid>
   `,
   styles: [
