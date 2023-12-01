@@ -26,10 +26,8 @@ import { RecipeFilterComponent } from '@whiskmate/recipe/ui';
     GridComponent,
     MessageComponent,
     MatButtonModule,
-    NgIf,
     RecipeFilterComponent,
     RecipePreviewComponent,
-    NgForOf,
     RecipeListComponent,
     RecipeAddButtonComponent,
     RecipeAddButtonComponent,
@@ -37,21 +35,28 @@ import { RecipeFilterComponent } from '@whiskmate/recipe/ui';
   template: `
     <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
 
-    <wm-message *ngIf="recipesSuspense().pending">⏳ Searching...</wm-message>
+    @if(recipesSuspense().pending) {
+    <wm-message>⏳ Searching...</wm-message>
+    }
 
-    <wm-message *ngIf="recipesSuspense().hasError">
-      💥 Something went wrong
-    </wm-message>
+    <!-- prettier-ignore -->
+    @if (recipesSuspense().hasError) {
+    <wm-message> 💥 Something went wrong </wm-message>
+    }
 
-    <wm-message *ngIf="recipesSuspense().hasValue && recipes().length === 0">
-      😿 no results
-    </wm-message>
+    <!-- prettier-ignore -->
+    @if (recipesSuspense().hasValue && recipes().length === 0) {
+    <wm-message> 😿 no results </wm-message>
+    }
 
-    <wm-recipe-list *ngIf="recipesSuspense().hasValue" [recipes]="recipes()">
+    <!-- prettier-ignore -->
+    @if(recipesSuspense().hasValue && recipes().length > 0) {
+    <wm-recipe-list [recipes]="recipes()">
       <ng-template #actions let-recipe>
         <wm-recipe-add-button [recipe]="recipe" />
       </ng-template>
     </wm-recipe-list>
+    }
   `,
 })
 export class RecipeSearchComponent {
