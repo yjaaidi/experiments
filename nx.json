@@ -11,8 +11,7 @@
       "cache": true
     },
     "deploy": {
-      "dependsOn": ["build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": ["build"]
     },
     "lint": {
       "inputs": [
