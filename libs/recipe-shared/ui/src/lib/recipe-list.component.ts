@@ -5,9 +5,9 @@ import {
   Input,
   TemplateRef,
 } from '@angular/core';
-import { NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
-import { GridComponent, trackById } from '@whiskmate/shared/ui';
+import { NgTemplateOutlet } from '@angular/common';
 import { Recipe } from '@whiskmate/recipe-shared/core';
+import { GridComponent } from '@whiskmate/shared/ui';
 import { RecipePreviewComponent } from './recipe-preview.component';
 
 @Component({
@@ -16,23 +16,16 @@ import { RecipePreviewComponent } from './recipe-preview.component';
   selector: 'wm-recipe-list',
   template: `
     <wm-grid>
-      <wm-recipe-preview
-        *ngFor="let recipe of recipes; trackBy: trackById"
-        [recipe]="recipe"
-      >
+      @for (recipe of recipes;track recipe.id) {
+      <wm-recipe-preview [recipe]="recipe">
         <ng-container
           *ngTemplateOutlet="actionsTemplateRef; context: { $implicit: recipe }"
         ></ng-container>
       </wm-recipe-preview>
+      }
     </wm-grid>
   `,
-  imports: [
-    GridComponent,
-    RecipePreviewComponent,
-    NgForOf,
-    NgTemplateOutlet,
-    NgIf,
-  ],
+  imports: [GridComponent, RecipePreviewComponent, NgTemplateOutlet],
 })
 export class RecipeListComponent {
   @Input({ required: true }) recipes!: Recipe[];
@@ -40,6 +33,4 @@ export class RecipeListComponent {
   @ContentChild('actions') actionsTemplateRef!: TemplateRef<{
     $implicit: Recipe;
   }>;
-
-  trackById = trackById;
 }
