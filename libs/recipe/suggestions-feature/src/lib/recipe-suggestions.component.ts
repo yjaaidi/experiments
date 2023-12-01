@@ -1,11 +1,7 @@
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import {
-  GridComponent,
-  MessageComponent,
-  trackById,
-} from '@whiskmate/shared/ui';
+import { GridComponent, MessageComponent } from '@whiskmate/shared/ui';
 import { RecipePreviewComponent } from '@whiskmate/recipe-shared/ui';
 import { RecipeAddButtonComponent } from '@whiskmate/meal-planner/recipe-add-button-feature';
 
@@ -64,6 +60,4 @@ export class RecipeSuggestionsComponent {
       steps: [],
     },
   ];
-
-  trackById = trackById;
 }

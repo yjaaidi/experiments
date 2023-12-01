@@ -4,16 +4,16 @@ import {
   inject,
   Input,
 } from '@angular/core';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { rxComputed } from '@jscutlery/rx-computed';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
+import { rxComputed } from '@jscutlery/rx-computed';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 export interface Link {
   name: string;
@@ -32,8 +32,6 @@ export interface Link {
     MatIconModule,
     MatListModule,
     MatToolbarModule,
-    NgIf,
-    NgForOf,
     RouterLink,
     RouterLinkActive,
   ],
@@ -48,8 +46,8 @@ export interface Link {
         [opened]="!isHandset()"
       >
         <mat-nav-list>
+          @for (link of links;track link) {
           <a
-            *ngFor="let link of links"
             #routerLinkActive="routerLinkActive"
             [activated]="routerLinkActive.isActive"
             [routerLink]="link.route"
@@ -59,20 +57,21 @@ export interface Link {
             routerLinkActive
             >{{ link.name }}</a
           >
+          }
         </mat-nav-list>
       </mat-sidenav>
-
       <mat-sidenav-content>
         <mat-toolbar color="primary">
+          @if (isHandset()) {
           <button
             type="button"
             aria-label="Toggle sidenav"
             mat-icon-button
             (click)="drawer.toggle()"
-            *ngIf="isHandset()"
           >
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
           </button>
+          }
           <span>{{ title }}</span>
         </mat-toolbar>
         <ng-content />
