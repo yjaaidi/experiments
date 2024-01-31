@@ -14,17 +14,18 @@ import { RecipeComponent } from './recipe.component';
   template: `
     <input [formControl]="keywordsCtrl" type="text" />
 
-    <!-- -->
-    @if(recipes()?.pending) { ... }
-
-    <!-- -->
-    @if(recipes()?.hasError) {
-    <div>🚨 Error.</div>
-    }
-
-    <!-- -->
-    @for(recipe of recipes()?.value; track recipe.id) {
-    <demo-recipe [recipe]="recipe" />
+    @if (recipes(); as suspense) {
+      @if (suspense.hasValue) {
+        @for (recipe of suspense.value; track recipe.id) {
+          <demo-recipe [recipe]="recipe" />
+        }
+      }
+      @if (suspense.pending) {
+        <div>Loading...</div>
+      }
+      @if (suspense.hasError) {
+        <div>🚨 Error.</div>
+      }
     }
   `,
   imports: [ReactiveFormsModule, RecipeComponent],
@@ -35,7 +36,7 @@ export class AppComponent {
 
   // 1. Async computed approach
   recipes = computedAsync(() =>
-    this._getRecipes(this.keywords()).pipe(suspensify({ strict: false }))
+    this._getRecipes(this.keywords()).pipe(suspensify()),
   );
 
   // 2. RxJS approach
@@ -81,8 +82,8 @@ export class AppComponent {
             id: item.id,
             name: item.name,
             pictureUri: item.picture_uri,
-          }))
-        )
+          })),
+        ),
       );
   }
 }
