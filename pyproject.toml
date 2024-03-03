@@ -10,6 +10,8 @@ python = "^3.12"
 ortools = "^9.8.3296"
 mypy = "^1.8.0"
 
+[tool.poetry.scripts]
+demo = 'demo.main:main'
 
 [build-system]
 requires = ["poetry-core"]
