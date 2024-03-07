@@ -84,15 +84,30 @@ interface Todo {
   standalone: true,
   imports: [FormsModule],
   template: `
+    <p>
+      💥 Typing "error" will make the submission fail.
+      <br />
+      💥 Deleting "Burger" will fail too.
+      <br />
+      This is useful to try out retries 😉.
+    </p>
+
+    <hr />
+
     <form (ngSubmit)="add()">
-      <input
-        [disabled]="todosResource.pending"
-        [(ngModel)]="name"
-        name="name"
-      />
-      @if(todosResource.canRefetch) {
-      <button type="button" (click)="todosResource.refetch()">REFRESH</button>
-      }
+      <input [(ngModel)]="name" name="name" />
+
+      <button [disabled]="todosResource.pending" type="submit">ADD</button>
+
+      <button
+        [disabled]="
+          !todosResource.canRefetch || addTodo.pending() || deleteTodo.pending()
+        "
+        (click)="todosResource.canRefetch && todosResource.refetch()"
+        type="button"
+      >
+        REFRESH
+      </button>
     </form>
 
     @if(todosResource.pending) {
@@ -105,7 +120,9 @@ interface Todo {
         <span>{{ todo.name }}</span>
         <span>&nbsp;</span>
         <button
-          [disabled]="todo.addition || todo.deletion?.pending()"
+          [disabled]="
+            todosResource.pending || todo.addition || todo.deletion?.pending()
+          "
           (click)="todo.deletion ? todo.deletion.retry() : deleteTodo(todo.id)"
         >
           DELETE
@@ -141,8 +158,7 @@ export class AppComponent {
   todos = computed<
     (Todo & { addition?: Mutation<unknown>; deletion?: Mutation<unknown> })[]
   >(() => {
-    let todos =
-      this.todosResource.status === 'success' ? this.todosResource() : [];
+    let todos = this.todosResource.hasValue ? this.todosResource() : [];
     const addTodoMutations = this.addTodo.mutations();
     const deleteTodoMutations = this.deleteTodo.mutations();
 
@@ -232,6 +248,7 @@ function createMutation<T>(fn: (value: T) => Promise<void>): Mutator<T> {
     action();
   }) as Mutator<T>;
 
+  mutator.pending = () => mutations().some((mutation) => mutation.pending());
   mutator.mutations = mutations.asReadonly();
 
   return mutator;
@@ -240,6 +257,7 @@ function createMutation<T>(fn: (value: T) => Promise<void>): Mutator<T> {
 interface Mutator<T> {
   (value: T): void;
   mutations(): Mutation<T>[];
+  pending(): boolean;
 }
 
 interface Mutation<T> {
@@ -286,6 +304,16 @@ function createResource<T>(fn: () => Observable<T>): Resource<T> {
     get() {
       const status = state().status;
       return status === 'success' || status === 'error';
+    },
+  });
+
+  Object.defineProperty(resource, 'hasValue', {
+    get() {
+      const suspense = state();
+      return (
+        suspense.status === 'success' ||
+        (suspense.status === 'refetching' && suspense.value !== undefined)
+      );
     },
   });
 
@@ -346,11 +374,13 @@ type Resource<T> = ResourceBase<T> &
     | {
         status: 'fetching';
         canRefetch: false;
+        hasValue: false;
         pending: true;
       }
     | {
         status: 'success';
         canRefetch: true;
+        hasValue: true;
         pending: false;
         (): T;
         refetch(): void;
@@ -359,6 +389,7 @@ type Resource<T> = ResourceBase<T> &
     | {
         status: 'error';
         canRefetch: true;
+        hasValue: false;
         pending: false;
         error: unknown;
         refetch(): void;
@@ -366,9 +397,18 @@ type Resource<T> = ResourceBase<T> &
     | {
         status: 'refetching';
         canRefetch: false;
+        hasValue: false;
         pending: true;
-        (): T | undefined;
-        update: (updater: (value?: T) => T) => void;
+        (): undefined;
+        update: (updater: () => T) => void;
+      }
+    | {
+        status: 'refetching';
+        canRefetch: false;
+        hasValue: true;
+        pending: true;
+        (): T;
+        update: (updater: (value: T) => T) => void;
       }
   );
 
