@@ -1,22 +1,16 @@
 import {
   Component,
+  DestroyRef,
   Injectable,
-  Signal,
   computed,
+  effect,
   inject,
   signal,
-  untracked
+  untracked,
 } from '@angular/core';
-import {
-  FormsModule
-} from '@angular/forms';
-import {
-  SuspenseLax,
-  pending,
-  suspensify
-} from '@jscutlery/operators';
-import { rxComputed } from '@jscutlery/rx-computed';
-import { BehaviorSubject, Observable, Subject, defer, exhaustMap, merge } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { Observable, defer } from 'rxjs';
 import 'zone.js';
 
 @Injectable({
@@ -37,10 +31,10 @@ class TodoRepo {
   /**
    * If the name contains "error", it will throw an error.
    */
-  async addTodo({name}: { name: string }): Promise<Todo> {
+  async addTodo({ name }: { name: string }): Promise<Todo> {
     console.log(`✨ Adding todo: ${name}`);
     await this.#wait();
-    
+
     if (name.toLocaleLowerCase().includes('error')) {
       throw new Error('Failed to add todo.');
     }
@@ -60,7 +54,7 @@ class TodoRepo {
     return defer(async () => {
       await this.#wait();
       return this.#todos;
-    })
+    });
   }
 
   /**
@@ -72,11 +66,11 @@ class TodoRepo {
     if (todoId === '0') {
       throw new Error('Failed to delete todo.');
     }
-    this.#todos = this.#todos.filter(todo => todo.id !== todoId);
+    this.#todos = this.#todos.filter((todo) => todo.id !== todoId);
   }
 
   #wait(duration = 500) {
-    return new Promise(resolve => setTimeout(resolve, duration));
+    return new Promise((resolve) => setTimeout(resolve, duration));
   }
 }
 
@@ -92,26 +86,34 @@ interface Todo {
   template: `
     <form (ngSubmit)="add()">
       <input
-        [disabled]="todosResource().pending" 
+        [disabled]="todosResource.pending"
         [(ngModel)]="name"
-        name="name"/>
+        name="name"
+      />
+      @if(todosResource.canRefetch) {
       <button type="button" (click)="todosResource.refetch()">REFRESH</button>
+      }
     </form>
 
-    @if(todosResource().pending) {
-      <p>Loading...</p>
+    @if(todosResource.pending) {
+    <p>Loading...</p>
     }
-    
+
     <ul>
       @for(todo of todos(); track todo.id) {
-        <li [class.pending]="todo.addition?.pending()">
-          <span>{{todo.name}}</span>
-          <span>&nbsp;</span>
-          <button [disabled]="todo.addition || todo.deletion?.pending()" (click)="todo.deletion ? todo.deletion.retry() : deleteTodo(todo.id)">DELETE</button>
-          @if(todo.addition?.error()) {
-            <button (click)="todo.addition?.retry()">RETRY</button>
-          }
-        </li>
+      <li [class.pending]="todo.addition?.pending()">
+        <span>{{ todo.name }}</span>
+        <span>&nbsp;</span>
+        <button
+          [disabled]="todo.addition || todo.deletion?.pending()"
+          (click)="todo.deletion ? todo.deletion.retry() : deleteTodo(todo.id)"
+        >
+          DELETE
+        </button>
+        @if(todo.addition?.error()) {
+        <button (click)="todo.addition?.retry()">RETRY</button>
+        }
+      </li>
       }
     </ul>
   `,
@@ -120,33 +122,48 @@ interface Todo {
 export class AppComponent {
   name = signal<string | null>(null);
   todosResource = createResource(() => this.#repo.getTodos());
-  addTodo = createMutation(async ({name}: {name: string}) => {
-    const todo = await this.#repo.addTodo({name});
-    this.todosResource.set([...this.todosResource().value ?? [], todo]);
+  addTodo = createMutation(async ({ name }: { name: string }) => {
+    const todo = await this.#repo.addTodo({ name });
+    const todos =
+      this.todosResource.status === 'success' ? this.todosResource() : [];
+    this.todosResource.set([...todos, todo]);
     this.name.set(null);
   });
   deleteTodo = createMutation(async (todoId: string) => {
     await this.#repo.deleteTodo(todoId);
-    const todos = this.todosResource().value;
-    if (todos) {
-      this.todosResource.set(todos.filter(todo => todo.id !== todoId));
+    if (this.todosResource.status === 'success') {
+      this.todosResource.update((todos) =>
+        todos.filter((todo) => todo.id !== todoId)
+      );
     }
-  })
+  });
 
-  todos = computed<(Todo & {addition?: Mutation<unknown>; deletion?: Mutation<unknown>})[]>(() => {
-    let todos = this.todosResource().value ?? [];
+  todos = computed<
+    (Todo & { addition?: Mutation<unknown>; deletion?: Mutation<unknown> })[]
+  >(() => {
+    let todos =
+      this.todosResource.status === 'success' ? this.todosResource() : [];
     const addTodoMutations = this.addTodo.mutations();
     const deleteTodoMutations = this.deleteTodo.mutations();
 
     if (addTodoMutations) {
-      todos = [...todos, ...addTodoMutations.map((mutation) => ({id: generateId(), name: mutation().name, addition: mutation}))];
+      todos = [
+        ...todos,
+        ...addTodoMutations.map((mutation) => ({
+          id: generateId(),
+          name: mutation().name,
+          addition: mutation,
+        })),
+      ];
     }
 
     if (deleteTodoMutations) {
-      todos = todos.map(todo => {
-        const deletionMutation = deleteTodoMutations.find(mutation => mutation() === todo.id);
+      todos = todos.map((todo) => {
+        const deletionMutation = deleteTodoMutations.find(
+          (mutation) => mutation() === todo.id
+        );
         if (deletionMutation) {
-          return {...todo, deletion: deletionMutation};
+          return { ...todo, deletion: deletionMutation };
         }
         return todo;
       });
@@ -163,7 +180,7 @@ export class AppComponent {
       return;
     }
 
-    this.addTodo({name});
+    this.addTodo({ name });
   }
 }
 
@@ -175,14 +192,20 @@ function generateId() {
 function createMutation<T>(fn: (value: T) => Promise<void>): Mutator<T> {
   const mutations = signal<Mutation<T>[]>([]);
 
-  const mutator = ((value: T) => {    
-    const mutationState = signal<{error?: unknown, pending: boolean, value: T}>({pending: true, value});
+  const mutator = ((value: T) => {
+    const mutationState = signal<{
+      error?: unknown;
+      pending: boolean;
+      value: T;
+    }>({ pending: true, value });
     const mutation = (() => mutationState().value) as Mutation<T>;
-    mutations.update(_mutations => [..._mutations, mutation]);
+    mutations.update((_mutations) => [..._mutations, mutation]);
 
     mutation.cancel = () => {
       /* @todo unsubscribe if observable or trigger abort signal etc... */
-      mutations.update(_mutations => _mutations.filter(m => m !== mutation));
+      mutations.update((_mutations) =>
+        _mutations.filter((m) => m !== mutation)
+      );
     };
 
     mutation.retry = () => {
@@ -196,11 +219,15 @@ function createMutation<T>(fn: (value: T) => Promise<void>): Mutator<T> {
     mutation.pending = () => mutationState().pending;
 
     function action() {
-      mutationState.set({error: undefined, pending: true, value})
+      mutationState.set({ error: undefined, pending: true, value });
       fn(value)
-        .then(() => mutations.update(_mutations => _mutations.filter(m => m !== mutation)))
-        .catch(error => mutationState.set({error, pending: false, value}));
-    };
+        .then(() =>
+          mutations.update((_mutations) =>
+            _mutations.filter((m) => m !== mutation)
+          )
+        )
+        .catch((error) => mutationState.set({ error, pending: false, value }));
+    }
 
     action();
   }) as Mutator<T>;
@@ -213,7 +240,7 @@ function createMutation<T>(fn: (value: T) => Promise<void>): Mutator<T> {
 interface Mutator<T> {
   (value: T): void;
   mutations(): Mutation<T>[];
-};
+}
 
 interface Mutation<T> {
   (): T;
@@ -223,21 +250,134 @@ interface Mutation<T> {
   error(): unknown;
 }
 
-function createResource<T>(fn: () => Observable<T>): ResourceSignal<T> {
-  const manualTriggerSubject = new BehaviorSubject<void>(undefined);
-  const manualValueSubject = new Subject<T>();
-  const signal = rxComputed(
-    () => merge(manualTriggerSubject.pipe(exhaustMap(() => fn())), manualValueSubject).pipe(suspensify({ strict: false })),
-    { initialValue: pending }
-  ) as ResourceSignal<T>;
-  signal.refetch = () => manualTriggerSubject.next();
-  signal.set = (value) => manualValueSubject.next(value);
-  signal.update = (updater) => signal.set(updater(untracked(() => signal().value)));
-  return signal;
+function createResource<T>(fn: () => Observable<T>): Resource<T> {
+  const destroyRef = inject(DestroyRef);
+  const state = signal<Suspense<T>>({
+    status: 'pending',
+  });
+
+  function action() {
+    return fn()
+      .pipe(takeUntilDestroyed(destroyRef))
+      .subscribe({
+        next: (value) => state.set({ status: 'success', value }),
+        error: (error) => state.set({ status: 'error', error }),
+      });
+  }
+
+  effect(
+    (onCleanUp) => {
+      state.set({ status: 'pending' });
+      const sub = action();
+      onCleanUp(() => sub.unsubscribe());
+    },
+    { allowSignalWrites: true }
+  );
+
+  const resource = (() => {
+    const suspense = state();
+    if (suspense.status !== 'success' && suspense.status !== 'refetching') {
+      throw new Error('Resource is not in success or refetching state.');
+    }
+    return suspense.value;
+  }) as Resource<T>;
+
+  Object.defineProperty(resource, 'canRefetch', {
+    get() {
+      const status = state().status;
+      return status === 'success' || status === 'error';
+    },
+  });
+
+  Object.defineProperty(resource, 'pending', {
+    get() {
+      const status = state().status;
+      return status === 'pending' || status === 'refetching';
+    },
+  });
+
+  Object.defineProperty(resource, 'status', {
+    get() {
+      return state().status;
+    },
+  });
+
+  Object.defineProperty(resource, 'error', {
+    get() {
+      const suspense = state();
+      if (suspense.status !== 'error') {
+        throw new Error('Resource is not in error state.');
+      }
+      return suspense.error;
+    },
+  });
+
+  resource.set = (value) => state.set({ status: 'success', value });
+  (resource as { update(updater: (v: T | undefined) => T): void }).update = (
+    updater
+  ) =>
+    state.update((suspense) => {
+      return {
+        status: 'success',
+        value: updater('value' in suspense ? suspense.value : undefined),
+      };
+    });
+
+  (resource as { refetch(): void }).refetch = () => {
+    const suspense = untracked(state);
+
+    if (suspense.status === 'pending' || suspense.status === 'refetching') {
+      return;
+    }
+
+    state.set({
+      status: 'refetching',
+      value: 'value' in suspense ? suspense.value : undefined,
+    });
+
+    action();
+  };
+
+  return resource;
 }
 
-interface ResourceSignal<T> extends Signal<SuspenseLax<T>> {
-  refetch(): void;
-  set(value: T): void;
-  update(updater: (value?: T) => T): void;
+type Resource<T> = ResourceBase<T> &
+  (
+    | {
+        status: 'fetching';
+        canRefetch: false;
+        pending: true;
+      }
+    | {
+        status: 'success';
+        canRefetch: true;
+        pending: false;
+        (): T;
+        refetch(): void;
+        update: (updater: (value: T) => T) => void;
+      }
+    | {
+        status: 'error';
+        canRefetch: true;
+        pending: false;
+        error: unknown;
+        refetch(): void;
+      }
+    | {
+        status: 'refetching';
+        canRefetch: false;
+        pending: true;
+        (): T | undefined;
+        update: (updater: (value?: T) => T) => void;
+      }
+  );
+
+interface ResourceBase<T> {
+  set: (value: T) => void;
 }
+
+type Suspense<T> =
+  | { status: 'pending' }
+  | { status: 'success'; value: T }
+  | { status: 'error'; error: unknown }
+  | { status: 'refetching'; value: T | undefined };
