@@ -45,14 +45,18 @@ class TodoRepo {
       throw new Error('Failed to add todo.');
     }
 
-    return {
+    const todo = {
       id: generateId(),
       name: name.charAt(0).toLocaleUpperCase() + name.slice(1),
-    }
+    };
+
+    this.#todos = [...this.#todos, todo];
+
+    return todo;
   }
 
   getTodos() {
-    console.log('👉 Fetching todos');
+    console.log('🎉 Fetching todos');
     return defer(async () => {
       await this.#wait();
       return this.#todos;
@@ -91,6 +95,7 @@ interface Todo {
         [disabled]="todosResource().pending" 
         [(ngModel)]="name"
         name="name"/>
+      <button type="button" (click)="todosResource.refetch()">REFRESH</button>
     </form>
 
     @if(todosResource().pending) {
