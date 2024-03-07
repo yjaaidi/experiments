@@ -162,27 +162,27 @@ export class AppComponent {
     const addTodoMutations = this.addTodo.mutations();
     const deleteTodoMutations = this.deleteTodo.mutations();
 
-    if (addTodoMutations) {
-      todos = [
-        ...todos,
-        ...addTodoMutations.map((mutation) => ({
-          id: generateId(),
-          name: mutation().name,
-          addition: mutation,
-        })),
-      ];
-    }
-
     if (deleteTodoMutations) {
       todos = todos.map((todo) => {
         const deletionMutation = deleteTodoMutations.find(
-          (mutation) => mutation() === todo.id
+          (mutation) => untracked(mutation) === todo.id
         );
         if (deletionMutation) {
           return { ...todo, deletion: deletionMutation };
         }
         return todo;
       });
+    }
+
+    if (addTodoMutations) {
+      todos = [
+        ...todos,
+        ...addTodoMutations.map((mutation) => ({
+          id: generateId(),
+          name: untracked(mutation).name,
+          addition: mutation,
+        })),
+      ];
     }
 
     return todos;
