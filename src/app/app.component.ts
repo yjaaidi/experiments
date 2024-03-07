@@ -16,7 +16,7 @@ import {
   suspensify
 } from '@jscutlery/operators';
 import { rxComputed } from '@jscutlery/rx-computed';
-import { BehaviorSubject, Observable, Subject, defer, delay, exhaustMap, firstValueFrom, interval, merge, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, defer, exhaustMap, merge } from 'rxjs';
 import 'zone.js';
 
 @Injectable({
@@ -34,7 +34,11 @@ class TodoRepo {
     },
   ];
 
+  /**
+   * If the name contains "error", it will throw an error.
+   */
   async addTodo({name}: { name: string }): Promise<Todo> {
+    console.log(`✨ Adding todo: ${name}`);
     await this.#wait();
     
     if (name.toLocaleLowerCase().includes('error')) {
@@ -48,18 +52,26 @@ class TodoRepo {
   }
 
   getTodos() {
+    console.log('👉 Fetching todos');
     return defer(async () => {
       await this.#wait();
       return this.#todos;
     })
   }
 
+  /**
+   * If the todoId is "0", it will throw an error.
+   */
   async deleteTodo(todoId: string) {
+    console.log(`🗑️ Deleting todo ${todoId}`);
     await this.#wait();
+    if (todoId === '0') {
+      throw new Error('Failed to delete todo.');
+    }
     this.#todos = this.#todos.filter(todo => todo.id !== todoId);
   }
 
-  #wait(duration = 1000) {
+  #wait(duration = 500) {
     return new Promise(resolve => setTimeout(resolve, duration));
   }
 }
@@ -74,16 +86,12 @@ interface Todo {
   standalone: true,
   imports: [FormsModule],
   template: `
-    <form (input)="addTodo.cancel()" (ngSubmit)="add()">
+    <form (ngSubmit)="add()">
       <input
-        [disabled]="addTodo.pending()"
+        [disabled]="todosResource().pending" 
         [(ngModel)]="name"
         name="name"/>
     </form>
-
-    @if(addTodo.error()) {
-      <button type="button" (click)="addTodo.retry()">RETRY</button>
-    }
 
     @if(todosResource().pending) {
       <p>Loading...</p>
@@ -91,10 +99,13 @@ interface Todo {
     
     <ul>
       @for(todo of todos(); track todo.id) {
-        <li [class.pending]="todo.pending">
+        <li [class.pending]="todo.addition?.pending()">
           <span>{{todo.name}}</span>
           <span>&nbsp;</span>
-          <button [disabled]="todo.pending || deleteTodo.pending()" (click)="deleteTodo(todo.id)">DELETE</button>
+          <button [disabled]="todo.addition || todo.deletion?.pending()" (click)="todo.deletion ? todo.deletion.retry() : deleteTodo(todo.id)">DELETE</button>
+          @if(todo.addition?.error()) {
+            <button (click)="todo.addition?.retry()">RETRY</button>
+          }
         </li>
       }
     </ul>
@@ -117,16 +128,26 @@ export class AppComponent {
     }
   })
 
-  todos = computed(() => {
-    const existingTodos = this.todosResource().value?.map(todos => ({...todos, pending: false, deleting: false})) ?? [];
-    const todoData = this.addTodo.value();
-    if (todoData) {
-      return [...existingTodos, {id: generateId(), ...todoData, pending: true}];
+  todos = computed<(Todo & {addition?: Mutation<unknown>; deletion?: Mutation<unknown>})[]>(() => {
+    let todos = this.todosResource().value ?? [];
+    const addTodoMutations = this.addTodo.mutations();
+    const deleteTodoMutations = this.deleteTodo.mutations();
+
+    if (addTodoMutations) {
+      todos = [...todos, ...addTodoMutations.map((mutation) => ({id: generateId(), name: mutation().name, addition: mutation}))];
     }
-    if (this.deleteTodo.pending()) {
-      return existingTodos.map(todo => todo.id === this.deleteTodo.value() ? {...todo, deleting: true} : todo);
+
+    if (deleteTodoMutations) {
+      todos = todos.map(todo => {
+        const deletionMutation = deleteTodoMutations.find(mutation => mutation() === todo.id);
+        if (deletionMutation) {
+          return {...todo, deletion: deletionMutation};
+        }
+        return todo;
+      });
     }
-    return existingTodos;
+
+    return todos;
   });
 
   #repo = inject(TodoRepo);
@@ -143,53 +164,59 @@ export class AppComponent {
 
 let i = 0;
 function generateId() {
-  return (++i).toString();
+  return (i++).toString();
 }
 
 function createMutation<T>(fn: (value: T) => Promise<void>): Mutator<T> {
-  const state = signal<{error?: unknown, pending: boolean, value?: T}>({pending: false});
+  const mutations = signal<Mutation<T>[]>([]);
 
   const mutator = ((value: T) => {    
-    const action = () => {
-      state.set({pending: true, value});
+    const mutationState = signal<{error?: unknown, pending: boolean, value: T}>({pending: true, value});
+    const mutation = (() => mutationState().value) as Mutation<T>;
+    mutations.update(_mutations => [..._mutations, mutation]);
 
-      fn(value)
-        .then(() => state.set({pending: false}))
-        .catch(error => state.set({error, pending: false}));
-    }
+    mutation.cancel = () => {
+      /* @todo unsubscribe if observable or trigger abort signal etc... */
+      mutations.update(_mutations => _mutations.filter(m => m !== mutation));
+    };
 
-    mutator.retry = () => {
-      if (state().pending) {
+    mutation.retry = () => {
+      if (mutationState().pending) {
         throw new Error('Mutation has already been finalized.');
       }
       action();
     };
 
+    mutation.error = () => mutationState().error;
+    mutation.pending = () => mutationState().pending;
+
+    function action() {
+      mutationState.set({error: undefined, pending: true, value})
+      fn(value)
+        .then(() => mutations.update(_mutations => _mutations.filter(m => m !== mutation)))
+        .catch(error => mutationState.set({error, pending: false, value}));
+    };
+
     action();
   }) as Mutator<T>;
 
-  mutator.cancel = () => {
-    // todo unsubscribe if observable.
-    state.set({pending: false});
-  }
-  mutator.retry = () => {
-    throw new Error('Mutation has not been initialized yet.');
-  }
-  mutator.error = () => state().error;
-  mutator.pending = () => state().pending;
-  mutator.value = () => state().value;
-  
+  mutator.mutations = mutations.asReadonly();
+
   return mutator;
 }
 
 interface Mutator<T> {
   (value: T): void;
+  mutations(): Mutation<T>[];
+};
+
+interface Mutation<T> {
+  (): T;
   cancel(): void;
   retry(): void;
   pending(): boolean;
   error(): unknown;
-  value(): T | undefined;
-};
+}
 
 function createResource<T>(fn: () => Observable<T>): ResourceSignal<T> {
   const manualTriggerSubject = new BehaviorSubject<void>(undefined);
