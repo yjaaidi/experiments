@@ -4,7 +4,8 @@ import {
   Signal,
   computed,
   inject,
-  signal
+  signal,
+  untracked
 } from '@angular/core';
 import {
   FormsModule
@@ -15,7 +16,7 @@ import {
   suspensify
 } from '@jscutlery/operators';
 import { rxComputed } from '@jscutlery/rx-computed';
-import { BehaviorSubject, Observable, Subject, delay, exhaustMap, merge, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, defer, delay, exhaustMap, firstValueFrom, interval, merge, of } from 'rxjs';
 import 'zone.js';
 
 @Injectable({
@@ -34,7 +35,8 @@ class TodoRepo {
   ];
 
   async addTodo({name}: { name: string }): Promise<Todo> {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await this.#wait();
+    
     if (name.toLocaleLowerCase().includes('error')) {
       throw new Error('Failed to add todo.');
     }
@@ -46,7 +48,19 @@ class TodoRepo {
   }
 
   getTodos() {
-    return of(this.#todos).pipe(delay(1000));
+    return defer(async () => {
+      await this.#wait();
+      return this.#todos;
+    })
+  }
+
+  async deleteTodo(todoId: string) {
+    await this.#wait();
+    this.#todos = this.#todos.filter(todo => todo.id !== todoId);
+  }
+
+  #wait(duration = 1000) {
+    return new Promise(resolve => setTimeout(resolve, duration));
   }
 }
 
@@ -77,7 +91,11 @@ interface Todo {
     
     <ul>
       @for(todo of todos(); track todo.id) {
-        <li [class.pending]="todo.pending">{{todo.name}}</li>
+        <li [class.pending]="todo.pending">
+          <span>{{todo.name}}</span>
+          <span>&nbsp;</span>
+          <button [disabled]="todo.pending || deleteTodo.pending()" (click)="deleteTodo(todo.id)">DELETE</button>
+        </li>
       }
     </ul>
   `,
@@ -91,12 +109,22 @@ export class AppComponent {
     this.todosResource.set([...this.todosResource().value ?? [], todo]);
     this.name.set(null);
   });
+  deleteTodo = createMutation(async (todoId: string) => {
+    await this.#repo.deleteTodo(todoId);
+    const todos = this.todosResource().value;
+    if (todos) {
+      this.todosResource.set(todos.filter(todo => todo.id !== todoId));
+    }
+  })
 
   todos = computed(() => {
-    const existingTodos = this.todosResource().value?.map(todos => ({...todos, pending: false})) ?? [];
+    const existingTodos = this.todosResource().value?.map(todos => ({...todos, pending: false, deleting: false})) ?? [];
     const todoData = this.addTodo.value();
     if (todoData) {
       return [...existingTodos, {id: generateId(), ...todoData, pending: true}];
+    }
+    if (this.deleteTodo.pending()) {
+      return existingTodos.map(todo => todo.id === this.deleteTodo.value() ? {...todo, deleting: true} : todo);
     }
     return existingTodos;
   });
@@ -172,10 +200,12 @@ function createResource<T>(fn: () => Observable<T>): ResourceSignal<T> {
   ) as ResourceSignal<T>;
   signal.refetch = () => manualTriggerSubject.next();
   signal.set = (value) => manualValueSubject.next(value);
+  signal.update = (updater) => signal.set(updater(untracked(() => signal().value)));
   return signal;
 }
 
 interface ResourceSignal<T> extends Signal<SuspenseLax<T>> {
   refetch(): void;
   set(value: T): void;
+  update(updater: (value?: T) => T): void;
 }
