@@ -110,31 +110,38 @@ interface Todo {
       </button>
     </form>
 
-    @if(todosResource.pending) {
-    <p>Loading...</p>
+    @if (todosResource.pending) {
+      <p>Loading...</p>
     }
 
     <ul>
-      @for(todo of todos(); track todo.id) {
-      <li [class.pending]="todo.addition?.pending()">
-        <span>{{ todo.name }}</span>
-        <span>&nbsp;</span>
-        <button
-          [disabled]="
-            todosResource.pending || todo.addition || todo.deletion?.pending()
-          "
-          (click)="todo.deletion ? todo.deletion.retry() : deleteTodo(todo.id)"
-        >
-          DELETE
-        </button>
-        @if(todo.addition?.error()) {
-        <button (click)="todo.addition?.retry()">RETRY</button>
-        }
-      </li>
+      @for (todo of todos(); track todo.id) {
+        <li [class.pending]="todo.addition?.pending()">
+          <span>{{ todo.name }}</span>
+          <span>&nbsp;</span>
+          <button
+            [disabled]="
+              todosResource.pending || todo.addition || todo.deletion?.pending()
+            "
+            (click)="
+              todo.deletion ? todo.deletion.retry() : deleteTodo(todo.id)
+            "
+          >
+            DELETE
+          </button>
+          @if (todo.addition?.error()) {
+            <button (click)="todo.addition?.retry()">RETRY</button>
+          }
+        </li>
       }
     </ul>
   `,
-  styles: `.pending { color: #999; font-style: italic; }`,
+  styles: `
+    .pending {
+      color: #999;
+      font-style: italic;
+    }
+  `,
 })
 export class AppComponent {
   name = signal<string | null>(null);
@@ -150,7 +157,7 @@ export class AppComponent {
     await this.#repo.deleteTodo(todoId);
     if (this.todosResource.status === 'success') {
       this.todosResource.update((todos) =>
-        todos.filter((todo) => todo.id !== todoId)
+        todos.filter((todo) => todo.id !== todoId),
       );
     }
   });
@@ -165,7 +172,7 @@ export class AppComponent {
     if (deleteTodoMutations) {
       todos = todos.map((todo) => {
         const deletionMutation = deleteTodoMutations.find(
-          (mutation) => untracked(mutation) === todo.id
+          (mutation) => untracked(mutation) === todo.id,
         );
         if (deletionMutation) {
           return { ...todo, deletion: deletionMutation };
@@ -220,7 +227,7 @@ function createMutation<T>(fn: (value: T) => Promise<void>): Mutator<T> {
     mutation.cancel = () => {
       /* @todo unsubscribe if observable or trigger abort signal etc... */
       mutations.update((_mutations) =>
-        _mutations.filter((m) => m !== mutation)
+        _mutations.filter((m) => m !== mutation),
       );
     };
 
@@ -239,8 +246,8 @@ function createMutation<T>(fn: (value: T) => Promise<void>): Mutator<T> {
       fn(value)
         .then(() =>
           mutations.update((_mutations) =>
-            _mutations.filter((m) => m !== mutation)
-          )
+            _mutations.filter((m) => m !== mutation),
+          ),
         )
         .catch((error) => mutationState.set({ error, pending: false, value }));
     }
@@ -289,7 +296,7 @@ function createResource<T>(fn: () => Observable<T>): Resource<T> {
       const sub = action();
       onCleanUp(() => sub.unsubscribe());
     },
-    { allowSignalWrites: true }
+    { allowSignalWrites: true },
   );
 
   const resource = (() => {
@@ -342,7 +349,7 @@ function createResource<T>(fn: () => Observable<T>): Resource<T> {
 
   resource.set = (value) => state.set({ status: 'success', value });
   (resource as { update(updater: (v: T | undefined) => T): void }).update = (
-    updater
+    updater,
   ) =>
     state.update((suspense) => {
       return {
