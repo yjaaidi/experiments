@@ -182,10 +182,11 @@ export class AppComponent {
     }
 
     if (addTodoMutations) {
+      let i = 0;
       todos = [
         ...todos,
         ...addTodoMutations.map((mutation) => ({
-          id: generateId(),
+          id: `tmp-${i++}`,
           name: untracked(mutation).name,
           addition: mutation,
         })),
