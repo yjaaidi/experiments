@@ -1,14 +1,19 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding } from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
   selector: 'nx-angular-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  template: `Hello!`
 })
 export class AppComponent {
-  title = 'nx-angular';
+  @HostBinding('attr.my-title') title = '';
+
+  constructor(cdr: ChangeDetectorRef) {
+    queueMicrotask(() => {
+      this.title = 'Angular';
+      // @todo remove this to break test.
+      cdr.markForCheck();
+    });
+  }
 }
