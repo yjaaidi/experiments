@@ -39,7 +39,7 @@ export function useDebounce<T>({
   };
 }
 
-function useObservable<T>(sourceFn: () => Observable<T>): T | undefined {
+export function useObservable<T>(sourceFn: () => Observable<T>): T | undefined {
   const valueRef = useRef<T | undefined>(undefined);
   const subscribe = useCallback((onChange: () => void) => {
     const subscription = sourceFn().subscribe((_value) => {
