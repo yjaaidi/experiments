@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "benchmark": "tools/benchmark.sh"
+  },
   "dependencies": {
     "@angular/animations": "17.3.1",
     "@angular/common": "17.3.1",
@@ -29,6 +32,8 @@
     "@angular/cli": "17.3.1",
     "@angular/compiler-cli": "17.3.1",
     "@angular/language-service": "17.3.1",
+    "@jscutlery/swc-angular-preset": "^0.1.2",
+    "@jscutlery/swc-plugin-angular": "^0.8.0",
     "@nx/devkit": "v17.2.5",
     "@nx/eslint": "v17.2.5",
     "@nx/eslint-plugin": "v17.2.5",
@@ -39,8 +44,8 @@
     "@playwright/test": "^1.36.0",
     "@schematics/angular": "~17.0.0",
     "@swc-node/register": "1.8.0",
-    "@swc/core": "1.4.8",
-    "@swc/jest": "0.2.36",
+    "@swc/core": "^1.4.11",
+    "@swc/jest": "^0.2.36",
     "@types/jest": "^29.4.0",
     "@types/node": "18.16.9",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
@@ -59,4 +64,3 @@
     "typescript": "~5.2.2"
   }
 }
-
