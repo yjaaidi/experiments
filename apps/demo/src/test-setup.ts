@@ -5,4 +5,7 @@ globalThis.ngJest = {
     errorOnUnknownProperties: true,
   },
 };
+
+import '@angular/compiler';
+import 'reflect-metadata';
 import 'jest-preset-angular/setup-jest';
