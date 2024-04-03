@@ -2,5 +2,5 @@
 
 ```sh
 bun install
-bun run benchmark
+bun run benchmark <jest|jest-swc|jest-ng>
 ```

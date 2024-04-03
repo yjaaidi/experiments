@@ -1,16 +1,19 @@
+/* eslint-disable */
+import swcAngularPreset from '@jscutlery/swc-angular-preset';
+
 export default {
   displayName: 'demo',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/apps/demo',
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': [
+    '^.+\\.(html)$': [
       'jest-preset-angular',
       {
-        tsconfig: '<rootDir>/tsconfig.spec.json',
         stringifyContentPathRegex: '\\.(html|svg)$',
       },
     ],
+    '^.+\\.(mjs|ts)$': ['@swc/jest', swcAngularPreset],
   },
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [

@@ -1,14 +1,22 @@
 #!/usr/bin/env sh
 
+# check first arg is jest or jest-swc or jest-esbuild
+TARGET=$1
+if [ "$TARGET" != "jest" ] && [ "$TARGET" != "jest-swc" ] && [ "$TARGET" != "jest-ng" ]; then
+  echo "First argument must be 'jest' or 'jest-swc' or 'jest-ng'"
+  exit 1
+fi
+
 bun jest --clearCache
+rm -Rf dist
 
 BENCHMARK_FOLDER=apps/demo/src/app/benchmark
 rm -rf $BENCHMARK_FOLDER
 mkdir -p $BENCHMARK_FOLDER
-for i in $(seq 1 3000); do
+for i in $(seq 1 500); do
   cat apps/demo/src/app/app.component.spec.ts | sed "s/app.component/app.component.$i/g" > $BENCHMARK_FOLDER/app.component.$i.spec.ts
   cat apps/demo/src/app/app.component.ts | sed "s/app.component/app.component.$i/g" | sed "s|\./recipe|../recipe|g" > $BENCHMARK_FOLDER/app.component.$i.ts
   cp apps/demo/src/app/app.component.html $BENCHMARK_FOLDER/app.component.$i.html
 done
 
-nx test demo --skip-nx-cache
+nx $TARGET demo --skip-nx-cache

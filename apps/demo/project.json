@@ -65,11 +65,27 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     },
-    "test": {
+    "jest": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/demo/jest.config.ts"
+      }
+    },
+    "jest-swc": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/demo/jest-swc.config.ts"
+      }
+    },
+    "jest-ng": {
+      "executor": "@angular-devkit/build-angular:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "include": ["apps/demo/**/*.spec.ts"],
+        "polyfills": ["zone.js", "zone.js/testing"],
+        "tsConfig": "apps/demo/tsconfig.spec.json"
       }
     }
   }

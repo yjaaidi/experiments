@@ -6,11 +6,6 @@ import { Recipe } from './recipe';
   selector: 'demo-recipe',
   template: `<h2>{{ recipe.name }}</h2>
     <img [src]="recipe.pictureUri" />`,
-  styles: `
-    img {
-      max-width: 200px;
-    }
-  `,
 })
 export class RecipeComponent {
   @Input({ required: true }) recipe!: Recipe;
