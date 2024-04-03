@@ -14,6 +14,7 @@ jobs:
         test:
           [
             'angular-cli-jest',
+            'angular-cli-karma',
             'angular-cli-web-test-runner',
             'jest',
             'jest-swc',
@@ -33,6 +34,6 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-      - run: bun install --frozen-lockfile
+      - run: bun install --frozen-lockfile --ignore-scripts
 
       - run: bun benchmark ${{ matrix.test }}

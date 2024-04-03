@@ -11,12 +11,12 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/demo",
-        "index": "apps/demo/src/index.html",
-        "browser": "apps/demo/src/main.ts",
+        "index": "{projectRoot}/src/index.html",
+        "browser": "{projectRoot}/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/demo/tsconfig.app.json",
-        "assets": ["apps/demo/src/favicon.ico", "apps/demo/src/assets"],
-        "styles": ["apps/demo/src/styles.css"],
+        "tsConfig": "{projectRoot}/tsconfig.app.json",
+        "assets": ["{projectRoot}/src/favicon.ico", "{projectRoot}/src/assets"],
+        "styles": ["{projectRoot}/src/styles.css"],
         "scripts": []
       },
       "configurations": {
@@ -69,32 +69,42 @@
       "executor": "@angular-devkit/build-angular:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "include": ["apps/demo/**/*.spec.ts"],
+        "include": ["{projectRoot}/**/*.spec.ts"],
         "polyfills": ["zone.js", "zone.js/testing"],
-        "tsConfig": "apps/demo/tsconfig.spec.json"
+        "tsConfig": "{projectRoot}/tsconfig.spec.json"
+      }
+    },
+    "angular-cli-karma": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "browsers": "ChromeHeadless",
+        "polyfills": ["zone.js", "zone.js/testing"],
+        "tsConfig": "{projectRoot}/tsconfig.spec.json",
+        "watch": false
       }
     },
     "angular-cli-web-test-runner": {
       "executor": "@angular-devkit/build-angular:web-test-runner",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "include": ["apps/demo/**/*.spec.ts"],
+        "include": ["{projectRoot}/**/*.spec.ts"],
         "polyfills": ["zone.js", "zone.js/testing"],
-        "tsConfig": "apps/demo/tsconfig.spec.json"
+        "tsConfig": "{projectRoot}/tsconfig.spec.json"
       }
     },
     "jest": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/demo/jest.config.ts"
+        "jestConfig": "{projectRoot}/jest.config.ts"
       }
     },
     "jest-swc": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/demo/jest-swc.config.ts"
+        "jestConfig": "{projectRoot}/jest-swc.config.ts"
       }
     },
     "vitest": {
