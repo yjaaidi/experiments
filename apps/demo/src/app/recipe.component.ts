@@ -1,12 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Recipe } from './recipe';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'demo-recipe',
-  template: `<h2>{{ recipe.name }}</h2>
-    <img [src]="recipe.pictureUri" />`,
+  template: `<h2>{{ recipe().name }}</h2>
+    <img [src]="recipe().pictureUri" />`,
 })
 export class RecipeComponent {
-  @Input({ required: true }) recipe!: Recipe;
+  recipe = input.required<Recipe>();
 }

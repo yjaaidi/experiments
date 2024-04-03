@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Recipe } from './recipe';
 import { RecipeComponent } from './recipe.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'demo-root',
-  template: `@for (recipe of recipes; track recipe.id) {
-    <demo-recipe [recipe]="recipe" />
-  } `,
+  templateUrl: './app.component.html',
   imports: [RecipeComponent],
 })
 export class AppComponent {
