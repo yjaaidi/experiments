@@ -1,7 +1,7 @@
 import { AppComponent } from './app.component';
 import { TestBed } from '@angular/core/testing';
 
-test('ok', async () => {
+test('ok', () => {
   const fixture = TestBed.createComponent(AppComponent);
   fixture.autoDetectChanges();
 

@@ -2,8 +2,8 @@
 
 # check first arg is jest or jest-swc or jest-esbuild
 TARGET=$1
-if [ "$TARGET" != "jest" ] && [ "$TARGET" != "jest-swc" ] && [ "$TARGET" != "jest-ng" ]; then
-  echo "First argument must be 'jest' or 'jest-swc' or 'jest-ng'"
+if [ "$TARGET" != "jest" ] && [ "$TARGET" != "jest-swc" ] && [ "$TARGET" != "jest-ng" ] && [ "$TARGET" != "vitest" ]; then
+  echo "First argument must be 'jest' or 'jest-swc' or 'jest-ng' or 'vitest'"
   exit 1
 fi
 

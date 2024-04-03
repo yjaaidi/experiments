@@ -87,6 +87,13 @@
         "polyfills": ["zone.js", "zone.js/testing"],
         "tsConfig": "apps/demo/tsconfig.spec.json"
       }
+    },
+    "vitest": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/apps/demo"
+      }
     }
   }
 }
