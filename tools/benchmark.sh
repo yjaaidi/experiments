@@ -1,15 +1,13 @@
 #!/usr/bin/env sh
 
 # check first arg is jest or jest-swc or jest-esbuild
-TARGET=$1
-if [ "$TARGET" != "jest" ] \
-  && [ "$TARGET" != "jest-swc" ] \
-  && [ "$TARGET" != "jest-ng" ] \
-  && [ "$TARGET" != "vitest" ] \
-  && [ "$TARGET" != "vitest-swc" ]; then
-  echo "First argument must be 'jest' or 'jest-swc' or 'jest-ng' or 'vitest' or 'vitest-swc'"
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 angular-cli-jest|angular-cli-web-test-runner|jest|jest-swc|vitest|vitest-swc"
   exit 1
 fi
+
+TARGET=$1
 
 bun jest --clearCache
 rm -Rf dist node_modules/.vite
