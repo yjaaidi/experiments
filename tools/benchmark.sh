@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 angular-cli-jest|angular-cli-karma|angular-cli-web-test-runner|jest|jest-swc|vitest|vitest-swc"
+  echo "Usage: $0 angular-cli-jest|angular-cli-karma|angular-cli-web-test-runner|jest|jest-swc|vitest"
   exit 1
 fi
 

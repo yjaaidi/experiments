@@ -114,13 +114,9 @@
         "reportsDirectory": "../../coverage/apps/demo"
       }
     },
-    "vitest-swc": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "configFile": "{projectRoot}/vite-swc.config.mts",
-        "reportsDirectory": "../../coverage/apps/demo"
-      }
+    "_vitest-swc": {
+      "_comment": "This is work in progress as it requires transforming into ESM import instead of CJS require",
+      "command": "vitest --config {projectRoot}/vite-swc.config.mts"
     }
   }
 }

@@ -19,7 +19,6 @@ jobs:
             'jest',
             'jest-swc',
             'vitest',
-            'vitest-swc',
           ]
     name: ✅ Test
     runs-on: ubuntu-latest
