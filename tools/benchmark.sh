@@ -7,7 +7,9 @@ fi
 
 TARGET=$1
 
-bun jest --clearCache
+# Clear all transform caches.
+bun jest --clearCache -c apps/demo/jest.config.ts
+bun jest --clearCache -c apps/demo/jest-swc.config.ts
 rm -Rf dist node_modules/.vite
 
 BENCHMARK_FOLDER=apps/demo/src/app/benchmark
@@ -19,4 +21,4 @@ for i in $(seq 1 400); do
   cp apps/demo/src/app/app.component.html $BENCHMARK_FOLDER/app.component.$i.html
 done
 
-nx $TARGET demo --skip-nx-cache
+nx "$TARGET" demo --skip-nx-cache
