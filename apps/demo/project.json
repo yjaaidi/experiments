@@ -94,6 +94,14 @@
       "options": {
         "reportsDirectory": "../../coverage/apps/demo"
       }
+    },
+    "vitest-swc": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "configFile": "{projectRoot}/vite-swc.config.mts",
+        "reportsDirectory": "../../coverage/apps/demo"
+      }
     }
   }
 }

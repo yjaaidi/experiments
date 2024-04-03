@@ -5,7 +5,9 @@ import { RecipeComponent } from './recipe.component';
 @Component({
   standalone: true,
   selector: 'demo-root',
-  templateUrl: './app.component.html',
+  template: `@for (recipe of recipes; track recipe.id) {
+    <demo-recipe [recipe]="recipe" />
+  } `,
   imports: [RecipeComponent],
 })
 export class AppComponent {
