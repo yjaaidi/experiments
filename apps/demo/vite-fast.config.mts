@@ -17,10 +17,18 @@ export default defineConfig({
     cache: {
       dir: '../../node_modules/.vitest',
     },
-    environment: 'jsdom',
+    environment: 'happy-dom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     setupFiles: ['src/test-setup-vitest.ts'],
     reporters: ['default'],
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      },
+    },
+    isolate: false,
+    watch: false,
     coverage: {
       reportsDirectory: '../../coverage/apps/demo',
       provider: 'v8',

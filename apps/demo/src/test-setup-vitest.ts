@@ -10,3 +10,5 @@ getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting(),
 );
+
+afterAll(() => getTestBed().resetTestEnvironment());
