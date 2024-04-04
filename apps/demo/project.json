@@ -115,16 +115,7 @@
       }
     },
     "vitest-fast": {
-      "executor": "nx:run-commands",
-      "options": {
-        "parallel": true,
-        "commands": [
-          "vitest --config {projectRoot}/vite-fast.config.mts --shard 1/4",
-          "vitest --config {projectRoot}/vite-fast.config.mts --shard 2/4",
-          "vitest --config {projectRoot}/vite-fast.config.mts --shard 3/4",
-          "vitest --config {projectRoot}/vite-fast.config.mts --shard 4/4"
-        ]
-      }
+      "command": "vitest --config {projectRoot}/vite-fast.config.mts"
     },
     "_vitest-swc": {
       "_comment": "This is work in progress as it requires transforming into ESM import instead of CJS require",
