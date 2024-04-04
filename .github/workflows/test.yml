@@ -36,6 +36,15 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-      - run: bun install --frozen-lockfile --ignore-scripts
 
-      - run: bun benchmark ${{ matrix.test }}
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Generate tests
+        run: tools/generate-tests.sh
+
+      - name: Clean caches
+        run: tools/clean.sh
+
+      - name: Test
+        run: bun nx ${{ matrix.test }} demo --skip-nx-cache
