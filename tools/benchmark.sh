@@ -10,7 +10,7 @@ TARGET=$1
 # Clear all transform caches.
 bun jest --clearCache -c apps/demo/jest.config.ts
 bun jest --clearCache -c apps/demo/jest-swc.config.ts
-rm -Rf dist node_modules/.vite
+rm -Rf .angular/cache dist node_modules/.vite node_modules/.vitest
 
 BENCHMARK_FOLDER=apps/demo/src/app/benchmark
 rm -rf $BENCHMARK_FOLDER
