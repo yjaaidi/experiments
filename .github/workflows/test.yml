@@ -20,6 +20,8 @@ jobs:
             'jest-swc',
             'vitest',
             'vitest-no-isolate',
+            'vitest-swc',
+            'vitest-swc-no-isolate',
           ]
     name: ✅ Test
     runs-on: ubuntu-latest

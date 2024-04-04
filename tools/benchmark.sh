@@ -1,7 +1,18 @@
 #!/usr/bin/env sh
 
 if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 angular-cli-jest|angular-cli-karma|angular-cli-web-test-runner|jest|jest-swc|vitest"
+  echo "Usage: $0 <target>"
+
+  # Check if jq is installed...
+  which jq || exit 1
+
+  # ...and display the available targets.
+  echo
+  echo "The target to benchmark which can be any of:"
+  nx show project demo \
+    | jq -r '.targets | to_entries[] | .key' \
+    | grep -v -e build -e lint -e serve -e extract-i18n \
+    | sed 's|^|  |'
   exit 1
 fi
 

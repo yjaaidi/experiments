@@ -142,18 +142,16 @@
       }
     },
     "vitest": {
-      "command": "vitest --config {projectRoot}/vitest.config.mts --no-isolate"
+      "command": "vitest --config {projectRoot}/vitest.config.ts --no-isolate --watch false"
     },
     "vitest-no-isolate": {
-      "command": "vitest --config {projectRoot}/vitest.config.mts --no-isolate"
+      "command": "vitest --config {projectRoot}/vitest.config.ts --no-isolate --watch false"
     },
-    "_vitest-swc": {
-      "_comment": "This is work in progress as it requires transforming into ESM import instead of CJS require",
-      "command": "vitest --config {projectRoot}/vitest-swc.config.mts"
+    "vitest-swc": {
+      "command": "vitest --config {projectRoot}/vitest-swc.config.ts --watch false"
     },
-    "_vitest-swc-no-isolate": {
-      "_comment": "This is work in progress as it requires transforming into ESM import instead of CJS require",
-      "command": "vitest --config {projectRoot}/vitest-swc.config.mts --no-isolate"
+    "vitest-swc-no-isolate": {
+      "command": "vitest --config {projectRoot}/vitest-swc.config.ts --no-isolate --watch false"
     }
   }
 }

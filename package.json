@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "scripts": {
     "benchmark": "tools/benchmark.sh"
   },
@@ -33,8 +34,8 @@
     "@angular/cli": "~17.3.0",
     "@angular/compiler-cli": "17.3.1",
     "@angular/language-service": "17.3.1",
-    "@jscutlery/swc-angular-preset": "0.1.2",
-    "@jscutlery/swc-plugin-angular": "0.10.1",
+    "@jscutlery/swc-angular-preset": "0.2.0",
+    "@jscutlery/swc-plugin-angular": "0.11.0",
     "@nx/devkit": "18.2.2",
     "@nx/eslint": "18.2.2",
     "@nx/eslint-plugin": "18.2.2",

@@ -1,13 +1,8 @@
-import swcAngularPreset from '@jscutlery/swc-angular-preset';
-import swc from 'unplugin-swc';
 import { defineConfig, mergeConfig } from 'vitest/config';
-import viteConfig from './vite.config.mjs';
+import viteConfig from './vite.config';
 
 export default mergeConfig(
-  {
-    ...viteConfig,
-    plugins: [swc.vite(swcAngularPreset)],
-  },
+  viteConfig,
   defineConfig({
     test: {
       globals: true,
