@@ -114,8 +114,8 @@
         "reportsDirectory": "../../coverage/apps/demo"
       }
     },
-    "vitest-fast": {
-      "command": "vitest --config {projectRoot}/vite-fast.config.mts"
+    "vitest-no-isolate": {
+      "command": "vitest --config {projectRoot}/vite.config.mts --no-isolate"
     },
     "_vitest-swc": {
       "_comment": "This is work in progress as it requires transforming into ESM import instead of CJS require",
