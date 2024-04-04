@@ -1,35 +1,30 @@
 #!/usr/bin/env sh
 
-if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 <target>"
+set -e
 
-  # Check if jq is installed...
-  which jq || exit 1
+# Make sure dist folder exists for reports.
+mkdir -p dist
 
-  # ...and display the available targets.
-  echo
-  echo "The target to benchmark which can be any of:"
-  nx show project demo \
-    | jq -r '.targets | to_entries[] | .key' \
-    | grep -v -e build -e lint -e serve -e extract-i18n \
-    | sed 's|^|  |'
-  exit 1
-fi
+TOOLS_DIR=$(dirname "$0")
 
-TARGET=$1
-
-# Clear all transform caches.
-bun jest --clearCache -c apps/demo/jest.config.ts
-bun jest --clearCache -c apps/demo/jest-swc.config.ts
-rm -Rf .angular/cache dist node_modules/.vite node_modules/.vitest
-
-BENCHMARK_FOLDER=apps/demo/src/app/benchmark
-rm -rf $BENCHMARK_FOLDER
-mkdir -p $BENCHMARK_FOLDER
-for i in $(seq 1 400); do
-  cat apps/demo/src/app/app.component.spec.ts | sed "s/app.component/app.component.$i/g" > $BENCHMARK_FOLDER/app.component.$i.spec.ts
-  cat apps/demo/src/app/app.component.ts | sed "s/app.component/app.component.$i/g" | sed "s|\./recipe|../recipe|g" > $BENCHMARK_FOLDER/app.component.$i.ts
-  cp apps/demo/src/app/app.component.html $BENCHMARK_FOLDER/app.component.$i.html
+TARGETS=$(nx show project demo | jq -r '.targets | to_entries[] | .key' | grep -v -e build -e lint -e serve -e extract-i18n)
+HYPERFINE_OPTIONS="--ignore-failure"
+for target in $TARGETS; do
+  command="nx $target demo --skip-nx-cache"
+  HYPERFINE_OPTIONS="$HYPERFINE_OPTIONS --command-name $target '$command'"
 done
 
-nx "$TARGET" demo --skip-nx-cache
+$TOOLS_DIR/clean.sh
+
+rm -Rf apps/demo/src/app/benchmark
+
+# Measure cold start by running one test module.
+eval hyperfine --export-markdown dist/benchmark-cold-start.md --prepare "$TOOLS_DIR/clean.sh" $HYPERFINE_OPTIONS
+
+$TOOLS_DIR/generate-tests.sh
+
+# Run with cache by running a warmup run first.
+eval hyperfine --export-markdown dist/benchmark-cache.md --warmup 1 $HYPERFINE_OPTIONS
+
+# Run without cache by clearing caches before each run.
+eval hyperfine --export-markdown dist/benchmark-no-cache.md --prepare "$TOOLS_DIR/clean.sh" $HYPERFINE_OPTIONS
