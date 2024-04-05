@@ -7,9 +7,8 @@ mkdir -p dist
 
 TOOLS_DIR=$(dirname "$0")
 
-TARGETS=$(nx show project demo | jq -r '.targets | to_entries[] | .key' | grep -v -e build -e lint -e serve -e extract-i18n)
 HYPERFINE_OPTIONS="--ignore-failure"
-for target in $TARGETS; do
+for target in $($TOOLS_DIR/list-test-targets.sh); do
   command="nx $target demo --skip-nx-cache"
   HYPERFINE_OPTIONS="$HYPERFINE_OPTIONS --command-name $target '$command'"
 done

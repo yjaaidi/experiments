@@ -1,0 +1,22 @@
+name: Setup
+
+description: Setup Node.js, Bun and install dependencies
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 21
+
+    - uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      shell: sh
+      run: bun install --frozen-lockfile --ignore-scripts
+
+    - name: Clean caches
+      shell: sh
+      run: tools/clean.sh

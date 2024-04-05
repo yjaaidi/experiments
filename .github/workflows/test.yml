@@ -1,51 +1,59 @@
 name: Test
-
 on:
   - push
-
 permissions:
   actions: read
   contents: read
-
 jobs:
+  # Run all tests in parallel.
   test:
+    name: Test
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         test:
-          [
-            'angular-cli-jest',
-            'angular-cli-karma',
-            'angular-cli-web-test-runner',
-            'jest',
-            'jest-swc',
-            'vitest',
-            'vitest-no-isolate',
-            'vitest-swc',
-            'vitest-swc-no-isolate',
-          ]
-    name: ✅ Test
-    runs-on: ubuntu-latest
+          - jest
+          - jest-swc
+          - angular-cli-jest
+          - angular-cli-karma
+          - angular-cli-web-test-runner
+          - vitest
+          - vitest-no-isolate
+          - vitest-swc
+          - vitest-swc-no-isolate
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 21
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile --ignore-scripts
-
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Generate tests
         run: tools/generate-tests.sh
-
-      - name: Clean caches
-        run: tools/clean.sh
-
+      - name: Test
+        run: bun nx ${{ matrix.test }} demo --skip-nx-cache
+  # Run a single test module to observe the cold start.
+  single-test:
+    name: Single Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test:
+          - jest
+          - jest-swc
+          - angular-cli-jest
+          - angular-cli-karma
+          - angular-cli-web-test-runner
+          - vitest
+          - vitest-no-isolate
+          - vitest-swc
+          - vitest-swc-no-isolate
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Test
         run: bun nx ${{ matrix.test }} demo --skip-nx-cache

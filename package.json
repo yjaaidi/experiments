@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "benchmark": "tools/benchmark.sh"
+    "benchmark": "tools/benchmark.sh",
+    "codegen": "tools/codegen.sh"
   },
   "dependencies": {
     "@angular/animations": "17.3.1",
