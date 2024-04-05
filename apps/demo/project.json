@@ -142,7 +142,7 @@
       }
     },
     "vitest": {
-      "command": "vitest --config {projectRoot}/vitest.config.ts --no-isolate --watch false"
+      "command": "vitest --config {projectRoot}/vitest.config.ts --watch false"
     },
     "vitest-no-isolate": {
       "command": "vitest --config {projectRoot}/vitest.config.ts --no-isolate --watch false"
