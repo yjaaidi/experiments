@@ -1,6 +1,13 @@
-import { useCallback, useRef, useSyncExternalStore } from 'react';
 import {
-  distinctUntilChanged,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
+import {
+  first,
   map,
   merge,
   Observable,
@@ -14,16 +21,18 @@ export function useDebounce<T>({
   delay = 1000,
   onChange,
 }: { delay?: number; onChange?: (value: T) => void } = {}) {
-  const subjectRef = useRef(new Subject<T>());
-  const commitSubjectRef = useRef(new Subject<void>());
+  const dirtyValue$ = useMemo(() => new Subject<T>(), []);
+  const commit$ = useMemo(() => new Subject<void>(), []);
 
   const value = useObservable(() => {
-    const commit$ = commitSubjectRef.current;
-    const value$ = subjectRef.current;
-    return value$.pipe(
+    return dirtyValue$.pipe(
       /* Wait either for a commit or a delay whichever comes first. */
-      switchMap((value) => merge(commit$, timer(delay)).pipe(map(() => value))),
-      distinctUntilChanged(),
+      switchMap((value) =>
+        merge(commit$, timer(delay)).pipe(
+          first(),
+          map(() => value)
+        )
+      ),
       tap((value) => onChange?.(value))
     );
   });
@@ -31,15 +40,23 @@ export function useDebounce<T>({
   return {
     value,
     commit() {
-      commitSubjectRef.current.next();
+      commit$.next();
     },
     setValue(value: T) {
-      subjectRef.current.next(value);
+      dirtyValue$.next(value);
     },
   };
 }
 
 export function useObservable<T>(sourceFn: () => Observable<T>): T | undefined {
+  const [value, setValue] = useState<T | undefined>();
+  useEffect(() => {
+    const subscription = sourceFn().subscribe((_value) => {
+      setValue(_value);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   const valueRef = useRef<T | undefined>(undefined);
   const subscribe = useCallback((onChange: () => void) => {
     const subscription = sourceFn().subscribe((_value) => {
@@ -49,5 +66,5 @@ export function useObservable<T>(sourceFn: () => Observable<T>): T | undefined {
     return () => subscription.unsubscribe();
   }, []);
 
-  return useSyncExternalStore(subscribe, () => valueRef.current);
+  return value;
 }

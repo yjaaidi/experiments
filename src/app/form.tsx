@@ -12,7 +12,7 @@ import {
   Observable,
   Subject,
 } from 'rxjs';
-import { useDebounce, useObservable } from './use-debounce';
+import { useDebounce, useObservable } from './use-control';
 import styles from './form.module.css';
 
 export function Form() {
