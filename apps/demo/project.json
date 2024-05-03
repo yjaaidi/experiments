@@ -142,10 +142,12 @@
       }
     },
     "vitest": {
-      "command": "vitest --config {projectRoot}/vitest.config.ts --watch false"
+      "_comment": "override analog's override which is setting the pool to vmThreads",
+      "command": "vitest --config {projectRoot}/vitest.config.ts --pool threads --watch false"
     },
     "vitest-no-isolate": {
-      "command": "vitest --config {projectRoot}/vitest.config.ts --no-isolate --watch false"
+      "_comment": "override analog's override which is setting the pool to vmThreads",
+      "command": "vitest --config {projectRoot}/vitest.config.ts --pool threads --no-isolate --watch false"
     },
     "vitest-swc": {
       "command": "vitest --config {projectRoot}/vitest-swc.config.ts --watch false"
