@@ -1,14 +1,36 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { DatePipe } from '@angular/common';
+import { Component, computed, model } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  imports: [DatePipe, FormsModule],
+  template: `
+    <div data-testid="datepicker" aria-label="main">
+      <input [(ngModel)]="day" aria-label="day" type="number" />
+      <input [(ngModel)]="month" aria-label="month" type="number" />
+      <input [(ngModel)]="year" aria-label="year" type="number" />
+    </div>
+    <hr />
+    <div data-testid="datepicker">
+      <input [(ngModel)]="day" aria-label="day" type="number" />
+      <input [(ngModel)]="month" aria-label="month" type="number" />
+      <input [(ngModel)]="year" aria-label="year" type="number" />
+    </div>
+    <hr />
+    <div role="article">{{ date() | date }}</div>
+  `,
 })
 export class AppComponent {
-  title = 'playwright-glove';
+  day = model<number | undefined>(undefined);
+  month = model<number | undefined>(undefined);
+  year = model<number | undefined>(undefined);
+  date = computed(() => {
+    return new Date(
+      this.year() ?? new Date().getUTCFullYear(),
+      (this.month() ?? 1) - 1,
+      this.day() ?? 1
+    );
+  });
 }
