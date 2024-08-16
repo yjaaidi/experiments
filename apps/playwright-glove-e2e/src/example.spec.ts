@@ -1,4 +1,3 @@
-import { Type } from '@angular/core';
 import { test as base, expect, Locator } from '@playwright/test';
 
 const test = base.extend<{ gloveLoader: GloveLoader }>({
@@ -8,9 +7,8 @@ const test = base.extend<{ gloveLoader: GloveLoader }>({
 });
 
 test('has title', async ({ page, gloveLoader }) => {
-  const mainDatePicker = gloveLoader.getGlove(
-    DatepickerGlove.with({ name: 'main' })
-  );
+  // const mainDatePicker = gloveLoader.getGlove(DatepickerGlove);
+  const mainDatePicker = gloveLoader.getGlove(DatepickerGlove.first());
 
   await page.goto('/');
 
@@ -23,78 +21,118 @@ test('has title', async ({ page, gloveLoader }) => {
   await expect(page.getByRole('article')).toHaveText('Jan 1, 2022');
 });
 
-class DatepickerGlove {
-  private _loader: GloveLoader;
-  constructor(private _locator: Locator) {
-    this._loader = new GloveLoader(this._locator);
-  }
+const DatepickerGlove = createGlove({
+  locators: {
+    default() {
+      return (parent) => parent.getByTestId('datepicker');
+    },
+    first() {
+      return (parent) => parent.getByTestId('datepicker').first();
+    },
+  },
+  gloveFactory({ locator, loader }) {
+    return {
+      async setDate({
+        day,
+        month,
+        year,
+      }: {
+        day: number;
+        month: number;
+        year: number;
+      }) {
+        await loader
+          .getGlove(TextFieldGlove.with({ name: 'day' }))
+          .fill(day.toString());
+        await locator.getByLabel('month').fill(`${month}`);
+        await locator.getByLabel('year').fill(`${year}`);
+      },
+    };
+  },
+});
 
-  static factory = createGloveFactory(
-    ({ within }) => new DatepickerGlove(within.getByTestId('datepicker'))
+const TextFieldGlove = createGlove({
+  locators: {
+    with({ name }: { name: string }) {
+      return (parent) => parent.getByRole('spinbutton', { name });
+    },
+  },
+  gloveFactory({ locator }) {
+    return {
+      async fill(value: string) {
+        return await locator.fill(value);
+      },
+    };
+  },
+});
+
+type GloveType<DEFINITION> = DEFINITION extends GloveDefinition<infer GLOVE>
+  ? GLOVE
+  : never;
+
+function createGlove<DEFINITION extends GloveDefinition<any>>(
+  definition: DEFINITION
+): GloveFinder<GloveType<DEFINITION>> & {
+  [FINDER_NAME in keyof DEFINITION['locators']]: (
+    ...args: Parameters<DEFINITION['locators'][FINDER_NAME]>
+  ) => GloveFinder<GloveType<DEFINITION>>;
+} {
+  const { gloveFactory } = definition;
+  return Object.entries(definition.locators).reduce(
+    (acc, [name, locatorFactory]) => {
+      acc[name] = (...args: any[]) => {
+        return {
+          ɵgloveFinder: ({ parent }) => {
+            const locator = locatorFactory(...args)(parent);
+            return gloveFactory({
+              locator,
+              loader: new GloveLoader(locator),
+            });
+          },
+        } satisfies GloveFinderInternal<GloveType<DEFINITION>>;
+      };
+      return acc;
+    },
+    {} as any
   );
-
-  static with({ name }: { name: string }) {
-    return createGloveFactory(
-      ({ within }) =>
-        new DatepickerGlove(
-          within.getByTestId('datepicker').and(within.getByLabel(name))
-        )
-    );
-  }
-
-  first() {
-    return new DatepickerGlove(this._locator.first());
-  }
-
-  async setDate({
-    day,
-    month,
-    year,
-  }: {
-    day: number;
-    month: number;
-    year: number;
-  }) {
-    await this._loader
-      .getGlove(TextFieldGlove.with({ name: 'day' }))
-      .fill(day.toString());
-    await this._locator.getByLabel('month').fill(`${month}`);
-    await this._locator.getByLabel('year').fill(`${year}`);
-  }
 }
 
-class TextFieldGlove {
-  constructor(private _locator: Locator) {}
+interface GloveDefinition<GLOVE> {
+  locators: Record<string, (...args: any[]) => GloveFinderDefinition>;
+  gloveFactory: GloveFactory<GLOVE>;
+}
 
-  static with({ name }: { name: string }) {
-    return createGloveFactory(
-      ({ within }) =>
-        new TextFieldGlove(within.getByRole('spinbutton', { name }))
-    );
-  }
+interface GloveFinderDefinition {
+  (parent: Locator): Locator;
+}
 
-  async fill(value: string) {
-    return await this._locator.fill(value);
-  }
+interface GloveFactory<GLOVE> {
+  (args: { locator: Locator; loader: GloveLoader }): GLOVE;
 }
 
 class GloveLoader {
   constructor(private _rootLocator: Locator) {}
 
-  getGlove<GLOVE>(glove: GloveType<GLOVE> | GloveFactory<GLOVE>) {
-    const within = this._rootLocator;
-    return 'factory' in glove ? glove.factory({ within }) : glove({ within });
+  getGlove<GLOVE>(
+    finder: GloveFinder<GLOVE> | { default(): GloveFinder<GLOVE> }
+  ): GLOVE {
+    const { ɵgloveFinder } = toInternalGloveFinder(
+      'default' in finder ? finder.default() : finder
+    );
+    return ɵgloveFinder({ parent: this._rootLocator });
   }
 }
 
-type GloveType<GLOVE> = Type<GLOVE> & { factory: GloveFactory<GLOVE> };
-
-interface GloveFactory<GLOVE> {
-  ({ within }: { within: Locator }): GLOVE;
+class GloveFinder<GLOVE> {
+  private ɵgloveFinder: unknown;
 }
 
-function createGloveFactory<GLOVE>(
-  factoryFn: (args: { within: Locator }) => GLOVE
-) {
-  return factoryFn;
+interface GloveFinderInternal<GLOVE> {
+  ɵgloveFinder: (args: { parent: Locator }) => GLOVE;
+}
+
+function toInternalGloveFinder<GLOVE>(
+  finder: GloveFinder<GLOVE>
+): GloveFinderInternal<GLOVE> {
+  return finder as any;
 }
