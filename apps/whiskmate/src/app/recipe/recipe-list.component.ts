@@ -8,8 +8,7 @@ import {
 import { Recipe } from './recipe';
 import { GridComponent } from '../shared/grid.component';
 import { RecipePreviewComponent } from './recipe-preview.component';
-import { NgForOf, NgIf, NgTemplateOutlet } from '@angular/common';
-import { trackById } from '../shared/track-by-id';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,23 +16,19 @@ import { trackById } from '../shared/track-by-id';
   selector: 'wm-recipe-list',
   template: `
     <wm-grid>
-      <wm-recipe-preview
-        *ngFor="let recipe of recipes; trackBy: trackById"
-        [recipe]="recipe"
-      >
-        <ng-container
-          *ngTemplateOutlet="actionsTemplateRef; context: { $implicit: recipe }"
-        ></ng-container>
-      </wm-recipe-preview>
+      @for (recipe of recipes; track recipe.id) {
+        <wm-recipe-preview [recipe]="recipe">
+          <ng-container
+            *ngTemplateOutlet="
+              actionsTemplateRef;
+              context: { $implicit: recipe }
+            "
+          ></ng-container>
+        </wm-recipe-preview>
+      }
     </wm-grid>
   `,
-  imports: [
-    GridComponent,
-    RecipePreviewComponent,
-    NgForOf,
-    NgTemplateOutlet,
-    NgIf,
-  ],
+  imports: [GridComponent, RecipePreviewComponent, NgTemplateOutlet],
 })
 export class RecipeListComponent {
   @Input({ required: true }) recipes!: Recipe[];
@@ -41,6 +36,4 @@ export class RecipeListComponent {
   @ContentChild('actions') actionsTemplateRef!: TemplateRef<{
     $implicit: Recipe;
   }>;
-
-  trackById = trackById;
 }
