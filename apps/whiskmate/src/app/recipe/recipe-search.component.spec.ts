@@ -2,13 +2,13 @@ import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { Mocked, vi } from 'vitest';
-import { provideAutoDetectChanges } from '../testing/provide-auto-detect-changes';
 import { recipeMother } from '../testing/recipe.mother';
 import {
   RecipeRepository,
   RecipeRepositoryDef,
 } from './recipe-repository.service';
 import { RecipeSearchComponent } from './recipe-search.component';
+import { ComponentFixture } from '@angular/core/testing';
 
 vi.useFakeTimers();
 
@@ -26,7 +26,7 @@ describe(RecipeSearchComponent.name, () => {
 
     repo.search.mockClear();
     repo.search.mockReturnValue(
-      of([recipeMother.withBasicInfo('Burger').build()])
+      of([recipeMother.withBasicInfo('Burger').build()]),
     );
 
     await typeKeywords('Bur');
@@ -45,18 +45,19 @@ describe(RecipeSearchComponent.name, () => {
       of([
         recipeMother.withBasicInfo('Burger').build(),
         recipeMother.withBasicInfo('Salad').build(),
-      ])
+      ]),
     );
 
     const { fixture } = await render(RecipeSearchComponent, {
       providers: [
-        provideAutoDetectChanges(),
         {
           provide: RecipeRepository,
           useValue: repo,
         },
       ],
     });
+
+    await advanceTime(fixture);
 
     return {
       repo,
@@ -68,9 +69,14 @@ describe(RecipeSearchComponent.name, () => {
       async typeKeywords(keywords: string) {
         userEvent.type(screen.getByLabelText('Keywords'), keywords);
         /* wait for debounce. */
-        await vi.runAllTimersAsync();
-        await fixture.whenStable();
+        await advanceTime(fixture);
       },
     };
   }
 });
+
+async function advanceTime(fixture: ComponentFixture<unknown>) {
+  const promise = fixture.whenStable();
+  await vi.runAllTimersAsync();
+  await promise;
+}
