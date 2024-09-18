@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { Recipe } from './recipe';
+import type { Recipe } from './recipe';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,5 +17,5 @@ import { Recipe } from './recipe';
   </button>`,
 })
 export class RecipeAddButtonComponent {
-  @Input({ required: true }) recipe!: Recipe;
+  recipe = input.required<Recipe>();
 }
