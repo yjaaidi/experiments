@@ -1,7 +1,7 @@
-import { ComponentFixtureAutoDetect } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
+import { provideAutoDetectChanges } from '../testing/provide-auto-detect-changes';
 import { recipeMother } from '../testing/recipe.mother';
 import {
   provideRecipeRepositoryFake,
@@ -48,13 +48,7 @@ describe(RecipeSearchComponent.name, () => {
             recipeMother.withBasicInfo('Burger').build(),
             recipeMother.withBasicInfo('Salad').build(),
           ]),
-      providers: [
-        {
-          provide: ComponentFixtureAutoDetect,
-          useValue: true,
-        },
-        provideRecipeRepositoryFake(),
-      ],
+      providers: [provideAutoDetectChanges(), provideRecipeRepositoryFake()],
     });
 
     return {
