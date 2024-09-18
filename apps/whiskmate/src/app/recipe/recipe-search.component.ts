@@ -1,4 +1,3 @@
-import { NgForOf, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,38 +24,40 @@ import { MessageComponent } from '../shared/message.component';
     GridComponent,
     MessageComponent,
     MatButtonModule,
-    NgIf,
     RecipeFilterComponent,
     RecipePreviewComponent,
-    NgForOf,
     RecipeListComponent,
     RecipeAddButtonComponent,
   ],
   template: `
     <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
 
-    <wm-message *ngIf="recipesSuspense().pending">⏳ Searching...</wm-message>
+    @if (recipesSuspense().pending) {
+      <wm-message>⏳ Searching...</wm-message>
+    }
+    @if (recipesSuspense().hasError) {
+      <wm-message> 💥 Something went wrong </wm-message>
+    }
 
-    <wm-message *ngIf="recipesSuspense().hasError">
-      💥 Something went wrong
-    </wm-message>
-
-    <wm-message *ngIf="recipesSuspense().hasValue && recipes().length === 0">
-      😿 no results
-    </wm-message>
-
-    <wm-recipe-list *ngIf="recipesSuspense().hasValue" [recipes]="recipes()">
-      <ng-template #actions let-recipe>
-        <wm-recipe-add-button [recipe]="recipe" />
-      </ng-template>
-    </wm-recipe-list>
+    @if (recipesSuspense().hasValue) {
+      @if (recipes().length === 0) {
+        <wm-message> 😿 no results </wm-message>
+      } @else {
+        <wm-recipe-list [recipes]="recipes()">
+          <ng-template #actions let-recipe>
+            <wm-recipe-add-button [recipe]="recipe" />
+          </ng-template>
+        </wm-recipe-list>
+      }
+    }
   `,
 })
 export class RecipeSearchComponent {
   filter = signal<RecipeFilter>({});
   recipesSuspense = rxComputed(
-    () => this._recipeRepository.search(this.filter().keywords).pipe(suspensify()),
-    { initialValue: pending }
+    () =>
+      this._recipeRepository.search(this.filter().keywords).pipe(suspensify()),
+    { initialValue: pending },
   );
   recipes = () => {
     const suspense = this.recipesSuspense();
