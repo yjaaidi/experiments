@@ -1,6 +1,6 @@
 {
-  "extends": ["plugin:playwright/recommended", "../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"],
+  "extends": ["../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*", "playwright/.cache/**/*"],
   "overrides": [
     {
       "files": ["*.ts"],
@@ -34,6 +34,7 @@
     },
     {
       "files": ["**/*.pw.{ts,js,tsx,jsx}"],
+      "extends": ["plugin:playwright/recommended"],
       "rules": {}
     }
   ]
