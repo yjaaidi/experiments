@@ -45,3 +45,4 @@ Thumbs.db
 .cache
 
 .swc
+vite*.timestamp*.mjs
