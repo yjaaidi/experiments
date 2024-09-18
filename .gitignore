@@ -43,3 +43,5 @@ Thumbs.db
 .angular
 # Playwright cache
 .cache
+
+.swc
