@@ -2,6 +2,7 @@ import { ComponentFixtureAutoDetect } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { of } from 'rxjs';
+import { Mocked, vi } from 'vitest';
 import { recipeMother } from '../testing/recipe.mother';
 import {
   RecipeRepository,
@@ -9,7 +10,7 @@ import {
 } from './recipe-repository.service';
 import { RecipeSearchComponent } from './recipe-search.component';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe(RecipeSearchComponent.name, () => {
   it('should search recipes without filtering', async () => {
@@ -36,8 +37,8 @@ describe(RecipeSearchComponent.name, () => {
   });
 
   async function renderComponent() {
-    const repo: jest.Mocked<RecipeRepositoryDef> = {
-      search: jest.fn(),
+    const repo: Mocked<RecipeRepositoryDef> = {
+      search: vi.fn(),
     };
 
     repo.search.mockReturnValue(
@@ -70,7 +71,7 @@ describe(RecipeSearchComponent.name, () => {
       async typeKeywords(keywords: string) {
         userEvent.type(screen.getByLabelText('Keywords'), keywords);
         /* wait for debounce. */
-        await jest.runAllTimersAsync();
+        await vi.runAllTimersAsync();
         await fixture.whenStable();
       },
     };
