@@ -1,11 +1,12 @@
+import { ComponentFixtureAutoDetect } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
-import { RecipeSearchComponent } from './recipe-search.component';
 import { userEvent } from '@testing-library/user-event';
 import { recipeMother } from '../testing/recipe.mother';
 import {
   provideRecipeRepositoryFake,
   RecipeRepositoryFake,
 } from './recipe-repository.fake';
+import RecipeSearchComponent from './recipe-search.component';
 
 jest.useFakeTimers();
 
@@ -38,7 +39,7 @@ describe(RecipeSearchComponent.name, () => {
   });
 
   async function renderComponent() {
-    const { detectChanges } = await render(RecipeSearchComponent, {
+    const { fixture } = await render(RecipeSearchComponent, {
       configureTestBed: (testBed) =>
         testBed
           .inject(RecipeRepositoryFake)
@@ -46,7 +47,13 @@ describe(RecipeSearchComponent.name, () => {
             recipeMother.withBasicInfo('Burger').build(),
             recipeMother.withBasicInfo('Salad').build(),
           ]),
-      providers: [provideRecipeRepositoryFake()],
+      providers: [
+        {
+          provide: ComponentFixtureAutoDetect,
+          useValue: true,
+        },
+        provideRecipeRepositoryFake(),
+      ],
     });
 
     return {
@@ -59,7 +66,7 @@ describe(RecipeSearchComponent.name, () => {
         userEvent.type(screen.getByLabelText('Keywords'), keywords);
         /* wait for debounce. */
         await jest.runAllTimersAsync();
-        detectChanges();
+        await fixture.whenStable();
       },
     };
   }
