@@ -74,6 +74,9 @@
     },
     "test-ui": {
       "outputs": ["{workspaceRoot}/dist/.playwright/apps/whiskmate"]
+    },
+    "reset": {
+      "command": "rm -rf {projectRoot}/playwright/.cache"
     }
   }
 }
