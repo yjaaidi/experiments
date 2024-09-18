@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  input,
   Input,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -90,8 +91,8 @@ export interface Link {
   ],
 })
 export class NavComponent {
-  @Input({ required: true }) links!: Link[];
-  @Input({ required: true }) title!: string;
+  links = input.required<Link[]>();
+  title = input.required<string>();
 
   isHandset = rxComputed(() =>
     this._breakpointObserver
