@@ -1,14 +1,14 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ContentChild,
-  Input,
+  contentChild,
+  input,
   TemplateRef,
 } from '@angular/core';
-import { Recipe } from './recipe';
 import { GridComponent } from '../shared/grid.component';
+import { Recipe } from './recipe';
 import { RecipePreviewComponent } from './recipe-preview.component';
-import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,11 +16,11 @@ import { NgTemplateOutlet } from '@angular/common';
   selector: 'wm-recipe-list',
   template: `
     <wm-grid>
-      @for (recipe of recipes; track recipe.id) {
+      @for (recipe of recipes(); track recipe.id) {
         <wm-recipe-preview [recipe]="recipe">
           <ng-container
             *ngTemplateOutlet="
-              actionsTemplateRef;
+              actionsTemplateRef();
               context: { $implicit: recipe }
             "
           ></ng-container>
@@ -31,9 +31,11 @@ import { NgTemplateOutlet } from '@angular/common';
   imports: [GridComponent, RecipePreviewComponent, NgTemplateOutlet],
 })
 export class RecipeListComponent {
-  @Input({ required: true }) recipes!: Recipe[];
+  recipes = input.required<Recipe[]>();
 
-  @ContentChild('actions') actionsTemplateRef!: TemplateRef<{
-    $implicit: Recipe;
-  }>;
+  actionsTemplateRef = contentChild.required<
+    TemplateRef<{
+      $implicit: Recipe;
+    }>
+  >('actions');
 }
