@@ -1,8 +1,8 @@
-import { ComponentFixtureAutoDetect } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { Mocked, vi } from 'vitest';
+import { provideAutoDetectChanges } from '../testing/provide-auto-detect-changes';
 import { recipeMother } from '../testing/recipe.mother';
 import {
   RecipeRepository,
@@ -50,13 +50,10 @@ describe(RecipeSearchComponent.name, () => {
 
     const { fixture } = await render(RecipeSearchComponent, {
       providers: [
+        provideAutoDetectChanges(),
         {
           provide: RecipeRepository,
           useValue: repo,
-        },
-        {
-          provide: ComponentFixtureAutoDetect,
-          useValue: true,
         },
       ],
     });
