@@ -1,8 +1,8 @@
+import { ComponentFixture } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
-import { provideAutoDetectChanges } from '../testing/provide-auto-detect-changes';
-import { RecipeSearchComponent } from './recipe-search.component';
+import RecipeSearchComponent from './recipe-search.component';
 
 vi.useFakeTimers();
 
@@ -12,9 +12,9 @@ describe(RecipeSearchComponent.name, () => {
   it.todo('🚧 should filter recipes using keywords');
 
   async function renderComponent() {
-    const { fixture } = await render(RecipeSearchComponent, {
-      providers: [provideAutoDetectChanges()],
-    });
+    const { fixture } = await render(RecipeSearchComponent);
+
+    await advanceTime(fixture);
 
     return {
       getRecipeNames() {
@@ -25,9 +25,14 @@ describe(RecipeSearchComponent.name, () => {
       async typeKeywords(keywords: string) {
         userEvent.type(screen.getByLabelText('Keywords'), keywords);
         /* wait for debounce. */
-        await vi.runAllTimersAsync();
-        await fixture.whenStable();
+        await advanceTime(fixture);
       },
     };
   }
 });
+
+async function advanceTime(fixture: ComponentFixture<unknown>) {
+  const promise = fixture.whenStable();
+  await vi.runAllTimersAsync();
+  await promise;
+}
