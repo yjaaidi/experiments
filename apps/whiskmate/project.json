@@ -72,19 +72,8 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "apps/whiskmate/jest.config.ts"
-      }
-    },
     "test-ui": {
-      "executor": "@nx/playwright:playwright",
-      "outputs": ["{workspaceRoot}/dist/.playwright/apps/whiskmate"],
-      "options": {
-        "config": "apps/whiskmate/playwright.config.ts"
-      }
+      "outputs": ["{workspaceRoot}/dist/.playwright/apps/whiskmate"]
     }
   }
 }
