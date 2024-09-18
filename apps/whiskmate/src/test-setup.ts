@@ -1,13 +1,16 @@
-/* @hack fix https://youtrack.jetbrains.com/issue/WEB-62299/types-are-not-properly-resolved-when-using-pnpm */
-/// <reference types="@types/jest" />
-
-// @ts-expect-error https://thymikee.github.io/jest-preset-angular/docs/getting-started/test-environment
-globalThis.ngJest = {
-  testEnvironmentOptions: {
-    errorOnUnknownElements: true,
-    errorOnUnknownProperties: true,
-  },
-};
-import 'jest-preset-angular/setup-jest';
-
+import '@analogjs/vite-plugin-angular/setup-vitest';
 import '@testing-library/jest-dom';
+import 'reflect-metadata';
+import { getTestBed } from '@angular/core/testing';
+
+import './styles.css';
+
+import {
+  BrowserDynamicTestingModule,
+  platformBrowserDynamicTesting,
+} from '@angular/platform-browser-dynamic/testing';
+
+getTestBed().initTestEnvironment(
+  BrowserDynamicTestingModule,
+  platformBrowserDynamicTesting()
+);
