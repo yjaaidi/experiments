@@ -1,19 +1,18 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
   Input,
 } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { map } from 'rxjs/operators';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
-import { rxComputed } from '@jscutlery/rx-computed';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { rxComputed } from '@jscutlery/rx-computed';
+import { map } from 'rxjs/operators';
 
 export interface Link {
   name: string;
@@ -26,14 +25,11 @@ export interface Link {
   standalone: true,
   selector: 'wm-nav',
   imports: [
-    AsyncPipe,
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
     MatToolbarModule,
-    NgIf,
-    NgForOf,
     RouterLink,
     RouterLinkActive,
   ],
@@ -48,31 +44,33 @@ export interface Link {
         [opened]="!isHandset()"
       >
         <mat-nav-list>
-          <a
-            *ngFor="let link of links"
-            #routerLinkActive="routerLinkActive"
-            [activated]="routerLinkActive.isActive"
-            [routerLink]="link.route"
-            [queryParams]="link.queryParams"
-            (click)="drawer.mode === 'over' && drawer.toggle()"
-            mat-list-item
-            routerLinkActive
-            >{{ link.name }}</a
-          >
+          @for (link of links; track link) {
+            <a
+              #routerLinkActive="routerLinkActive"
+              [activated]="routerLinkActive.isActive"
+              [routerLink]="link.route"
+              [queryParams]="link.queryParams"
+              (click)="drawer.mode === 'over' && drawer.toggle()"
+              mat-list-item
+              routerLinkActive
+              >{{ link.name }}</a
+            >
+          }
         </mat-nav-list>
       </mat-sidenav>
 
       <mat-sidenav-content>
         <mat-toolbar color="primary">
-          <button
-            type="button"
-            aria-label="Toggle sidenav"
-            mat-icon-button
-            (click)="drawer.toggle()"
-            *ngIf="isHandset()"
-          >
-            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-          </button>
+          @if (isHandset()) {
+            <button
+              type="button"
+              aria-label="Toggle sidenav"
+              mat-icon-button
+              (click)="drawer.toggle()"
+            >
+              <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+            </button>
+          }
           <span>{{ title }}</span>
         </mat-toolbar>
         <ng-content />
@@ -98,7 +96,7 @@ export class NavComponent {
   isHandset = rxComputed(() =>
     this._breakpointObserver
       .observe(Breakpoints.Handset)
-      .pipe(map((result) => result.matches))
+      .pipe(map((result) => result.matches)),
   );
 
   private _breakpointObserver = inject(BreakpointObserver);
