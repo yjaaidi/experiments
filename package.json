@@ -70,7 +70,7 @@
     "eslint-plugin-playwright": "^0.15.3",
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "19.7.3",
-    "prettier": "^2.6.2",
+    "prettier": "3.3.3",
     "reflect-metadata": "0.2.2",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
