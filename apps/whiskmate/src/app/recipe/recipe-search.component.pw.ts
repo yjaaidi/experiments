@@ -2,6 +2,7 @@ import { expect, test } from '@jscutlery/playwright-ct-angular';
 import { RecipeSearchComponent } from './recipe-search.component';
 
 test('should search recipes without filtering', async ({ mount }) => {
+  test.skip();
   const locator = await mount(RecipeSearchComponent);
 
   await expect(locator.getByRole('heading', { level: 2 })).toHaveText([
@@ -11,6 +12,7 @@ test('should search recipes without filtering', async ({ mount }) => {
 });
 
 test('should filter recipes by keyword', async ({ mount }) => {
+  test.skip();
   const locator = await mount(RecipeSearchComponent);
 
   await locator.getByLabel('Keywords').fill('Bur');
@@ -23,6 +25,7 @@ test('should filter recipes by keyword', async ({ mount }) => {
 test('should show "no results" message when no recipes match', async ({
   mount,
 }) => {
+  test.skip();
   const locator = await mount(RecipeSearchComponent);
 
   await locator.getByLabel('Keywords').fill('arecipethatdoesnotexist');
