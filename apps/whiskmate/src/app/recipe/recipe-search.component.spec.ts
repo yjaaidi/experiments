@@ -1,7 +1,7 @@
-import { ComponentFixtureAutoDetect } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
+import { provideAutoDetectChanges } from '../testing/provide-auto-detect-changes';
 import { RecipeSearchComponent } from './recipe-search.component';
 
 vi.useFakeTimers();
@@ -13,12 +13,7 @@ describe(RecipeSearchComponent.name, () => {
 
   async function renderComponent() {
     const { fixture } = await render(RecipeSearchComponent, {
-      providers: [
-        {
-          provide: ComponentFixtureAutoDetect,
-          useValue: true,
-        },
-      ],
+      providers: [provideAutoDetectChanges()],
     });
 
     return {
