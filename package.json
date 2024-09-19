@@ -5,8 +5,8 @@
   "scripts": {
     "reset": "nx run-many -t reset && nx reset",
     "test": "nx test",
-    "test:narrow": "nx test -- --testPathIgnorePatterns wide",
-    "test:wide": "nx test -- --testPathPattern wide"
+    "test:narrow": "nx test -- --exclude 'src/**/*.wide.spec.*'",
+    "test:wide": "nx test -- 'wide.spec'"
   },
   "private": true,
   "dependencies": {
