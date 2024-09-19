@@ -44,7 +44,7 @@ export interface Link {
         [opened]="!isHandset()"
       >
         <mat-nav-list>
-          @for (link of links; track link) {
+          @for (link of links(); track link) {
             <a
               #routerLinkActive="routerLinkActive"
               [activated]="routerLinkActive.isActive"
@@ -71,7 +71,7 @@ export interface Link {
               <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
             </button>
           }
-          <span>{{ title }}</span>
+          <span>{{ title() }}</span>
         </mat-toolbar>
         <ng-content />
       </mat-sidenav-content>
