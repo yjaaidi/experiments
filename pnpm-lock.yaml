@@ -88,8 +88,8 @@ importers:
         specifier: 18.2.4
         version: 18.2.4
       '@jscutlery/playwright-ct-angular':
-        specifier: 0.8.1
-        version: 0.8.1(@angular/compiler@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(@angular/platform-browser-dynamic@18.2.4(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/compiler@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(@angular/platform-browser@18.2.4(@angular/animations@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))))(@angular/platform-browser@18.2.4(@angular/animations@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@types/node@18.19.9)(less@4.1.3)(rxjs@7.8.1)(sass@1.69.5)(stylus@0.59.0)(terser@5.31.6)(zone.js@0.14.8)
+        specifier: 0.9.0
+        version: 0.9.0(@angular/compiler@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(@angular/platform-browser-dynamic@18.2.4(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/compiler@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(@angular/platform-browser@18.2.4(@angular/animations@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))))(@angular/platform-browser@18.2.4(@angular/animations@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@types/node@18.19.9)(less@4.1.3)(rxjs@7.8.1)(sass@1.69.5)(stylus@0.59.0)(terser@5.31.6)(zone.js@0.14.8)
       '@jscutlery/swc-angular':
         specifier: 0.14.14
         version: 0.14.14(@jscutlery/swc-angular-plugin@0.14.14)(@swc/core@1.5.7(@swc/helpers@0.5.13))
@@ -194,7 +194,7 @@ importers:
         version: 0.2.2
       ts-jest:
         specifier: ^29.1.0
-        version: 29.1.1(@babel/core@7.23.2)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.23.2))(jest@29.7.0(@types/node@18.19.9)(ts-node@10.9.1(@swc/core@1.5.7(@swc/helpers@0.5.13))(@types/node@18.19.9)(typescript@5.5.4)))(typescript@5.5.4)
+        version: 29.1.1(@babel/core@7.25.2)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.25.2))(jest@29.7.0(@types/node@18.19.9)(ts-node@10.9.1(@swc/core@1.5.7(@swc/helpers@0.5.13))(@types/node@18.19.9)(typescript@5.5.4)))(typescript@5.5.4)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@swc/core@1.5.7(@swc/helpers@0.5.13))(@types/node@18.19.9)(typescript@5.5.4)
@@ -2096,8 +2096,8 @@ packages:
     peerDependencies:
       rxjs: '>=6.0.0'
 
-  '@jscutlery/playwright-ct-angular@0.8.1':
-    resolution: {integrity: sha512-xsmZWl4NR2RM8/ZOgzcUEDMCjRlP8ru3qDR3pi+uhAauV/GddLj3pLjOno0c9IMyvs7XHcR/j44cdOMXMb6V2w==}
+  '@jscutlery/playwright-ct-angular@0.9.0':
+    resolution: {integrity: sha512-9+DPcvBVraQh155dfVzzQuAGZFxXASirRbhQdYOWrjtDKm6asJjhPK110Nn96VlOnW5XHbC1cv0nqFGEu9JzHA==}
     hasBin: true
     peerDependencies:
       '@angular/compiler': ^16.0.0 || ^17.0.0
@@ -8968,12 +8968,6 @@ snapshots:
       '@babel/core': 7.25.2
       '@babel/helper-plugin-utils': 7.24.8
 
-  '@babel/plugin-syntax-bigint@7.8.3(@babel/core@7.23.2)':
-    dependencies:
-      '@babel/core': 7.23.2
-      '@babel/helper-plugin-utils': 7.24.8
-    optional: true
-
   '@babel/plugin-syntax-bigint@7.8.3(@babel/core@7.25.2)':
     dependencies:
       '@babel/core': 7.25.2
@@ -10648,7 +10642,7 @@ snapshots:
     dependencies:
       rxjs: 7.8.1
 
-  '@jscutlery/playwright-ct-angular@0.8.1(@angular/compiler@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(@angular/platform-browser-dynamic@18.2.4(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/compiler@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(@angular/platform-browser@18.2.4(@angular/animations@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))))(@angular/platform-browser@18.2.4(@angular/animations@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@types/node@18.19.9)(less@4.1.3)(rxjs@7.8.1)(sass@1.69.5)(stylus@0.59.0)(terser@5.31.6)(zone.js@0.14.8)':
+  '@jscutlery/playwright-ct-angular@0.9.0(@angular/compiler@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(@angular/platform-browser-dynamic@18.2.4(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/compiler@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(@angular/platform-browser@18.2.4(@angular/animations@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))))(@angular/platform-browser@18.2.4(@angular/animations@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@angular/common@18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))(rxjs@7.8.1))(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8)))(@types/node@18.19.9)(less@4.1.3)(rxjs@7.8.1)(sass@1.69.5)(stylus@0.59.0)(terser@5.31.6)(zone.js@0.14.8)':
     dependencies:
       '@angular/compiler': 18.2.4(@angular/core@18.2.4(rxjs@7.8.1)(zone.js@0.14.8))
       '@angular/core': 18.2.4(rxjs@7.8.1)(zone.js@0.14.8)
@@ -11497,7 +11491,7 @@ snapshots:
 
   '@nx/webpack@19.7.3(@babel/traverse@7.25.6)(@swc-node/register@1.9.2(@swc/core@1.5.7(@swc/helpers@0.5.13))(@swc/types@0.1.7)(typescript@5.5.4))(@swc/core@1.5.7(@swc/helpers@0.5.13))(@types/node@18.19.9)(nx@19.7.3(@swc-node/register@1.9.2(@swc/core@1.5.7(@swc/helpers@0.5.13))(@swc/types@0.1.7)(typescript@5.5.4))(@swc/core@1.5.7(@swc/helpers@0.5.13)))(typescript@5.5.4)':
     dependencies:
-      '@babel/core': 7.23.2
+      '@babel/core': 7.25.2
       '@module-federation/enhanced': 0.6.4(typescript@5.5.4)(webpack@5.89.0(@swc/core@1.5.7(@swc/helpers@0.5.13)))
       '@module-federation/sdk': 0.6.4
       '@nrwl/webpack': 19.7.3(@babel/traverse@7.25.6)(@swc-node/register@1.9.2(@swc/core@1.5.7(@swc/helpers@0.5.13))(@swc/types@0.1.7)(typescript@5.5.4))(@swc/core@1.5.7(@swc/helpers@0.5.13))(@types/node@18.19.9)(nx@19.7.3(@swc-node/register@1.9.2(@swc/core@1.5.7(@swc/helpers@0.5.13))(@swc/types@0.1.7)(typescript@5.5.4))(@swc/core@1.5.7(@swc/helpers@0.5.13)))(typescript@5.5.4)
@@ -11506,7 +11500,7 @@ snapshots:
       '@phenomnomnominal/tsquery': 5.0.1(typescript@5.5.4)
       ajv: 8.12.0
       autoprefixer: 10.4.16(postcss@8.4.47)
-      babel-loader: 9.1.3(@babel/core@7.23.2)(webpack@5.89.0(@swc/core@1.5.7(@swc/helpers@0.5.13)))
+      babel-loader: 9.1.3(@babel/core@7.25.2)(webpack@5.89.0(@swc/core@1.5.7(@swc/helpers@0.5.13)))
       browserslist: 4.22.1
       chalk: 4.1.2
       copy-webpack-plugin: 10.2.4(webpack@5.89.0(@swc/core@1.5.7(@swc/helpers@0.5.13)))
@@ -12638,20 +12632,6 @@ snapshots:
 
   axobject-query@4.1.0: {}
 
-  babel-jest@29.7.0(@babel/core@7.23.2):
-    dependencies:
-      '@babel/core': 7.23.2
-      '@jest/transform': 29.7.0
-      '@types/babel__core': 7.20.3
-      babel-plugin-istanbul: 6.1.1
-      babel-preset-jest: 29.6.3(@babel/core@7.23.2)
-      chalk: 4.1.2
-      graceful-fs: 4.2.11
-      slash: 3.0.0
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
   babel-jest@29.7.0(@babel/core@7.25.2):
     dependencies:
       '@babel/core': 7.25.2
@@ -12665,9 +12645,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-loader@9.1.3(@babel/core@7.23.2)(webpack@5.89.0(@swc/core@1.5.7(@swc/helpers@0.5.13))):
+  babel-loader@9.1.3(@babel/core@7.25.2)(webpack@5.89.0(@swc/core@1.5.7(@swc/helpers@0.5.13))):
     dependencies:
-      '@babel/core': 7.23.2
+      '@babel/core': 7.25.2
       find-cache-dir: 4.0.0
       schema-utils: 4.2.0
       webpack: 5.89.0(@swc/core@1.5.7(@swc/helpers@0.5.13))
@@ -12766,23 +12746,6 @@ snapshots:
     optionalDependencies:
       '@babel/traverse': 7.25.6
 
-  babel-preset-current-node-syntax@1.0.1(@babel/core@7.23.2):
-    dependencies:
-      '@babel/core': 7.23.2
-      '@babel/plugin-syntax-async-generators': 7.8.4(@babel/core@7.23.2)
-      '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.23.2)
-      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.23.2)
-      '@babel/plugin-syntax-import-meta': 7.10.4(@babel/core@7.23.2)
-      '@babel/plugin-syntax-json-strings': 7.8.3(@babel/core@7.23.2)
-      '@babel/plugin-syntax-logical-assignment-operators': 7.10.4(@babel/core@7.23.2)
-      '@babel/plugin-syntax-nullish-coalescing-operator': 7.8.3(@babel/core@7.23.2)
-      '@babel/plugin-syntax-numeric-separator': 7.10.4(@babel/core@7.23.2)
-      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.23.2)
-      '@babel/plugin-syntax-optional-catch-binding': 7.8.3(@babel/core@7.23.2)
-      '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.23.2)
-      '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.23.2)
-    optional: true
-
   babel-preset-current-node-syntax@1.0.1(@babel/core@7.25.2):
     dependencies:
       '@babel/core': 7.25.2
@@ -12798,13 +12761,6 @@ snapshots:
       '@babel/plugin-syntax-optional-catch-binding': 7.8.3(@babel/core@7.25.2)
       '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.25.2)
       '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.25.2)
-
-  babel-preset-jest@29.6.3(@babel/core@7.23.2):
-    dependencies:
-      '@babel/core': 7.23.2
-      babel-plugin-jest-hoist: 29.6.3
-      babel-preset-current-node-syntax: 1.0.1(@babel/core@7.23.2)
-    optional: true
 
   babel-preset-jest@29.6.3(@babel/core@7.25.2):
     dependencies:
@@ -14217,7 +14173,7 @@ snapshots:
 
   fork-ts-checker-webpack-plugin@7.2.13(typescript@5.5.4)(webpack@5.89.0(@swc/core@1.5.7(@swc/helpers@0.5.13))):
     dependencies:
-      '@babel/code-frame': 7.22.13
+      '@babel/code-frame': 7.24.7
       chalk: 4.1.2
       chokidar: 3.5.3
       cosmiconfig: 7.1.0
@@ -17307,7 +17263,7 @@ snapshots:
   stylus@0.59.0:
     dependencies:
       '@adobe/css-tools': 4.3.1
-      debug: 4.3.4
+      debug: 4.3.7(supports-color@8.1.1)
       glob: 7.2.3
       sax: 1.2.4
       source-map: 0.7.4
@@ -17470,7 +17426,7 @@ snapshots:
     dependencies:
       typescript: 5.5.4
 
-  ts-jest@29.1.1(@babel/core@7.23.2)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.23.2))(jest@29.7.0(@types/node@18.19.9)(ts-node@10.9.1(@swc/core@1.5.7(@swc/helpers@0.5.13))(@types/node@18.19.9)(typescript@5.5.4)))(typescript@5.5.4):
+  ts-jest@29.1.1(@babel/core@7.25.2)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.25.2))(jest@29.7.0(@types/node@18.19.9)(ts-node@10.9.1(@swc/core@1.5.7(@swc/helpers@0.5.13))(@types/node@18.19.9)(typescript@5.5.4)))(typescript@5.5.4):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
@@ -17483,9 +17439,9 @@ snapshots:
       typescript: 5.5.4
       yargs-parser: 21.1.1
     optionalDependencies:
-      '@babel/core': 7.23.2
+      '@babel/core': 7.25.2
       '@jest/types': 29.6.3
-      babel-jest: 29.7.0(@babel/core@7.23.2)
+      babel-jest: 29.7.0(@babel/core@7.25.2)
 
   ts-loader@9.5.0(typescript@5.5.4)(webpack@5.89.0(@swc/core@1.5.7(@swc/helpers@0.5.13))):
     dependencies:
