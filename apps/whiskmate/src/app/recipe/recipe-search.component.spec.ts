@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { recipeMother } from '../testing/recipe.mother';
@@ -7,40 +7,52 @@ import {
   RecipeRepositoryFake,
 } from './recipe-repository.fake';
 import { RecipeSearchComponent } from './recipe-search.component';
-import { ComponentFixture } from '@angular/core/testing';
 
 vi.useFakeTimers();
 
 describe(RecipeSearchComponent.name, () => {
-  it('should search recipes without filtering', async () => {
-    const { getRecipeNames } = await renderComponent();
+  it(
+    'should search recipes without filtering',
+    autoAdvanceTime(async () => {
+      const { getRecipeNames } = await renderComponent();
 
-    expect(getRecipeNames()).toEqual(['Burger', 'Salad']);
-  });
+      await waitFor(() =>
+        expect(getRecipeNames()).toEqual(['Burger', 'Salad']),
+      );
+    }),
+  );
 
-  it('should filter recipes using keywords', async () => {
-    const { getRecipeNames, typeKeywords } = await renderComponent();
+  it(
+    'should filter recipes using keywords',
+    autoAdvanceTime(async () => {
+      const { getRecipeNames, typeKeywords } = await renderComponent();
 
-    await typeKeywords('Bur');
+      await typeKeywords('Bur');
 
-    expect(getRecipeNames()).toEqual(['Burger']);
-  });
+      await waitFor(() => expect(getRecipeNames()).toEqual(['Burger']));
+    }),
+  );
 
-  it('should show "no results" message when no recipes match', async () => {
-    const { getRecipeNames, typeKeywords } = await renderComponent();
+  it(
+    'should show "no results" message when no recipes match',
+    autoAdvanceTime(async () => {
+      const { getRecipeNames, typeKeywords } = await renderComponent();
 
-    await typeKeywords('arecipethatdoesnotexist');
+      await typeKeywords('arecipethatdoesnotexist');
 
-    expect(getRecipeNames()).toEqual([]);
-    expect(
-      screen.getByText('no results', {
-        exact: false,
-      }),
-    ).toBeVisible();
-  });
+      await waitFor(() => {
+        expect(getRecipeNames()).toEqual([]);
+        expect(
+          screen.getByText('no results', {
+            exact: false,
+          }),
+        ).toBeVisible();
+      });
+    }),
+  );
 
   async function renderComponent() {
-    const { fixture } = await render(RecipeSearchComponent, {
+    await render(RecipeSearchComponent, {
       configureTestBed: (testBed) =>
         testBed
           .inject(RecipeRepositoryFake)
@@ -51,8 +63,6 @@ describe(RecipeSearchComponent.name, () => {
       providers: [provideRecipeRepositoryFake()],
     });
 
-    await advanceTime(fixture);
-
     return {
       getRecipeNames() {
         return screen
@@ -60,16 +70,27 @@ describe(RecipeSearchComponent.name, () => {
           .map((el) => el.textContent);
       },
       async typeKeywords(keywords: string) {
-        userEvent.type(screen.getByLabelText('Keywords'), keywords);
-        /* wait for debounce. */
-        await advanceTime(fixture);
+        await userEvent.type(screen.getByLabelText('Keywords'), keywords);
       },
     };
   }
 });
 
-async function advanceTime(fixture: ComponentFixture<unknown>) {
-  const promise = fixture.whenStable();
-  await vi.runAllTimersAsync();
-  await promise;
+function autoAdvanceTime(testFn: () => void | Promise<void>) {
+  return async () => {
+    let isTestRunning = true;
+
+    /* Keep advancing time until the test is finished. */
+    (async () => {
+      while (isTestRunning) {
+        await vi.advanceTimersToNextTimerAsync();
+      }
+    })();
+
+    try {
+      await testFn();
+    } finally {
+      isTestRunning = false;
+    }
+  };
 }
