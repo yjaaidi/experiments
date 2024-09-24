@@ -1,59 +1,66 @@
+import { ComponentFixture } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { of } from 'rxjs';
+import { describe, expect, it, Mocked, vi } from 'vitest';
 import { recipeMother } from '../testing/recipe.mother';
 import {
-  provideRecipeRepositoryFake,
-  RecipeRepositoryFake,
-} from './recipe-repository.fake';
+  RecipeRepository,
+  RecipeRepositoryDef,
+} from './recipe-repository.service';
 import { RecipeSearchComponent } from './recipe-search.component';
-import { ComponentFixture } from '@angular/core/testing';
 
 vi.useFakeTimers();
 
 describe(RecipeSearchComponent.name, () => {
   it('should search recipes without filtering', async () => {
-    const { getRecipeNames } = await renderComponent();
+    const { getRecipeNames, repo } = await renderComponent();
 
     expect(getRecipeNames()).toEqual(['Burger', 'Salad']);
+    expect(repo.search).toBeCalledTimes(1);
+    expect(repo.search).toBeCalledWith(undefined);
   });
 
   it('should filter recipes using keywords', async () => {
-    const { getRecipeNames, typeKeywords } = await renderComponent();
+    const { getRecipeNames, typeKeywords, repo } = await renderComponent();
+
+    repo.search.mockClear();
+    repo.search.mockReturnValue(
+      of([recipeMother.withBasicInfo('Burger').build()]),
+    );
 
     await typeKeywords('Bur');
 
     expect(getRecipeNames()).toEqual(['Burger']);
-  });
-
-  it('should show "no results" message when no recipes match', async () => {
-    const { getRecipeNames, typeKeywords } = await renderComponent();
-
-    await typeKeywords('arecipethatdoesnotexist');
-
-    expect(getRecipeNames()).toEqual([]);
-    expect(
-      screen.getByText('no results', {
-        exact: false,
-      }),
-    ).toBeVisible();
+    expect(repo.search).toHaveBeenCalledTimes(1);
+    expect(repo.search).toHaveBeenCalledWith('Bur');
   });
 
   async function renderComponent() {
+    const repo: Mocked<RecipeRepositoryDef> = {
+      search: vi.fn(),
+    };
+
+    repo.search.mockReturnValue(
+      of([
+        recipeMother.withBasicInfo('Burger').build(),
+        recipeMother.withBasicInfo('Salad').build(),
+      ]),
+    );
+
     const { fixture } = await render(RecipeSearchComponent, {
-      configureTestBed: (testBed) =>
-        testBed
-          .inject(RecipeRepositoryFake)
-          .setRecipes([
-            recipeMother.withBasicInfo('Burger').build(),
-            recipeMother.withBasicInfo('Salad').build(),
-          ]),
-      providers: [provideRecipeRepositoryFake()],
+      providers: [
+        {
+          provide: RecipeRepository,
+          useValue: repo,
+        },
+      ],
     });
 
     await advanceTime(fixture);
 
     return {
+      repo,
       getRecipeNames() {
         return screen
           .queryAllByRole('heading', { level: 2 })

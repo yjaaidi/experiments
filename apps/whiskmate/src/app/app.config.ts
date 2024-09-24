@@ -18,13 +18,13 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideHttpClient(),
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
-    provideRecipeRepositoryFake(),
-    provideAppInitializer(() => {
-      inject(RecipeRepositoryFake).setRecipes([
-        recipeMother.withBasicInfo('Burger').build(),
-        recipeMother.withBasicInfo('Salad').build(),
-        recipeMother.withBasicInfo('Beer').build(),
-      ]);
-    }),
+    // provideRecipeRepositoryFake(),
+    // provideAppInitializer(() => {
+    //   inject(RecipeRepositoryFake).setRecipes([
+    //     recipeMother.withBasicInfo('Burger').build(),
+    //     recipeMother.withBasicInfo('Salad').build(),
+    //     recipeMother.withBasicInfo('Beer').build(),
+    //   ]);
+    // }),
   ],
 };
