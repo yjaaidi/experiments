@@ -1,7 +1,7 @@
 import { ComponentFixture } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import RecipeSearchComponent from './recipe-search.component';
 
 vi.useFakeTimers();
