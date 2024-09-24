@@ -1,14 +1,14 @@
+import { ComponentFixture } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { of } from 'rxjs';
-import { Mocked, vi } from 'vitest';
+import { describe, expect, it, Mocked, vi } from 'vitest';
 import { recipeMother } from '../testing/recipe.mother';
 import {
   RecipeRepository,
   RecipeRepositoryDef,
 } from './recipe-repository.service';
 import { RecipeSearchComponent } from './recipe-search.component';
-import { ComponentFixture } from '@angular/core/testing';
 
 vi.useFakeTimers();
 
