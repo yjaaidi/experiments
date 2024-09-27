@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test';
-import { createGlove, GloveLoader } from './glove';
+import { createGlove, GloveDefinition, GloveLoader } from './glove';
 
 const test = base.extend<{ gloveLoader: GloveLoader }>({
   gloveLoader: async ({ page }, use) => {
