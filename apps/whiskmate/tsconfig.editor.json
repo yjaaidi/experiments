@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "vitest-bridge.ts"],
   "compilerOptions": {
     "types": ["vitest/globals", "node"]
   }

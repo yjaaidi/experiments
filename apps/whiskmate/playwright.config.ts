@@ -8,7 +8,7 @@ import { swcAngularUnpluginOptions } from '@jscutlery/swc-angular';
  */
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: '.' }),
-  testMatch: ['**/*.pw.ts'],
+  testMatch: ['**/*.spec.ts'],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
