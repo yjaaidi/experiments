@@ -1,8 +1,8 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
-import { GetRecipes200Response } from '../../src/dtos/model/get-recipes200-response';
-import { GetRecipes200ResponseItemsInner } from '../../src/dtos/model/get-recipes200-response-items-inner';
-import { Recipe } from '../../src/dtos/model/recipe';
-import { PostRecipesRequest } from '../../src/dtos/model/post-recipes-request';
+import { GetRecipes200ResponseDto } from '../../src/dtos/model/get-recipes200-response-dto';
+import { GetRecipes200ResponseItemsInnerDto } from '../../src/dtos/model/get-recipes200-response-items-inner-dto';
+import { RecipeDto } from '../../src/dtos/model/recipe-dto';
+import { PostRecipesRequestDto } from '../../src/dtos/model/post-recipes-request-dto';
 
 /**
  * This is the (Domain-Specific Language) DSL.
@@ -18,22 +18,22 @@ export class RecipeClient {
     });
   }
 
-  async createRecipe(recipeNew: PostRecipesRequest) {
+  async createRecipe(recipeNew: PostRecipesRequestDto) {
     const response = await this._context.post('/recipes', { data: recipeNew });
-    return await this._responseToSimpleResponse<GetRecipes200ResponseItemsInner>(
+    return await this._responseToSimpleResponse<GetRecipes200ResponseItemsInnerDto>(
       response
     );
   }
 
   async getRecipe(recipeId: string) {
     const response = await this._context.get(`/recipes/${recipeId}`);
-    return await this._responseToSimpleResponse<Recipe>(response);
+    return await this._responseToSimpleResponse<RecipeDto>(response);
   }
 
   async getRecipes({ q }: { q?: string } = {}) {
     const params = q ? { q } : undefined;
     const response = await this._context.get(`/recipes`, { params });
-    return await this._responseToSimpleResponse<GetRecipes200Response>(
+    return await this._responseToSimpleResponse<GetRecipes200ResponseDto>(
       response
     );
   }
