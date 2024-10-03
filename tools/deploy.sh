@@ -11,7 +11,7 @@ log() {
 }
 
 update_traffic() {
-  gcloud run services update-traffic recipes-service --project "$PROJECT" --to-tags "$TAG=$1"
+  gcloud run services update-traffic recipes-service --region europe-west1 --project "$PROJECT" --to-tags "$TAG=$1"
 }
 
 wait() {
@@ -47,9 +47,11 @@ log "🛠 Setting up docker repository..."
 gcloud artifacts repositories describe marmicode --project "$PROJECT" --location europe-west1 \
 || gcloud artifacts repositories create marmicode --project "$PROJECT" --location europe-west1 --repository-format docker
 
+gcloud auth configure-docker europe-west1-docker.pkg.dev
+
 log "📦 Packaging application..."
 pnpm build
-docker build . -f src/Dockerfile -t "$IMAGE"
+docker build . --platform linux/amd64 -f src/Dockerfile -t "$IMAGE"
 docker push "$IMAGE"
 
 log "🚀 Deploying application..."
@@ -58,7 +60,7 @@ NEXT_URL=$(echo "$CLOUD_RUN_RESULT" | jq -r '.status.traffic[-1].url')
 REVISION_NAME=$(echo "$CLOUD_RUN_RESULT" | jq -r '.status.latestCreatedRevisionName')
 
 log "✅ Running smoke tests..."
-BASE_URL="$NEXT_URL" CI=true pnpm test
+BASE_URL="$NEXT_URL" CI=true pnpm test-wide
 wait 60
 check_logs_and_rollback_on_error
 

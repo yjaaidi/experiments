@@ -1,5 +1,9 @@
-FROM node:18.3.0-alpine
+FROM node:22-alpine3.20
 ENV NODE_ENV=production
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 # Create and change to the app directory.
 WORKDIR /usr/src/app
@@ -10,10 +14,10 @@ COPY package.json ./
 COPY pnpm-lock.yaml ./
 
 # Install dependencies.
-RUN pnpm --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Copy local code to the container image.
 COPY dist ./
 
 # Run the web service on container startup.
-CMD [ "pnpm", "node", "src/main.js" ]
+CMD [ "pnpm", "node", "main.js" ]

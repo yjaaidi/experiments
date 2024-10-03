@@ -1,10 +1,18 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "esModuleInterop": true,
     "module": "CommonJS",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "outDir": "dist",
     "strict": true,
-    "target": "ES2022"
-  }
+    "target": "ES2022",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.spec.json" }
+  ]
 }
