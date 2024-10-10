@@ -10,10 +10,13 @@ import {
   RecipeRepositoryFake,
 } from '../src/app/recipe/recipe-repository.fake';
 import { recipeMother } from '../src/app/testing/recipe.mother';
-import { provideHttpClient } from '@angular/common/http';
 
 beforeMount(async ({ TestBed }) => {
   TestBed.configureTestingModule({
-    providers: [provideAnimations(), provideHttpClient()],
+    providers: [provideAnimations(), provideRecipeRepositoryFake()],
   });
+  TestBed.inject(RecipeRepositoryFake).setRecipes([
+    recipeMother.withBasicInfo('Burger').build(),
+    recipeMother.withBasicInfo('Beer').build(),
+  ]);
 });
