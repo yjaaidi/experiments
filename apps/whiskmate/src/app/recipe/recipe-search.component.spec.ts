@@ -1,4 +1,3 @@
-import { ComponentFixture } from '@angular/core/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { of } from 'rxjs';
@@ -48,7 +47,7 @@ describe(RecipeSearchComponent.name, () => {
       ]),
     );
 
-    const { fixture } = await render(RecipeSearchComponent, {
+    await render(RecipeSearchComponent, {
       providers: [
         {
           provide: RecipeRepository,
@@ -57,7 +56,7 @@ describe(RecipeSearchComponent.name, () => {
       ],
     });
 
-    await advanceTime(fixture);
+    await vi.runAllTimersAsync();
 
     return {
       repo,
@@ -69,14 +68,8 @@ describe(RecipeSearchComponent.name, () => {
       async typeKeywords(keywords: string) {
         userEvent.type(screen.getByLabelText('Keywords'), keywords);
         /* wait for debounce. */
-        await advanceTime(fixture);
+        await vi.runAllTimersAsync();
       },
     };
   }
 });
-
-async function advanceTime(fixture: ComponentFixture<unknown>) {
-  const promise = fixture.whenStable();
-  await vi.runAllTimersAsync();
-  await promise;
-}
