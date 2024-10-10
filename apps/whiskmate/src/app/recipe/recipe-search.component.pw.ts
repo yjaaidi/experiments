@@ -6,14 +6,14 @@ test('should search recipes without filtering', async ({ mount }) => {
 
   await expect(locator.getByRole('heading', { level: 2 })).toHaveText([
     'Burger',
-    'Salad',
+    'Beer',
   ]);
 });
 
 test('should filter recipes by keyword', async ({ mount }) => {
   const locator = await mount(RecipeSearchComponent);
 
-  await locator.getByLabel('Keywords').fill('Bur');
+  await locator.getByLabel('Keywords').fill('bur');
 
   await expect(locator.getByRole('heading', { level: 2 })).toHaveText([
     'Burger',
