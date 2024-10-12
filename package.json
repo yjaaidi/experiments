@@ -2,12 +2,11 @@
   "name": "test-bear",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "playwright test"
   },
+  "type": "module",
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.0.0-next.0",
@@ -26,7 +25,9 @@
     "@angular-devkit/build-angular": "^19.0.0-next.10",
     "@angular/cli": "^19.0.0-next.10",
     "@angular/compiler-cli": "^19.0.0-next.0",
+    "@playwright/test": "1.48.0",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "22.7.5",
     "jasmine-core": "~5.3.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

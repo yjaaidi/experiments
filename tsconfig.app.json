@@ -4,7 +4,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": [],
+    "paths": {
+      "@playwright/test": [
+        "./src/testing/test-bear-playwright-browser-double.ts"
+      ]
+    }
   },
   "files": [
     "src/main.ts"

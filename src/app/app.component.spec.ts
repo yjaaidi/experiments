@@ -1,29 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { expect, test } from '@playwright/test';
+import { browserStep } from '../testing/test-bear';
 import { AppComponent } from './app.component';
 
-describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent],
-    }).compileComponents();
+test('should search recipes without filtering', async ({ page }) => {
+  await browserStep(async () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    await fixture.whenStable();
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have the 'test-bear' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('test-bear');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, test-bear');
-  });
+  await expect(page.getByRole('heading', { level: 2 })).toHaveText([
+    // 'Burger',
+    // 'Salad',
+  ]);
 });
