@@ -36,15 +36,10 @@ test('keep imports that are used outside `runInBrowser`', () => {
   expect(result).toContain(`import { expect, test } from '@playwright/test';`);
 });
 
-test.todo(
-  'replace `runInBrowser` function argument with a function identifier',
-  () => {
-    const result = transform(BASIC_TEST);
-    expect(result).toMatch(
-      /await runInBrowser('[a-z_]*_recipe-search.spec.ts-0')/,
-    );
-  },
-);
+test('replace `runInBrowser` function argument with a function identifier', () => {
+  const result = transform(BASIC_TEST);
+  expect(result).toMatch(/await runInBrowser\("\w+_recipe-search.spec.ts-0"\)/);
+});
 
 test.todo(
   'remove specifiers that are used in `runInBrowser` but keep other imports',

@@ -1,25 +1,29 @@
 import type { NodePath, PluginObj } from '@babel/core';
-import * as T from '@babel/types';
 import { declare } from '@babel/helper-plugin-utils';
-import { spec } from 'node:test/reporters';
+import * as T from '@babel/types';
 
 export default declare(({ assertVersion, types: t }) => {
   assertVersion(7);
 
   let currentRunInBrowserCall: T.CallExpression | null = null;
+  let filename: string | null = null;
   let importPaths: NodePath<T.ImportDeclaration>[] = [];
   let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
+  let runInBrowserIndex: number = 0;
 
   return {
     name: 'transform-run-in-browser',
     visitor: {
       Program: {
-        enter() {
-          importPaths = []; // Reset imports for each file
+        enter(_, state) {
+          filename = state.filename;
+          runInBrowserIndex = 0;
+          importPaths = [];
         },
         exit() {
+          filename = null;
+
           for (const importPath of importPaths) {
-            console.log(identifiersUsedInRunInBrowser);
             importPath.node.specifiers = importPath.node.specifiers.filter(
               (specifier) => {
                 return (
@@ -47,6 +51,11 @@ export default declare(({ assertVersion, types: t }) => {
           if (path.node !== currentRunInBrowserCall) {
             return;
           }
+
+          const identifier = t.stringLiteral(
+            `${filename.replaceAll('/', '_')}-${runInBrowserIndex++}`,
+          );
+          path.node.arguments = [identifier];
 
           currentRunInBrowserCall = null;
         },
