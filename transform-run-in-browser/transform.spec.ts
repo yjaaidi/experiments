@@ -2,7 +2,9 @@ import { transform as babelTransform } from '@babel/core';
 import { expect, test } from 'vitest';
 import transformRunInBrowser from './transform';
 
-const BASIC_TEST = `
+const BASIC_TEST = {
+  filename: 'recipe-search.spec.ts',
+  code: `
   import { TestBed } from '@angular/core/testing';
   import { expect, test } from '@playwright/test';
   import { RecipeSearchComponent } from './recipe-search.component';
@@ -14,7 +16,8 @@ const BASIC_TEST = `
 
     await expect(page.getByRole('listitem')).toHaveText(['Burger', 'Salad']);
   });
-`;
+`,
+};
 
 test('remove imports used in `runInBrowser` only', () => {
   const result = transform(BASIC_TEST);
@@ -35,6 +38,12 @@ test('keep imports that are used outside `runInBrowser`', () => {
 
 test.todo(
   'replace `runInBrowser` function argument with a function identifier',
+  () => {
+    const result = transform(BASIC_TEST);
+    expect(result).toMatch(
+      /await runInBrowser('[a-z_]*_recipe-search.spec.ts-0')/,
+    );
+  },
 );
 
 test.todo(
@@ -45,8 +54,9 @@ test.todo('extract imports');
 
 test.todo('extract `runInBrowser` function argument');
 
-function transform(code: string) {
+function transform({ filename, code }: { filename: string; code: string }) {
   return babelTransform(code, {
+    filename: filename,
     plugins: [transformRunInBrowser],
   })?.code;
 }
