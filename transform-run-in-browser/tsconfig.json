@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "target": "ES2022",
+    "outDir": "../dist/transform-run-in-browser",
+    "types": ["node"]
+  },
+  "files": ["transform.ts"]
+}

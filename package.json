@@ -4,7 +4,9 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
-    "test": "playwright test"
+    "build-transform": "tsc -p transform-run-in-browser/tsconfig.json && mv dist/transform-run-in-browser/transform.js dist/transform-run-in-browser/transform.cjs",
+    "test": "playwright test",
+    "postinstall": "npm run build-transform"
   },
   "type": "module",
   "private": true,
@@ -25,15 +27,13 @@
     "@angular-devkit/build-angular": "^19.0.0-next.10",
     "@angular/cli": "^19.0.0-next.10",
     "@angular/compiler-cli": "^19.0.0-next.0",
+    "@babel/core": "^7.25.8",
+    "@babel/helper-plugin-utils": "^7.25.7",
     "@playwright/test": "1.48.0",
-    "@types/jasmine": "~5.1.0",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__helper-plugin-utils": "^7.10.3",
     "@types/node": "22.7.5",
-    "jasmine-core": "~5.3.0",
-    "karma": "~6.4.0",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.6.2"
+    "typescript": "~5.6.2",
+    "vitest": "2.1.3"
   }
 }
