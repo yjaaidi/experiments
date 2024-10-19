@@ -4,7 +4,7 @@
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
-    "build-transform": "tsc -p transform-run-in-browser/tsconfig.json && mv dist/transform-run-in-browser/transform.js dist/transform-run-in-browser/transform.cjs",
+    "build-transform": "tsc -p transform-run-in-browser/tsconfig.json && cp transform-run-in-browser/package.json dist/transform-run-in-browser/",
     "test": "playwright test",
     "postinstall": "npm run build-transform"
   },

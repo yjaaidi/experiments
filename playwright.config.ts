@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { dirname } from 'node:path/posix';
 
 export default {
   ...defineConfig({
@@ -36,7 +37,7 @@ export default {
         urlToPath(
           import.meta.resolve('./dist/transform-run-in-browser/transform.cjs'),
         ),
-        { projectRoot: urlToPath(import.meta.url) },
+        { projectRoot: dirname(urlToPath(import.meta.url)) },
       ],
     ],
   },
