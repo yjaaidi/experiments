@@ -19,7 +19,6 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
   let relativeFilePath: string | null = null;
   let importPaths: NodePath<T.ImportDeclaration>[] = [];
   let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
-  let runInBrowserIndex: number = 0;
 
   return {
     name: 'transform-run-in-browser',
@@ -28,7 +27,6 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
         enter(_, state) {
           relativeFilePath = state.filename?.replace(projectRoot, '');
 
-          runInBrowserIndex = 0;
           importPaths = [];
         },
         exit() {
