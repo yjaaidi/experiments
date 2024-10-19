@@ -1,13 +1,15 @@
 import type { NodePath, PluginObj } from '@babel/core';
+import generate from '@babel/generator';
 import { declare } from '@babel/helper-plugin-utils';
 import * as T from '@babel/types';
+import { createHash } from 'node:crypto';
 
 export default declare<Options>(
   ({ assertVersion, types: t }, { projectRoot }) => {
     assertVersion(7);
 
     let currentRunInBrowserCall: T.CallExpression | null = null;
-    let filename: string | null = null;
+    let relativeFilePath: string | null = null;
     let importPaths: NodePath<T.ImportDeclaration>[] = [];
     let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
     let runInBrowserIndex: number = 0;
@@ -17,13 +19,13 @@ export default declare<Options>(
       visitor: {
         Program: {
           enter(_, state) {
-            filename = state.filename;
+            relativeFilePath = state.filename?.replace(projectRoot, '');
 
             runInBrowserIndex = 0;
             importPaths = [];
           },
           exit() {
-            filename = null;
+            relativeFilePath = null;
 
             for (const importPath of importPaths) {
               importPath.node.specifiers = importPath.node.specifiers.filter(
@@ -54,11 +56,13 @@ export default declare<Options>(
               return;
             }
 
-            const relativePath = filename?.replace(projectRoot, '');
-            const slug = relativePath.replaceAll('/', '_').replace(/^_/, '');
+            const code = generate(path.node.arguments[0]).code;
 
             const identifier = t.stringLiteral(
-              `${slug}-${runInBrowserIndex++}`,
+              generateUniqueFunctionName({
+                code,
+                path: relativeFilePath,
+              }),
             );
             path.node.arguments = [identifier];
 
@@ -82,4 +86,19 @@ export default declare<Options>(
 
 interface Options {
   projectRoot: string;
+}
+
+function generateUniqueFunctionName({
+  code,
+  path,
+}: {
+  code: string;
+  path: string;
+}) {
+  const slug = path.replaceAll('/', '_').replace(/^_/, '');
+  const hash = createHash('sha256')
+    .update(code)
+    .digest('base64')
+    .substring(0, 6);
+  return `${slug}-${hash}`;
 }

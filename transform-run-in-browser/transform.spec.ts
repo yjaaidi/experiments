@@ -39,7 +39,9 @@ test('keep imports that are used outside `runInBrowser`', () => {
 
 test('replace `runInBrowser` function argument with a function identifier', () => {
   const result = transform(BASIC_TEST);
-  expect(result).toMatch(/await runInBrowser\("src_recipe-search.spec.ts-0"\)/);
+  expect(result).toMatch(
+    /await runInBrowser\("src_recipe-search.spec.ts-\w+"\)/,
+  );
 });
 
 test.todo(
