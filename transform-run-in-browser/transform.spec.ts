@@ -1,7 +1,8 @@
 import { transform as babelTransform } from '@babel/core';
 import { join } from 'node:path';
 import { expect, test } from 'vitest';
-import transformRunInBrowser from './transform';
+import transformRunInBrowser, { TestingOptions } from './transform';
+import { FileRepositoryFake } from './testing';
 
 test('remove imports used in `runInBrowser` only', () => {
   const { transform } = setUp();
@@ -72,7 +73,8 @@ function setUp() {
             transformRunInBrowser,
             {
               projectRoot,
-            },
+              fileRepository: new FileRepositoryFake(),
+            } as TestingOptions,
           ],
         ],
       })?.code;

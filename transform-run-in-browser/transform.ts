@@ -2,103 +2,98 @@ import type { NodePath, PluginObj } from '@babel/core';
 import generate from '@babel/generator';
 import { declare } from '@babel/helper-plugin-utils';
 import * as T from '@babel/types';
-import { createHash } from 'node:crypto';
+import {
+  generateUniqueFunctionName,
+  FileRepository,
+  FileRepositoryImpl,
+} from './utils';
 
-export default declare<Options>(
-  ({ assertVersion, types: t }, { projectRoot }) => {
-    assertVersion(7);
+export default declare<Options>(({ assertVersion, types: t }, options) => {
+  assertVersion(7);
 
-    let currentRunInBrowserCall: T.CallExpression | null = null;
-    let relativeFilePath: string | null = null;
-    let importPaths: NodePath<T.ImportDeclaration>[] = [];
-    let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
-    let runInBrowserIndex: number = 0;
+  const { projectRoot } = options;
+  const { fileRepository = new FileRepositoryImpl() } =
+    options as TestingOptions;
 
-    return {
-      name: 'transform-run-in-browser',
-      visitor: {
-        Program: {
-          enter(_, state) {
-            relativeFilePath = state.filename?.replace(projectRoot, '');
+  let currentRunInBrowserCall: T.CallExpression | null = null;
+  let relativeFilePath: string | null = null;
+  let importPaths: NodePath<T.ImportDeclaration>[] = [];
+  let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
+  let runInBrowserIndex: number = 0;
 
-            runInBrowserIndex = 0;
-            importPaths = [];
-          },
-          exit() {
-            relativeFilePath = null;
+  return {
+    name: 'transform-run-in-browser',
+    visitor: {
+      Program: {
+        enter(_, state) {
+          relativeFilePath = state.filename?.replace(projectRoot, '');
 
-            for (const importPath of importPaths) {
-              importPath.node.specifiers = importPath.node.specifiers.filter(
-                (specifier) => {
-                  return (
-                    t.isImportSpecifier(specifier) &&
-                    !identifiersUsedInRunInBrowser.has(specifier)
-                  );
-                },
-              );
-              if (importPath.node.specifiers.length === 0) {
-                importPath.remove();
-              }
-            }
-          },
+          runInBrowserIndex = 0;
+          importPaths = [];
         },
-        ImportDeclaration(path) {
-          importPaths.push(path);
-        },
-        CallExpression: {
-          enter(path) {
-            if (t.isIdentifier(path.node.callee, { name: 'runInBrowser' })) {
-              currentRunInBrowserCall = path.node;
-            }
-          },
-          exit(path) {
-            if (path.node !== currentRunInBrowserCall) {
-              return;
-            }
+        exit() {
+          relativeFilePath = null;
 
-            const code = generate(path.node.arguments[0]).code;
-
-            const identifier = t.stringLiteral(
-              generateUniqueFunctionName({
-                code,
-                path: relativeFilePath,
-              }),
+          for (const importPath of importPaths) {
+            importPath.node.specifiers = importPath.node.specifiers.filter(
+              (specifier) => {
+                return (
+                  t.isImportSpecifier(specifier) &&
+                  !identifiersUsedInRunInBrowser.has(specifier)
+                );
+              },
             );
-            path.node.arguments = [identifier];
-
-            currentRunInBrowserCall = null;
-          },
-        },
-        Identifier(path) {
-          if (!currentRunInBrowserCall) {
-            return;
-          }
-
-          const binding = path.scope.getBinding(path.node.name);
-          if (t.isImportSpecifier(binding?.path.node)) {
-            identifiersUsedInRunInBrowser.add(binding?.path.node);
+            if (importPath.node.specifiers.length === 0) {
+              importPath.remove();
+            }
           }
         },
       },
-    } satisfies PluginObj;
-  },
-);
+      ImportDeclaration(path) {
+        importPaths.push(path);
+      },
+      CallExpression: {
+        enter(path) {
+          if (t.isIdentifier(path.node.callee, { name: 'runInBrowser' })) {
+            currentRunInBrowserCall = path.node;
+          }
+        },
+        exit(path) {
+          if (path.node !== currentRunInBrowserCall) {
+            return;
+          }
 
-interface Options {
+          const code = generate(path.node.arguments[0]).code;
+
+          const identifier = t.stringLiteral(
+            generateUniqueFunctionName({
+              code,
+              path: relativeFilePath,
+            }),
+          );
+          path.node.arguments = [identifier];
+
+          currentRunInBrowserCall = null;
+        },
+      },
+      Identifier(path) {
+        if (!currentRunInBrowserCall) {
+          return;
+        }
+
+        const binding = path.scope.getBinding(path.node.name);
+        if (t.isImportSpecifier(binding?.path.node)) {
+          identifiersUsedInRunInBrowser.add(binding?.path.node);
+        }
+      },
+    },
+  } satisfies PluginObj;
+});
+
+export interface Options {
   projectRoot: string;
 }
 
-function generateUniqueFunctionName({
-  code,
-  path,
-}: {
-  code: string;
-  path: string;
-}) {
-  const slug = path.replaceAll('/', '_').replace(/^_/, '');
-  const hash = createHash('sha256')
-    .update(code)
-    .digest('base64')
-    .substring(0, 6);
-  return `${slug}-${hash}`;
+export interface TestingOptions extends Options {
+  fileRepository: FileRepository;
 }
