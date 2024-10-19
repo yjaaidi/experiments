@@ -31,7 +31,7 @@ test('replace `runInBrowser` function argument with a function identifier', () =
   const result = transform(BASIC_TEST);
 
   expect(result).toMatch(
-    /await runInBrowser\("src_recipe-search.spec.ts-mPLWHe"\)/,
+    /await runInBrowser\("src_recipe_search_spec_ts_mPLWHe"\)/,
   );
 });
 
@@ -68,13 +68,13 @@ test.fails('extract `runInBrowser` function', () => {
 
   expect.soft(readRelativeFile('playwright-test-server/main.ts')).toContain(`
     globalThis.runInBrowserFuntions['src_recipe-search.spec.ts-mPLWHe'] = async () => {
-      const { runInBrowser⁠_mPLWHe } = await import('./src/recipe-search.spec.ts');
-      return runInBrowser⁠_mPLWHe();
+      const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec.ts');
+      return src_recipe_search_spec_ts_mPLWHe();
     };
   `);
   expect.soft(
     readRelativeFile('playwright-test-server/src/recipe-search.spec.ts'),
-  ).toContain(`export const runInBrowser_mPLWHe = async () => {
+  ).toContain(`export const src_recipe_search_spec_ts_mPLWHe = async () => {
   TestBed.createComponent(RecipeSearchComponent);
 }`);
 });

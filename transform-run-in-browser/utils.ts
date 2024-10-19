@@ -7,12 +7,12 @@ export function generateUniqueFunctionName({
   code: string;
   path: string;
 }) {
-  const slug = path.replaceAll('/', '_').replace(/^_/, '');
+  const slug = path.replaceAll(/[^\w]/g, '_').replace(/^_/, '');
   const hash = createHash('sha256')
     .update(code)
     .digest('base64')
     .substring(0, 6);
-  return `${slug}-${hash}`;
+  return `${slug}_${hash}`;
 }
 
 export interface FileRepository {
