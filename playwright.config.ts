@@ -36,6 +36,7 @@ export default {
         urlToPath(
           import.meta.resolve('./dist/transform-run-in-browser/transform.cjs'),
         ),
+        { projectRoot: urlToPath(import.meta.url) },
       ],
     ],
   },

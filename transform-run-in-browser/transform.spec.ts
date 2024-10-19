@@ -1,9 +1,10 @@
 import { transform as babelTransform } from '@babel/core';
+import { join } from 'node:path';
 import { expect, test } from 'vitest';
 import transformRunInBrowser from './transform';
 
 const BASIC_TEST = {
-  filename: 'recipe-search.spec.ts',
+  relativeFilePath: 'src/recipe-search.spec.ts',
   code: `
   import { TestBed } from '@angular/core/testing';
   import { expect, test } from '@playwright/test';
@@ -38,7 +39,7 @@ test('keep imports that are used outside `runInBrowser`', () => {
 
 test('replace `runInBrowser` function argument with a function identifier', () => {
   const result = transform(BASIC_TEST);
-  expect(result).toMatch(/await runInBrowser\("\w+_recipe-search.spec.ts-0"\)/);
+  expect(result).toMatch(/await runInBrowser\("src_recipe-search.spec.ts-0"\)/);
 });
 
 test.todo(
@@ -49,9 +50,23 @@ test.todo('extract imports');
 
 test.todo('extract `runInBrowser` function argument');
 
-function transform({ filename, code }: { filename: string; code: string }) {
+function transform({
+  relativeFilePath,
+  code,
+}: {
+  relativeFilePath: string;
+  code: string;
+}) {
+  const projectRoot = '/path/to/project';
   return babelTransform(code, {
-    filename: filename,
-    plugins: [transformRunInBrowser],
+    filename: join(projectRoot, relativeFilePath),
+    plugins: [
+      [
+        transformRunInBrowser,
+        {
+          projectRoot,
+        },
+      ],
+    ],
   })?.code;
 }
