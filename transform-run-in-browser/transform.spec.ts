@@ -19,13 +19,17 @@ test('remove imports used in `runInBrowser` only', () => {
 
 test('keep imports that are used outside `runInBrowser`', () => {
   const { transform } = setUp();
+
   const result = transform(BASIC_TEST);
+
   expect(result).toContain(`import { expect, test } from '@playwright/test';`);
 });
 
 test('replace `runInBrowser` function argument with a function identifier', () => {
   const { transform } = setUp();
+
   const result = transform(BASIC_TEST);
+
   expect(result).toMatch(
     /await runInBrowser\("src_recipe-search.spec.ts-mPLWHe"\)/,
   );
@@ -36,47 +40,43 @@ test.todo(
 );
 
 test.fails('extract imports', () => {
-  const { transform, fileRepository } = setUp();
+  const { transform, readRelativeFile } = setUp();
 
   transform(BASIC_TEST);
 
-  expect(
-    fileRepository.readFile('playwright-dev-server/src/recipe-search.spec.ts'),
-  ).toContain(`
+  expect(readRelativeFile('playwright-test-server/src/recipe-search.spec.ts'))
+    .toContain(`
   import { TestBed } from '@angular/core/testing';
   import { RecipeSearchComponent } from './recipe-search.component';
   `);
 });
 
 test.fails('generate runInBrowserFunctions object', () => {
-  const { transform, fileRepository } = setUp();
+  const { transform, readRelativeFile } = setUp();
 
   transform(BASIC_TEST);
 
   expect
-    .soft(fileRepository.readFile('playwright-dev-server/main.ts'))
+    .soft(readRelativeFile('playwright-test-server/main.ts'))
     .toContain(`globalThis.runInBrowserFuntions = {}`);
 });
 
 test.fails('extract `runInBrowser` function', () => {
-  const { transform, fileRepository } = setUp();
+  const { transform, readRelativeFile } = setUp();
 
   transform(BASIC_TEST);
 
-  expect.soft(fileRepository.readFile('playwright-dev-server/main.ts'))
-    .toContain(`
+  expect.soft(readRelativeFile('playwright-test-server/main.ts')).toContain(`
     globalThis.runInBrowserFuntions['src_recipe-search.spec.ts-mPLWHe'] = async () => {
       const { runInBrowser⁠_mPLWHe } = await import('./src/recipe-search.spec.ts');
       return runInBrowser⁠_mPLWHe();
     };
   `);
   expect.soft(
-    fileRepository.readFile('playwright-dev-server/src/recipe-search.spec.ts'),
-  ).toContain(`
-  export const runInBrowser⁠_mPLWHe = async () => {
-    TestBed.createComponent(RecipeSearchComponent);
-  }
-  `);
+    readRelativeFile('playwright-test-server/src/recipe-search.spec.ts'),
+  ).toContain(`export const runInBrowser_mPLWHe = async () => {
+  TestBed.createComponent(RecipeSearchComponent);
+}`);
 });
 
 const BASIC_TEST = {
@@ -97,10 +97,13 @@ const BASIC_TEST = {
 };
 
 function setUp() {
+  const projectRoot = '/path/to/project';
   const fileRepository = new FileRepositoryFake();
 
   return {
-    fileRepository,
+    readRelativeFile(relativeFilePath: string) {
+      return fileRepository.readFile(join(projectRoot, relativeFilePath));
+    },
     transform({
       relativeFilePath,
       code,
@@ -108,7 +111,6 @@ function setUp() {
       relativeFilePath: string;
       code: string;
     }) {
-      const projectRoot = '/path/to/project';
       return babelTransform(code, {
         filename: join(projectRoot, relativeFilePath),
         plugins: [
