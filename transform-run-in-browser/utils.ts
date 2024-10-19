@@ -1,4 +1,6 @@
 import { createHash } from 'node:crypto';
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname } from 'node:path';
 
 export function generateUniqueFunctionName({
   code,
@@ -16,14 +18,13 @@ export function generateUniqueFunctionName({
 }
 
 export interface FileRepository {
-  writeFile(filePath: string, content: string): Promise<void>;
+  writeFile(filePath: string, content: string): void;
 }
 
 export class FileRepositoryImpl implements FileRepository {
-  /**
-   * @deprecated 🚧 Work in progress.
-   */
-  writeFile(filePath: string, content: string): Promise<void> {
-    throw new Error('🚧 Work in progress!');
+  writeFile(filePath: string, content: string): void {
+    const parentPath = dirname(filePath);
+    mkdirSync(parentPath, { recursive: true });
+    writeFileSync(filePath, content, 'utf-8');
   }
 }

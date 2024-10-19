@@ -51,33 +51,27 @@ test.fails('extract imports', () => {
   `);
 });
 
-test.fails('generate runInBrowserFunctions object', () => {
-  const { transform, readRelativeFile } = setUp();
-
-  transform(BASIC_TEST);
-
-  expect
-    .soft(readRelativeFile('playwright-test-server/main.ts'))
-    .toContain(`globalThis.runInBrowserFuntions = {}`);
-});
-
-test.fails('extract `runInBrowser` function', () => {
+test('extract `runInBrowser` function', () => {
   const { transform, readRelativeFile } = setUp();
 
   transform(BASIC_TEST);
 
   expect.soft(readRelativeFile('playwright-test-server/main.ts')).toContain(`
-    globalThis.runInBrowserFuntions['src_recipe-search.spec.ts-mPLWHe'] = async () => {
-      const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec.ts');
-      return src_recipe_search_spec_ts_mPLWHe();
-    };
-  `);
+// src/recipe-search.spec.ts start
+
+globalThis.src_recipe_search_spec_ts_mPLWHe = async () => {
+  const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec.ts');
+  return src_recipe_search_spec_ts_mPLWHe();
+};
+// src/recipe-search.spec.ts end`);
   expect.soft(
     readRelativeFile('playwright-test-server/src/recipe-search.spec.ts'),
   ).toContain(`export const src_recipe_search_spec_ts_mPLWHe = async () => {
   TestBed.createComponent(RecipeSearchComponent);
 }`);
 });
+
+test.todo('do not inject the same function (same hash) twice');
 
 const BASIC_TEST = {
   relativeFilePath: 'src/recipe-search.spec.ts',

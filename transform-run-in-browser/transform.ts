@@ -1,3 +1,4 @@
+import { join, relative } from 'node:path/posix';
 import type { NodePath, PluginObj } from '@babel/core';
 import generate from '@babel/generator';
 import { declare } from '@babel/helper-plugin-utils';
@@ -14,24 +15,25 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
   const { projectRoot } = options;
   const { fileRepository = new FileRepositoryImpl() } =
     options as TestingOptions;
+  const testServerRoot = join(projectRoot, 'playwright-test-server');
 
   let currentRunInBrowserCall: T.CallExpression | null = null;
   let relativeFilePath: string | null = null;
   let importPaths: NodePath<T.ImportDeclaration>[] = [];
   let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
+  let extractedFunctions: ExtractedFunctions[] = [];
 
   return {
     name: 'transform-run-in-browser',
     visitor: {
       Program: {
         enter(_, state) {
-          relativeFilePath = state.filename?.replace(projectRoot, '');
+          relativeFilePath = relative(projectRoot, state.filename);
 
           importPaths = [];
         },
         exit() {
-          relativeFilePath = null;
-
+          /* Remove imports that were used in extracted functions. */
           for (const importPath of importPaths) {
             importPath.node.specifiers = importPath.node.specifiers.filter(
               (specifier) => {
@@ -45,6 +47,42 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
               importPath.remove();
             }
           }
+
+          /* Write extracted functions. */
+          const mainContent = extractedFunctions.reduce(
+            (content, { functionName }) => {
+              return `${content}
+globalThis.${functionName} = async () => {
+  const { ${functionName} } = await import('./${relativeFilePath}');
+  return ${functionName}();
+};`;
+            },
+            '',
+          );
+
+          const testContent = extractedFunctions.reduce(
+            (content, { code, functionName }) => {
+              return `${content}
+export const ${functionName} = ${code};`;
+            },
+            '',
+          );
+
+          fileRepository.writeFile(
+            join(testServerRoot, 'main.ts'),
+            `
+// src/recipe-search.spec.ts start
+${mainContent}
+// src/recipe-search.spec.ts end
+`,
+          );
+
+          fileRepository.writeFile(
+            join(testServerRoot, relativeFilePath),
+            testContent,
+          );
+
+          relativeFilePath = null;
         },
       },
       ImportDeclaration(path) {
@@ -61,14 +99,19 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
             return;
           }
 
+          /* Extract function to write it on program exit. */
           const code = generate(path.node.arguments[0]).code;
+          const functionName = generateUniqueFunctionName({
+            code,
+            path: relativeFilePath,
+          });
+          extractedFunctions.push({
+            code,
+            functionName,
+          });
 
-          const identifier = t.stringLiteral(
-            generateUniqueFunctionName({
-              code,
-              path: relativeFilePath,
-            }),
-          );
+          /* Replace arguments with a string that will be forwarded to the browser. */
+          const identifier = t.stringLiteral(functionName);
           path.node.arguments = [identifier];
 
           currentRunInBrowserCall = null;
@@ -94,4 +137,9 @@ export interface Options {
 
 export interface TestingOptions extends Options {
   fileRepository: FileRepository;
+}
+
+interface ExtractedFunctions {
+  code: string;
+  functionName: string;
 }
