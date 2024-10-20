@@ -17,24 +17,35 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
     options as TestingOptions;
   const testServerRoot = join(projectRoot, 'playwright-test-server');
 
-  let ctx: TransformContext;
+  let ctx: TransformContext | undefined;
 
   return {
     name: 'transform-run-in-browser',
     visitor: {
       Program: {
         enter(_, state) {
-          const relativeFilePath = relative(projectRoot, state.filename);
-          ctx = new TransformContext(relativeFilePath);
+          if (state.filename) {
+            const relativeFilePath = relative(projectRoot, state.filename);
+            ctx = new TransformContext(relativeFilePath);
+          }
         },
         exit() {
+          if (!ctx) {
+            return;
+          }
+
           /* Remove imports that were used in extracted functions. */
+          const {
+            extractedFunctions,
+            identifiersUsedInRunInBrowser,
+            relativePath,
+          } = ctx;
           for (const importPath of ctx.imports) {
             importPath.node.specifiers = importPath.node.specifiers.filter(
               (specifier) => {
                 return (
                   t.isImportSpecifier(specifier) &&
-                  !ctx.identifiersUsedInRunInBrowser.has(specifier)
+                  !identifiersUsedInRunInBrowser.has(specifier)
                 );
               },
             );
@@ -44,13 +55,12 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
           }
 
           /* Write extracted functions. */
-          const extractedFunctions = ctx.extractedFunctions;
           if (extractedFunctions.length > 0) {
             const mainContent = ctx.extractedFunctions.reduce(
               (content, { functionName }) => {
                 return `${content}
 globalThis.${functionName} = async () => {
-  const { ${functionName} } = await import('./${ctx.relativePath}');
+  const { ${functionName} } = await import('./${relativePath}');
   return ${functionName}();
 };`;
               },
@@ -66,7 +76,7 @@ export const ${functionName} = ${code};`;
             );
 
             fileRepository.writeFile(
-              join(testServerRoot, ctx.relativePath),
+              join(testServerRoot, relativePath),
               testContent,
             );
 
@@ -84,10 +94,14 @@ ${mainContent}
         },
       },
       ImportDeclaration(path) {
-        ctx.addImport(path);
+        ctx?.addImport(path);
       },
       CallExpression: {
         enter(path) {
+          if (!ctx) {
+            return;
+          }
+
           /* Skip if we are already in a `runInBrowserCall`. */
           if (
             t.isIdentifier(path.node.callee, { name: 'runInBrowser' }) &&
@@ -97,7 +111,7 @@ ${mainContent}
           }
         },
         exit(path) {
-          if (path.node !== ctx.currentRunInBrowserCall) {
+          if (!ctx || path.node !== ctx.currentRunInBrowserCall) {
             return;
           }
 
@@ -120,7 +134,7 @@ ${mainContent}
         },
       },
       Identifier(path) {
-        if (!ctx.isInRunInBrowserCall()) {
+        if (!ctx || !ctx.isInRunInBrowserCall()) {
           return;
         }
 
@@ -145,7 +159,7 @@ class TransformContext {
   #extractedFunctions: ExtractedFunctions[] = [];
   #imports: NodePath<T.ImportDeclaration>[] = [];
   #identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
-  #currentRunInBrowserCall: T.CallExpression;
+  #currentRunInBrowserCall: T.CallExpression | null = null;
 
   get currentRunInBrowserCall() {
     return this.#currentRunInBrowserCall;
@@ -177,7 +191,7 @@ class TransformContext {
   }
 
   isInRunInBrowserCall() {
-    return this.#currentRunInBrowserCall !== undefined;
+    return this.#currentRunInBrowserCall != null;
   }
 
   enterInRunInBrowser(call: T.CallExpression) {

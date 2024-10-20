@@ -23,13 +23,14 @@ export interface FileRepository {
 }
 
 export class FileRepositoryImpl implements FileRepository {
-  tryReadFile(filePath: string): string {
+  tryReadFile(filePath: string): string | null {
     try {
       return readFileSync(filePath, 'utf-8');
     } catch (e) {
-      if (e.code === 'ENOENT') {
+      if (e instanceof Error && 'code' in e && e.code === 'ENOENT') {
         return null;
       }
+      throw e;
     }
   }
 
