@@ -62,13 +62,13 @@ describe('code extraction', () => {
     transform(RECIPE_SEARCH_TEST);
 
     expect.soft(readRelativeFile('playwright-test-server/main.ts')).toContain(`
-// src/recipe-search.spec.ts start
+// #region src/recipe-search.spec.ts
 
 globalThis.src_recipe_search_spec_ts_mPLWHe = async () => {
   const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec.ts');
   return src_recipe_search_spec_ts_mPLWHe();
 };
-// src/recipe-search.spec.ts end`);
+// #endregion`);
     expect.soft(
       readRelativeFile('playwright-test-server/src/recipe-search.spec.ts'),
     ).toContain(`export const src_recipe_search_spec_ts_mPLWHe = async () => {
@@ -76,54 +76,51 @@ globalThis.src_recipe_search_spec_ts_mPLWHe = async () => {
 }`);
   });
 
-  test.fails(
-    'replace section in main.ts without removing other sections',
-    () => {
-      const { transform, readRelativeFile, writeRelativeFile } = setUp();
+  test('replace section in main.ts without removing other sections', () => {
+    const { transform, readRelativeFile, writeRelativeFile } = setUp();
 
-      writeRelativeFile(
-        'playwright-test-server/main.ts',
-        `
-// src/another-file.spec.ts start
+    writeRelativeFile(
+      'playwright-test-server/main.ts',
+      `
+// #region src/another-file.spec.ts
 globalThis.anotherExtractedFunction = async () => {
   console.log('another');
 });
-// src/another-file.spec.ts end
+// #endregion
 
-// src/recipe-search.spec.ts start
+// #region src/recipe-search.spec.ts
 globalThis.oldExtractedFuntion = async () => {
   console.log('old');
 };
-// src/recipe-search.spec.ts end
+// #endregion
 
-// src/yet-another-file.spec.ts start
+// #region src/yet-another-file.spec.ts
 globalThis.yetAotherExtractedFunction = async () => {
   console.log('yet another');
 });
-// src/yet-another-file.spec.ts end
+// #endregion
 `,
-      );
+    );
 
-      transform(RECIPE_SEARCH_TEST);
+    transform(RECIPE_SEARCH_TEST);
 
-      const content = readRelativeFile('playwright-test-server/main.ts');
-      expect.soft(content).toContain(`
-// src/another-file.spec.ts start
+    const content = readRelativeFile('playwright-test-server/main.ts');
+    expect.soft(content).toContain(`
+// #region src/another-file.spec.ts
 globalThis.anotherExtractedFunction = async () => {
   console.log('another');
 });
-// src/another-file.spec.ts end
+// #endregion
 `);
-      expect.soft(content).toContain(`
-// src/yet-another-file.spec.ts start
+    expect.soft(content).toContain(`
+// #region src/yet-another-file.spec.ts
 globalThis.yetAotherExtractedFunction = async () => {
   console.log('yet another');
 });
-// src/yet-another-file.spec.ts end
+// #endregion
 `);
-      expect.soft(content).not.toContain('oldExtractedFuntion');
-    },
-  );
+    expect.soft(content).not.toContain('oldExtractedFuntion');
+  });
 
   test.todo('do not inject the same function (same hash) twice');
 
@@ -162,7 +159,7 @@ globalThis.yetAotherExtractedFunction = async () => {
 
     expect(
       readRelativeFile('playwright-test-server/src/no-run-in-browser.spec.ts'),
-    ).toBeUndefined();
+    ).toBeNull();
   });
 });
 
@@ -200,7 +197,7 @@ function setUp() {
 
   return {
     readRelativeFile(relativeFilePath: string) {
-      return fileRepository.readFile(join(projectRoot, relativeFilePath));
+      return fileRepository.tryReadFile(join(projectRoot, relativeFilePath));
     },
     writeRelativeFile(relativeFilePath: string, content: string) {
       fileRepository.writeFile(join(projectRoot, relativeFilePath), content);

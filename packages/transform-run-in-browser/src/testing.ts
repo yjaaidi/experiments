@@ -7,7 +7,7 @@ export class FileRepositoryFake implements FileRepository {
     this.files.set(filePath, content);
   }
 
-  readFile(filePath: string): string | undefined {
-    return this.files.get(filePath);
+  tryReadFile(filePath: string): string | null {
+    return this.files.get(filePath) ?? null;
   }
 }

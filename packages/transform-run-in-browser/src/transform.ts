@@ -66,18 +66,20 @@ export const ${functionName} = ${code};`;
             );
 
             fileRepository.writeFile(
-              join(testServerRoot, 'main.ts'),
-              `
-// src/recipe-search.spec.ts start
-${mainContent}
-// src/recipe-search.spec.ts end
-`,
-            );
-
-            fileRepository.writeFile(
               join(testServerRoot, ctx.relativePath),
               testContent,
             );
+
+            updateRegion({
+              fileRepository,
+              filePath: join(testServerRoot, 'main.ts'),
+              region: 'src/recipe-search.spec.ts',
+              content: `
+// #region src/recipe-search.spec.ts
+${mainContent}
+// #endregion
+`,
+            });
           }
         },
       },
@@ -190,4 +192,36 @@ class TransformContext {
 interface ExtractedFunctions {
   code: string;
   functionName: string;
+}
+
+function updateRegion({
+  fileRepository,
+  filePath,
+  region,
+  content,
+}: {
+  fileRepository: FileRepository;
+  filePath: string;
+  region: string;
+  content: string;
+}) {
+  let fileContent = fileRepository.tryReadFile(filePath);
+
+  if (fileContent) {
+    const regionStart = `// #region ${region}`;
+    const regionEnd = `// #endregion`;
+
+    const startIndex = fileContent.indexOf(regionStart);
+    const endIndex = fileContent.indexOf(regionEnd, startIndex);
+
+    if (startIndex !== -1 && endIndex !== -1) {
+      fileContent =
+        fileContent.slice(0, startIndex + regionStart.length) +
+        fileContent.slice(endIndex + regionEnd.length);
+    }
+  }
+
+  const updatedContent = `${fileContent}\n${content}`;
+
+  fileRepository.writeFile(filePath, updatedContent);
 }

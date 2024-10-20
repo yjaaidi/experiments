@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 
 export function generateUniqueFunctionName({
@@ -18,10 +18,21 @@ export function generateUniqueFunctionName({
 }
 
 export interface FileRepository {
+  tryReadFile(filePath: string): string | null;
   writeFile(filePath: string, content: string): void;
 }
 
 export class FileRepositoryImpl implements FileRepository {
+  tryReadFile(filePath: string): string {
+    try {
+      return readFileSync(filePath, 'utf-8');
+    } catch (e) {
+      if (e.code === 'ENOENT') {
+        return null;
+      }
+    }
+  }
+
   writeFile(filePath: string, content: string): void {
     const parentPath = dirname(filePath);
     mkdirSync(parentPath, { recursive: true });
