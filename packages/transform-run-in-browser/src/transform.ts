@@ -50,38 +50,40 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
           }
 
           /* Write extracted functions. */
-          const mainContent = extractedFunctions.reduce(
-            (content, { functionName }) => {
-              return `${content}
+          if (extractedFunctions.length > 0) {
+            const mainContent = extractedFunctions.reduce(
+              (content, { functionName }) => {
+                return `${content}
 globalThis.${functionName} = async () => {
   const { ${functionName} } = await import('./${relativeFilePath}');
   return ${functionName}();
 };`;
-            },
-            '',
-          );
+              },
+              '',
+            );
 
-          const testContent = extractedFunctions.reduce(
-            (content, { code, functionName }) => {
-              return `${content}
+            const testContent = extractedFunctions.reduce(
+              (content, { code, functionName }) => {
+                return `${content}
 export const ${functionName} = ${code};`;
-            },
-            '',
-          );
+              },
+              '',
+            );
 
-          fileRepository.writeFile(
-            join(testServerRoot, 'main.ts'),
-            `
+            fileRepository.writeFile(
+              join(testServerRoot, 'main.ts'),
+              `
 // src/recipe-search.spec.ts start
 ${mainContent}
 // src/recipe-search.spec.ts end
 `,
-          );
+            );
 
-          fileRepository.writeFile(
-            join(testServerRoot, relativeFilePath),
-            testContent,
-          );
+            fileRepository.writeFile(
+              join(testServerRoot, relativeFilePath),
+              testContent,
+            );
+          }
 
           relativeFilePath = null;
         },

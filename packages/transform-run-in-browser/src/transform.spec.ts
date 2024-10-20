@@ -94,25 +94,22 @@ test('reset context between files', () => {
   expect.soft(content).not.toContain(`RecipeSearchComponent`);
 });
 
-test.fails(
-  'do not create empty file when no `runInBrowser` is extracted',
-  () => {
-    const { transform, readRelativeFile } = setUp();
+test('do not create empty file when no `runInBrowser` is extracted', () => {
+  const { transform, readRelativeFile } = setUp();
 
-    transform({
-      relativeFilePath: 'src/no-run-in-browser.spec.ts',
-      code: `
+  transform({
+    relativeFilePath: 'src/no-run-in-browser.spec.ts',
+    code: `
     test('...', async ({page, expect}) => {
       expect(true).toBe(true);
     })
     `,
-    });
+  });
 
-    expect(
-      readRelativeFile('playwright-test-server/src/no-run-in-browser.spec.ts'),
-    ).toBeUndefined();
-  },
-);
+  expect(
+    readRelativeFile('playwright-test-server/src/no-run-in-browser.spec.ts'),
+  ).toBeUndefined();
+});
 
 const RECIPE_SEARCH_TEST = {
   relativeFilePath: 'src/recipe-search.spec.ts',
