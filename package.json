@@ -1,15 +1,19 @@
 {
-  "name": "test-bear",
+  "name": "playwright-run-in-browser",
   "version": "0.0.0",
-  "scripts": {
-    "start": "ng serve",
-    "build": "ng build",
-    "build-transform": "tsc -p transform-run-in-browser/tsconfig.json && cp transform-run-in-browser/package.json dist/transform-run-in-browser/",
-    "test": "playwright test",
-    "postinstall": "npm run build-transform"
-  },
   "type": "module",
   "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "build:transform-run-in-browser": "bun run --filter transform-run-in-browser build",
+    "test": "playwright test",
+    "test:transform-run-in-browser": "bun run --filter transform-run-in-browser test --watch false",
+    "postinstall": "bun run build:transform-run-in-browser"
+  },
   "dependencies": {
     "@angular/animations": "^19.0.0-next.0",
     "@angular/common": "^19.0.0-next.0",

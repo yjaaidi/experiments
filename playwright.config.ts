@@ -35,7 +35,7 @@ export default {
     babelPlugins: [
       [
         urlToPath(
-          import.meta.resolve('./dist/transform-run-in-browser/transform.cjs'),
+          import.meta.resolve('./dist/transform-run-in-browser/transform.js'),
         ),
         { projectRoot: dirname(urlToPath(import.meta.url)) },
       ],
