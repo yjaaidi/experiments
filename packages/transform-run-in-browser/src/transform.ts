@@ -137,22 +137,33 @@ export interface TestingOptions extends Options {
 }
 
 class CurrentFileContext {
-  readonly extractedFunctions: ExtractedFunctions[] = [];
-  readonly imports: NodePath<T.ImportDeclaration>[] = [];
-  readonly identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
+  #extractedFunctions: ExtractedFunctions[] = [];
+  #imports: NodePath<T.ImportDeclaration>[] = [];
+  #identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
 
+  get extractedFunctions(): ReadonlyArray<ExtractedFunctions> {
+    return this.#extractedFunctions;
+  }
+
+  get identifiersUsedInRunInBrowser(): ReadonlySet<T.ImportSpecifier> {
+    return this.#identifiersUsedInRunInBrowser;
+  }
+
+  get imports(): ReadonlyArray<NodePath<T.ImportDeclaration>> {
+    return this.#imports;
+  }
   constructor(public readonly relativePath: string) {}
 
   addExtractedFunction(extractedFunction: ExtractedFunctions) {
-    this.extractedFunctions.push(extractedFunction);
+    this.#extractedFunctions.push(extractedFunction);
   }
 
   addIdentifierUsedInRunInBrowser(identifier: T.ImportSpecifier) {
-    this.identifiersUsedInRunInBrowser.add(identifier);
+    this.#identifiersUsedInRunInBrowser.add(identifier);
   }
 
   addImport(importPath: NodePath<T.ImportDeclaration>) {
-    this.imports.push(importPath);
+    this.#imports.push(importPath);
   }
 }
 
