@@ -73,7 +73,7 @@ globalThis.src_recipe_search_spec_ts_mPLWHe = async () => {
 
 test.todo('do not inject the same function (same hash) twice');
 
-test.fails('reset context between files', () => {
+test('reset context between files', () => {
   const { transform, readRelativeFile } = setUp();
 
   transform(RECIPE_SEARCH_TEST);

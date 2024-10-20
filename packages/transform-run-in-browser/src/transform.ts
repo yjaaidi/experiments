@@ -31,6 +31,7 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
           relativeFilePath = relative(projectRoot, state.filename);
 
           importPaths = [];
+          extractedFunctions = [];
         },
         exit() {
           /* Remove imports that were used in extracted functions. */
