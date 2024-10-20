@@ -1,4 +1,4 @@
-import { transform as babelTransform } from '@babel/core';
+import { PluginItem, transformSync } from '@babel/core';
 import { join } from 'node:path';
 import { expect, test } from 'vitest';
 import transformRunInBrowser, { TestingOptions } from './transform';
@@ -6,7 +6,7 @@ import { FileRepositoryFake } from './testing';
 
 test('remove imports used in `runInBrowser` only', () => {
   const { transform } = setUp();
-  const result = transform(BASIC_TEST);
+  const result = transform(RECIPE_SEARCH_TEST);
   expect
     .soft(result)
     .not.toContain(`import { TestBed } from '@angular/core/testing';`);
@@ -20,7 +20,7 @@ test('remove imports used in `runInBrowser` only', () => {
 test('keep imports that are used outside `runInBrowser`', () => {
   const { transform } = setUp();
 
-  const result = transform(BASIC_TEST);
+  const result = transform(RECIPE_SEARCH_TEST);
 
   expect(result).toContain(`import { expect, test } from '@playwright/test';`);
 });
@@ -28,7 +28,7 @@ test('keep imports that are used outside `runInBrowser`', () => {
 test('replace `runInBrowser` function argument with a function identifier', () => {
   const { transform } = setUp();
 
-  const result = transform(BASIC_TEST);
+  const result = transform(RECIPE_SEARCH_TEST);
 
   expect(result).toMatch(
     /await runInBrowser\("src_recipe_search_spec_ts_mPLWHe"\)/,
@@ -42,7 +42,7 @@ test.todo(
 test.fails('extract imports', () => {
   const { transform, readRelativeFile } = setUp();
 
-  transform(BASIC_TEST);
+  transform(RECIPE_SEARCH_TEST);
 
   expect(readRelativeFile('playwright-test-server/src/recipe-search.spec.ts'))
     .toContain(`
@@ -54,7 +54,7 @@ test.fails('extract imports', () => {
 test('extract `runInBrowser` function', () => {
   const { transform, readRelativeFile } = setUp();
 
-  transform(BASIC_TEST);
+  transform(RECIPE_SEARCH_TEST);
 
   expect.soft(readRelativeFile('playwright-test-server/main.ts')).toContain(`
 // src/recipe-search.spec.ts start
@@ -73,7 +73,28 @@ globalThis.src_recipe_search_spec_ts_mPLWHe = async () => {
 
 test.todo('do not inject the same function (same hash) twice');
 
-const BASIC_TEST = {
+test.fails('reset context between files', () => {
+  const { transform, readRelativeFile } = setUp();
+
+  transform(RECIPE_SEARCH_TEST);
+
+  transform({
+    relativeFilePath: 'src/another-file.spec.ts',
+    code: `
+    await runInBrowser(async () => {
+      console.log('another-file');
+    });
+    `,
+  });
+
+  const content = readRelativeFile(
+    'playwright-test-server/src/another-file.spec.ts',
+  );
+  expect.soft(content).toContain(`console.log('another-file');`);
+  expect.soft(content).not.toContain(`RecipeSearchComponent`);
+});
+
+const RECIPE_SEARCH_TEST = {
   relativeFilePath: 'src/recipe-search.spec.ts',
   code: `
   import { TestBed } from '@angular/core/testing';
@@ -94,6 +115,17 @@ function setUp() {
   const projectRoot = '/path/to/project';
   const fileRepository = new FileRepositoryFake();
 
+  /* Keep this here to reuse the same plugin instance when multiple files are transformed
+   * to make sure the context is reset properly.
+   * Cf. "reset context between files" test */
+  const plugin: PluginItem = [
+    transformRunInBrowser,
+    {
+      projectRoot,
+      fileRepository,
+    } as TestingOptions,
+  ];
+
   return {
     readRelativeFile(relativeFilePath: string) {
       return fileRepository.readFile(join(projectRoot, relativeFilePath));
@@ -105,17 +137,9 @@ function setUp() {
       relativeFilePath: string;
       code: string;
     }) {
-      return babelTransform(code, {
+      return transformSync(code, {
         filename: join(projectRoot, relativeFilePath),
-        plugins: [
-          [
-            transformRunInBrowser,
-            {
-              projectRoot,
-              fileRepository,
-            } as TestingOptions,
-          ],
-        ],
+        plugins: [plugin],
       })?.code;
     },
   };
