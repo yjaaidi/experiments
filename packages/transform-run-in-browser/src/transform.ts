@@ -19,7 +19,6 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
 
   let currentFile: CurrentFileContext;
   let currentRunInBrowserCall: T.CallExpression | null = null;
-  let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
 
   return {
     name: 'transform-run-in-browser',
@@ -36,7 +35,7 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
               (specifier) => {
                 return (
                   t.isImportSpecifier(specifier) &&
-                  !identifiersUsedInRunInBrowser.has(specifier)
+                  !currentFile.identifiersUsedInRunInBrowser.has(specifier)
                 );
               },
             );
@@ -122,7 +121,7 @@ ${mainContent}
 
         const binding = path.scope.getBinding(path.node.name);
         if (t.isImportSpecifier(binding?.path.node)) {
-          identifiersUsedInRunInBrowser.add(binding?.path.node);
+          currentFile.addIdentifierUsedInRunInBrowser(binding?.path.node);
         }
       },
     },
@@ -140,11 +139,16 @@ export interface TestingOptions extends Options {
 class CurrentFileContext {
   readonly extractedFunctions: ExtractedFunctions[] = [];
   readonly imports: NodePath<T.ImportDeclaration>[] = [];
+  readonly identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
 
   constructor(public readonly relativePath: string) {}
 
   addExtractedFunction(extractedFunction: ExtractedFunctions) {
     this.extractedFunctions.push(extractedFunction);
+  }
+
+  addIdentifierUsedInRunInBrowser(identifier: T.ImportSpecifier) {
+    this.identifiersUsedInRunInBrowser.add(identifier);
   }
 
   addImport(importPath: NodePath<T.ImportDeclaration>) {
