@@ -17,8 +17,8 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
     options as TestingOptions;
   const testServerRoot = join(projectRoot, 'playwright-test-server');
 
+  let currentFile: CurrentFileContext;
   let currentRunInBrowserCall: T.CallExpression | null = null;
-  let relativeFilePath: string | null = null;
   let importPaths: NodePath<T.ImportDeclaration>[] = [];
   let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
   let extractedFunctions: ExtractedFunctions[] = [];
@@ -28,7 +28,8 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
     visitor: {
       Program: {
         enter(_, state) {
-          relativeFilePath = relative(projectRoot, state.filename);
+          const relativeFilePath = relative(projectRoot, state.filename);
+          currentFile = new CurrentFileContext(relativeFilePath);
 
           importPaths = [];
           extractedFunctions = [];
@@ -55,7 +56,7 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
               (content, { functionName }) => {
                 return `${content}
 globalThis.${functionName} = async () => {
-  const { ${functionName} } = await import('./${relativeFilePath}');
+  const { ${functionName} } = await import('./${currentFile.relativePath}');
   return ${functionName}();
 };`;
               },
@@ -80,12 +81,10 @@ ${mainContent}
             );
 
             fileRepository.writeFile(
-              join(testServerRoot, relativeFilePath),
+              join(testServerRoot, currentFile.relativePath),
               testContent,
             );
           }
-
-          relativeFilePath = null;
         },
       },
       ImportDeclaration(path) {
@@ -106,7 +105,7 @@ ${mainContent}
           const code = generate(path.node.arguments[0]).code;
           const functionName = generateUniqueFunctionName({
             code,
-            path: relativeFilePath,
+            path: currentFile.relativePath,
           });
           extractedFunctions.push({
             code,
@@ -140,6 +139,10 @@ export interface Options {
 
 export interface TestingOptions extends Options {
   fileRepository: FileRepository;
+}
+
+class CurrentFileContext {
+  constructor(public readonly relativePath: string) {}
 }
 
 interface ExtractedFunctions {
