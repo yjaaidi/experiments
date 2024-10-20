@@ -19,7 +19,6 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
 
   let currentFile: CurrentFileContext;
   let currentRunInBrowserCall: T.CallExpression | null = null;
-  let importPaths: NodePath<T.ImportDeclaration>[] = [];
   let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
   let extractedFunctions: ExtractedFunctions[] = [];
 
@@ -31,12 +30,11 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
           const relativeFilePath = relative(projectRoot, state.filename);
           currentFile = new CurrentFileContext(relativeFilePath);
 
-          importPaths = [];
           extractedFunctions = [];
         },
         exit() {
           /* Remove imports that were used in extracted functions. */
-          for (const importPath of importPaths) {
+          for (const importPath of currentFile.imports) {
             importPath.node.specifiers = importPath.node.specifiers.filter(
               (specifier) => {
                 return (
@@ -88,7 +86,7 @@ ${mainContent}
         },
       },
       ImportDeclaration(path) {
-        importPaths.push(path);
+        currentFile.addImport(path);
       },
       CallExpression: {
         enter(path) {
@@ -142,7 +140,13 @@ export interface TestingOptions extends Options {
 }
 
 class CurrentFileContext {
+  readonly imports: NodePath<T.ImportDeclaration>[] = [];
+
   constructor(public readonly relativePath: string) {}
+
+  addImport(importPath: NodePath<T.ImportDeclaration>) {
+    this.imports.push(importPath);
+  }
 }
 
 interface ExtractedFunctions {
