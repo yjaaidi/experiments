@@ -20,7 +20,6 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
   let currentFile: CurrentFileContext;
   let currentRunInBrowserCall: T.CallExpression | null = null;
   let identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
-  let extractedFunctions: ExtractedFunctions[] = [];
 
   return {
     name: 'transform-run-in-browser',
@@ -29,8 +28,6 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
         enter(_, state) {
           const relativeFilePath = relative(projectRoot, state.filename);
           currentFile = new CurrentFileContext(relativeFilePath);
-
-          extractedFunctions = [];
         },
         exit() {
           /* Remove imports that were used in extracted functions. */
@@ -49,8 +46,9 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
           }
 
           /* Write extracted functions. */
+          const extractedFunctions = currentFile.extractedFunctions;
           if (extractedFunctions.length > 0) {
-            const mainContent = extractedFunctions.reduce(
+            const mainContent = currentFile.extractedFunctions.reduce(
               (content, { functionName }) => {
                 return `${content}
 globalThis.${functionName} = async () => {
@@ -105,7 +103,7 @@ ${mainContent}
             code,
             path: currentFile.relativePath,
           });
-          extractedFunctions.push({
+          currentFile.addExtractedFunction({
             code,
             functionName,
           });
@@ -140,9 +138,14 @@ export interface TestingOptions extends Options {
 }
 
 class CurrentFileContext {
+  readonly extractedFunctions: ExtractedFunctions[] = [];
   readonly imports: NodePath<T.ImportDeclaration>[] = [];
 
   constructor(public readonly relativePath: string) {}
+
+  addExtractedFunction(extractedFunction: ExtractedFunctions) {
+    this.extractedFunctions.push(extractedFunction);
+  }
 
   addImport(importPath: NodePath<T.ImportDeclaration>) {
     this.imports.push(importPath);
