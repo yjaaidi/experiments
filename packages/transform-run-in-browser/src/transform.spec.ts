@@ -39,7 +39,7 @@ describe('test transform', () => {
   });
 
   test.todo(
-    'remove specifiers that are used in `runInBrowser` but keep other imports',
+    'remove specifiers that are used in `runInBrowser` but keep those used outside',
   );
 });
 
