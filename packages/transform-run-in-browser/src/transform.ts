@@ -17,8 +17,7 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
     options as TestingOptions;
   const testServerRoot = join(projectRoot, 'playwright-test-server');
 
-  let currentFile: CurrentFileContext;
-  let currentRunInBrowserCall: T.CallExpression | null = null;
+  let ctx: TransformContext;
 
   return {
     name: 'transform-run-in-browser',
@@ -26,16 +25,16 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
       Program: {
         enter(_, state) {
           const relativeFilePath = relative(projectRoot, state.filename);
-          currentFile = new CurrentFileContext(relativeFilePath);
+          ctx = new TransformContext(relativeFilePath);
         },
         exit() {
           /* Remove imports that were used in extracted functions. */
-          for (const importPath of currentFile.imports) {
+          for (const importPath of ctx.imports) {
             importPath.node.specifiers = importPath.node.specifiers.filter(
               (specifier) => {
                 return (
                   t.isImportSpecifier(specifier) &&
-                  !currentFile.identifiersUsedInRunInBrowser.has(specifier)
+                  !ctx.identifiersUsedInRunInBrowser.has(specifier)
                 );
               },
             );
@@ -45,13 +44,13 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
           }
 
           /* Write extracted functions. */
-          const extractedFunctions = currentFile.extractedFunctions;
+          const extractedFunctions = ctx.extractedFunctions;
           if (extractedFunctions.length > 0) {
-            const mainContent = currentFile.extractedFunctions.reduce(
+            const mainContent = ctx.extractedFunctions.reduce(
               (content, { functionName }) => {
                 return `${content}
 globalThis.${functionName} = async () => {
-  const { ${functionName} } = await import('./${currentFile.relativePath}');
+  const { ${functionName} } = await import('./${ctx.relativePath}');
   return ${functionName}();
 };`;
               },
@@ -76,23 +75,27 @@ ${mainContent}
             );
 
             fileRepository.writeFile(
-              join(testServerRoot, currentFile.relativePath),
+              join(testServerRoot, ctx.relativePath),
               testContent,
             );
           }
         },
       },
       ImportDeclaration(path) {
-        currentFile.addImport(path);
+        ctx.addImport(path);
       },
       CallExpression: {
         enter(path) {
-          if (t.isIdentifier(path.node.callee, { name: 'runInBrowser' })) {
-            currentRunInBrowserCall = path.node;
+          /* Skip if we are already in a `runInBrowserCall`. */
+          if (
+            t.isIdentifier(path.node.callee, { name: 'runInBrowser' }) &&
+            !ctx.isInRunInBrowserCall()
+          ) {
+            ctx.enterInRunInBrowser(path.node);
           }
         },
         exit(path) {
-          if (path.node !== currentRunInBrowserCall) {
+          if (path.node !== ctx.currentRunInBrowserCall) {
             return;
           }
 
@@ -100,9 +103,9 @@ ${mainContent}
           const code = generate(path.node.arguments[0]).code;
           const functionName = generateUniqueFunctionName({
             code,
-            path: currentFile.relativePath,
+            path: ctx.relativePath,
           });
-          currentFile.addExtractedFunction({
+          ctx.addExtractedFunction({
             code,
             functionName,
           });
@@ -111,17 +114,17 @@ ${mainContent}
           const identifier = t.stringLiteral(functionName);
           path.node.arguments = [identifier];
 
-          currentRunInBrowserCall = null;
+          ctx.exitRunInBrowserCall();
         },
       },
       Identifier(path) {
-        if (!currentRunInBrowserCall) {
+        if (!ctx.isInRunInBrowserCall()) {
           return;
         }
 
         const binding = path.scope.getBinding(path.node.name);
         if (t.isImportSpecifier(binding?.path.node)) {
-          currentFile.addIdentifierUsedInRunInBrowser(binding?.path.node);
+          ctx.addIdentifierUsedInRunInBrowser(binding?.path.node);
         }
       },
     },
@@ -136,10 +139,15 @@ export interface TestingOptions extends Options {
   fileRepository: FileRepository;
 }
 
-class CurrentFileContext {
+class TransformContext {
   #extractedFunctions: ExtractedFunctions[] = [];
   #imports: NodePath<T.ImportDeclaration>[] = [];
   #identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
+  #currentRunInBrowserCall: T.CallExpression;
+
+  get currentRunInBrowserCall() {
+    return this.#currentRunInBrowserCall;
+  }
 
   get extractedFunctions(): ReadonlyArray<ExtractedFunctions> {
     return this.#extractedFunctions;
@@ -164,6 +172,18 @@ class CurrentFileContext {
 
   addImport(importPath: NodePath<T.ImportDeclaration>) {
     this.#imports.push(importPath);
+  }
+
+  isInRunInBrowserCall() {
+    return this.#currentRunInBrowserCall !== undefined;
+  }
+
+  enterInRunInBrowser(call: T.CallExpression) {
+    this.#currentRunInBrowserCall = call;
+  }
+
+  exitRunInBrowserCall() {
+    this.#currentRunInBrowserCall = null;
   }
 }
 
