@@ -2,7 +2,7 @@ import { PluginItem, transformSync } from '@babel/core';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 import transformRunInBrowser, { TestingOptions } from './transform';
-import { FileRepositoryFake } from './testing';
+import { FileRepositoryFake } from './file-repository.fake';
 
 describe('test transform', () => {
   test('remove imports used in `runInBrowser` only', () => {
