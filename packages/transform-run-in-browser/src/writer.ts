@@ -101,9 +101,9 @@ export const ${functionName} = ${code};`;
 
     entryPointContent ??= 'export {};';
 
-    const regionContent = extractedFunctions.reduce(
-      (content, { functionName }) => {
-        return `${content}
+    const regionContent = extractedFunctions
+      .map(({ functionName }) => {
+        return `\
 (globalThis as any).${functionName} = async () => {
   const { ${functionName} } = await import('./${relativeFilePath.replace(
     /\.ts$/,
@@ -111,9 +111,8 @@ export const ${functionName} = ${code};`;
   )}');
   return ${functionName}();
 };`;
-      },
-      '',
-    );
+      })
+      .join('\n');
 
     return updateRegion({
       fileContent: entryPointContent,

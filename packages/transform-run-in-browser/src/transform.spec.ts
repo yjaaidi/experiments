@@ -63,7 +63,6 @@ import { RecipeSearchComponent } from "../../../src/recipe-search.component";
 
     expect.soft(readRelativeFile('playwright/generated/tests.ts')).toContain(`
 // #region src/recipe-search.spec.ts
-
 (globalThis as any).src_recipe_search_spec_ts_mPLWHe = async () => {
   const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec');
   return src_recipe_search_spec_ts_mPLWHe();
