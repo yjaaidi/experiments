@@ -1,7 +1,18 @@
 import { test as base } from '@playwright/test';
+import { Type } from '@angular/core';
 export { expect } from '@playwright/test';
 
-export const test = base.extend<{ runInBrowser: RunInBrowser<any> }>({
+export const test = base.extend<{
+  mount: (cmpType: Type<unknown>) => Promise<void>;
+  runInBrowser: RunInBrowser<any>;
+}>({
+  mount: async ({}, use, testInfo) => {
+    await use(() => {
+      throw new Error(`test file ${testInfo.file} was not transformed.
+
+      Please enable the 'transform-angular' babel plugin to fix this.`);
+    });
+  },
   page: async ({ page }, use) => {
     await page.goto('/');
     await use(page);

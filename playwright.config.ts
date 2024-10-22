@@ -33,6 +33,7 @@ export default {
   }),
   '@playwright/test': {
     babelPlugins: [
+      [urlToPath(import.meta.resolve('./dist/transform-angular/transform.js'))],
       [
         urlToPath(
           import.meta.resolve('./dist/transform-run-in-browser/transform.js'),
