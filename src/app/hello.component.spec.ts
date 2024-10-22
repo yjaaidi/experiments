@@ -7,7 +7,5 @@ test('says hello', async ({ page, runInBrowser }) => {
     TestBed.createComponent(HelloComponent);
   });
 
-  await page.pause();
-
   await expect(page.getByRole('heading')).toHaveText('Hello!');
 });

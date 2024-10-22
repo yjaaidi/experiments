@@ -9,4 +9,5 @@ TestBed.initTestEnvironment(
   platformBrowserDynamicTesting(),
 );
 
+// @ts-ignore
 import('./generated/tests');

@@ -9,12 +9,13 @@
     ]
   },
   "scripts": {
-    "build:transform-run-in-browser": "bun run --filter transform-run-in-browser build",
-    "reset": "playwright clear-cache",
-    "test": "playwright test",
-    "test:transform-run-in-browser": "bun run --filter transform-run-in-browser test --watch false",
     "postinstall": "bun run build:transform-run-in-browser",
-    "debug": "bun build:transform-run-in-browser && bun reset && bun run test --reporter list"
+    "build:transform-run-in-browser": "bun run --filter transform-run-in-browser build",
+    "debug": "bun reset && bun build:transform-run-in-browser && bun run test",
+    "dev:testing": "(test -f playwright/generated/tests.ts || mkdir -p playwright/generated && echo 'export {};' > playwright/generated/tests.ts) && ng dev -c testing",
+    "reset": "playwright clear-cache && rm -rf playwright/generated",
+    "test": "concurrently --kill-others --success first \"wait-on http://localhost:4300 && playwright test --reporter list\" \"bun dev:testing\"",
+    "test:transform-run-in-browser": "bun run --filter transform-run-in-browser test --watch false"
   },
   "dependencies": {
     "@angular/animations": "^19.0.0-next.0",
@@ -40,7 +41,10 @@
     "@types/babel__core": "^7.20.5",
     "@types/babel__helper-plugin-utils": "^7.10.3",
     "@types/node": "22.7.5",
+    "concurrently": "^9.0.1",
+    "prettier": "^3.3.3",
     "typescript": "~5.6.2",
-    "vitest": "2.1.3"
+    "vitest": "2.1.3",
+    "wait-on": "^8.0.1"
   }
 }

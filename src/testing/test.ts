@@ -8,7 +8,11 @@ export const test = base.extend<{ runInBrowser: RunInBrowser<any> }>({
   },
   runInBrowser: async ({ page }, use) => {
     const runInBrowser: any = async (functionId: string) => {
-      await page.waitForFunction(functionId);
+      await page.waitForFunction(
+        ({ functionId }) => (globalThis as any)[functionId],
+        { functionId },
+      );
+
       return await page.evaluate(
         ({ functionId }) => {
           (globalThis as any)[functionId]();
