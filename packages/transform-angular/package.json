@@ -1,0 +1,8 @@
+{
+  "name": "transform-angular",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc && cp package.json ../../dist/transform-angular/",
+    "test": "vitest"
+  }
+}

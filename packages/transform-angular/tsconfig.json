@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "outDir": "../../dist/transform-angular",
+    "types": ["node"],
+    "strict": true
+  },
+  "files": ["src/transform.ts"]
+}
