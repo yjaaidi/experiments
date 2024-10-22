@@ -4,15 +4,19 @@ import { describe, expect, test } from 'vitest';
 import transformAngular from './transform';
 
 describe('test transform', () => {
-  test.fails('replace mount with runInBrowser', () => {
+  test('replace mount with runInBrowser', () => {
     const { transform } = setUp();
 
     const result = transform(RECIPE_SEARCH_TEST);
 
     expect.soft(result).toContain(`\
-test('...', async ({page, expect, runInBrowser}) => {
-  await runInBrowser(() => {
-    TestBed.createComponent(RecipeSearchComponent);
+test('...', async ({
+  page,
+  expect,
+  runInBrowser
+}) => {
+  await runInBrowser(async () => {
+    await pwMount(RecipeSearchComponent);
   });
 `);
   });
