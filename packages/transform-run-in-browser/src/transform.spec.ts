@@ -44,16 +44,16 @@ describe('test transform', () => {
 });
 
 describe('code extraction', () => {
-  test.fails('extract imports', () => {
+  test('extract imports', () => {
     const { transform, readRelativeFile } = setUp();
 
     transform(RECIPE_SEARCH_TEST);
 
     expect(readRelativeFile('playwright-test-server/src/recipe-search.spec.ts'))
-      .toContain(`
-  import { TestBed } from '@angular/core/testing';
-  import { RecipeSearchComponent } from './recipe-search.component';
-  `);
+      .toContain(`\
+import { TestBed } from "@angular/core/testing";
+import { RecipeSearchComponent } from "../../src/recipe-search.component";
+`);
   });
 
   test('extract `runInBrowser` function', () => {

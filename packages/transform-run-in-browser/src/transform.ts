@@ -8,6 +8,7 @@ import {
   FileRepository,
   FileRepositoryImpl,
 } from './utils';
+import { dirname } from 'node:path';
 
 export default declare<Options>(({ assertVersion, types: t }, options) => {
   assertVersion(7);
@@ -37,7 +38,9 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
           writeExtractedFunctions({
             ctx,
             fileRepository,
+            projectRoot,
             testServerRoot,
+            types: t,
           });
 
           removeUnusedImportSpecifiers({
@@ -92,8 +95,14 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
         }
 
         const binding = path.scope.getBinding(path.node.name);
-        if (t.isImportSpecifier(binding?.path.node)) {
-          ctx.addIdentifierUsedInRunInBrowser(binding?.path.node);
+        if (
+          t.isImportSpecifier(binding?.path.node) &&
+          t.isImportDeclaration(binding?.path.parentPath?.node)
+        ) {
+          ctx.addIdentifierUsedInRunInBrowser({
+            specifier: binding?.path.node,
+            source: binding?.path.parentPath.node.source.value,
+          });
         }
       },
     },
@@ -109,10 +118,15 @@ export interface TestingOptions extends Options {
 }
 
 class TransformContext {
-  #extractedFunctions: ExtractedFunctions[] = [];
   #imports: NodePath<T.ImportDeclaration>[] = [];
-  #identifiersUsedInRunInBrowser: Set<T.ImportSpecifier> = new Set();
   #currentRunInBrowserCall: T.CallExpression | null = null;
+  #extractedFunctions: ExtractedFunctions[] = [];
+  #identifiersToExtract: Array<{
+    source: string;
+    specifier: T.ImportSpecifier;
+  }> = [];
+
+  constructor(public readonly relativePath: string) {}
 
   get currentRunInBrowserCall() {
     return this.#currentRunInBrowserCall;
@@ -122,21 +136,38 @@ class TransformContext {
     return this.#extractedFunctions;
   }
 
-  get identifiersUsedInRunInBrowser(): ReadonlySet<T.ImportSpecifier> {
-    return this.#identifiersUsedInRunInBrowser;
+  get identifiersToExtract(): ReadonlyArray<{
+    source: string;
+    specifier: T.ImportSpecifier;
+  }> {
+    return this.#identifiersToExtract;
   }
 
   get imports(): ReadonlyArray<NodePath<T.ImportDeclaration>> {
     return this.#imports;
   }
-  constructor(public readonly relativePath: string) {}
 
   addExtractedFunction(extractedFunction: ExtractedFunctions) {
     this.#extractedFunctions.push(extractedFunction);
   }
 
-  addIdentifierUsedInRunInBrowser(identifier: T.ImportSpecifier) {
-    this.#identifiersUsedInRunInBrowser.add(identifier);
+  addIdentifierUsedInRunInBrowser({
+    source,
+    specifier,
+  }: {
+    source: string;
+    specifier: T.ImportSpecifier;
+  }) {
+    this.#identifiersToExtract.push({
+      source,
+      specifier,
+    });
+  }
+
+  isSpecifierUsedInRunInBrowser(specifier: T.ImportSpecifier) {
+    return this.#identifiersToExtract.some(
+      (item) => item.specifier === specifier,
+    );
   }
 
   addImport(importPath: NodePath<T.ImportDeclaration>) {
@@ -164,16 +195,56 @@ interface ExtractedFunctions {
 function writeExtractedFunctions({
   ctx,
   fileRepository,
+  projectRoot,
   testServerRoot,
+  types,
 }: {
   ctx: TransformContext;
   fileRepository: FileRepository;
+  projectRoot: string;
   testServerRoot: string;
+  types: typeof T;
 }) {
   const { extractedFunctions, relativePath } = ctx;
   if (extractedFunctions.length === 0) {
     return;
   }
+
+  const generatedTestFilePath = join(testServerRoot, relativePath);
+  let testContent = '';
+
+  /* Write extracted imports used by the extracted functions. */
+  for (const [source, identifiers] of Object.entries(
+    Object.groupBy(ctx.identifiersToExtract, (item) => item.source),
+  )) {
+    if (identifiers == null) {
+      continue;
+    }
+    const specifiers = identifiers.map((item) => item.specifier);
+    const relativeSource = source.startsWith('.')
+      ? relative(
+          dirname(generatedTestFilePath),
+          join(projectRoot, dirname(relativePath), source),
+        )
+      : source;
+    const importDeclaration = types.importDeclaration(
+      specifiers,
+      types.stringLiteral(relativeSource),
+    );
+    testContent += generate(importDeclaration).code + '\n';
+  }
+
+  /* Write extracted functions. */
+  testContent += extractedFunctions.reduce(
+    (content, { code, functionName }) => {
+      return `${content}
+export const ${functionName} = ${code};`;
+    },
+    '',
+  );
+  fileRepository.writeFile(join(testServerRoot, relativePath), testContent);
+
+  /* Update main file with imports of extracted functions. */
   const mainContent = extractedFunctions.reduce((content, { functionName }) => {
     return `${content}
 globalThis.${functionName} = async () => {
@@ -181,17 +252,6 @@ globalThis.${functionName} = async () => {
   return ${functionName}();
 };`;
   }, '');
-
-  const testContent = extractedFunctions.reduce(
-    (content, { code, functionName }) => {
-      return `${content}
-export const ${functionName} = ${code};`;
-    },
-    '',
-  );
-
-  fileRepository.writeFile(join(testServerRoot, relativePath), testContent);
-
   updateRegion({
     fileRepository,
     filePath: join(testServerRoot, 'main.ts'),
@@ -243,13 +303,13 @@ function removeUnusedImportSpecifiers({
   ctx: TransformContext;
   types: typeof T;
 }) {
-  const { identifiersUsedInRunInBrowser, imports } = ctx;
+  const { imports } = ctx;
   for (const importPath of imports) {
     importPath.node.specifiers = importPath.node.specifiers.filter(
       (specifier) => {
         return (
           types.isImportSpecifier(specifier) &&
-          !identifiersUsedInRunInBrowser.has(specifier)
+          !ctx.isSpecifierUsedInRunInBrowser(specifier)
         );
       },
     );

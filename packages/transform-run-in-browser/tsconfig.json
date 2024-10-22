@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "target": "ES2022",
+    "target": "ESNext",
     "outDir": "../../dist/transform-run-in-browser",
     "types": ["node"],
     "strict": true
