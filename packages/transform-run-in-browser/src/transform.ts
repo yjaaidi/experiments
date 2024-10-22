@@ -260,7 +260,7 @@ export const ${functionName} = ${code};`;
   }, '');
   updateRegion({
     fileRepository,
-    filePath: join(generatedDirectoryRoot, 'main.ts'),
+    filePath: join(generatedDirectoryRoot, 'tests.ts'),
     region: 'src/recipe-search.spec.ts',
     content: `
 // #region src/recipe-search.spec.ts

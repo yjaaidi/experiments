@@ -61,7 +61,7 @@ import { RecipeSearchComponent } from "../../../src/recipe-search.component";
 
     transform(RECIPE_SEARCH_TEST);
 
-    expect.soft(readRelativeFile('playwright/generated/main.ts')).toContain(`
+    expect.soft(readRelativeFile('playwright/generated/tests.ts')).toContain(`
 // #region src/recipe-search.spec.ts
 
 (globalThis as any).src_recipe_search_spec_ts_mPLWHe = async () => {
@@ -76,11 +76,11 @@ import { RecipeSearchComponent } from "../../../src/recipe-search.component";
 }`);
   });
 
-  test('replace section in main.ts without removing other sections', async () => {
+  test('replace section in tests.ts without removing other sections', async () => {
     const { transform, readRelativeFile, writeRelativeFile } = setUp();
 
     await writeRelativeFile(
-      'playwright/generated/main.ts',
+      'playwright/generated/tests.ts',
       `
 // #region src/another-file.spec.ts
 globalThis.anotherExtractedFunction = async () => {
@@ -104,7 +104,7 @@ globalThis.yetAotherExtractedFunction = async () => {
 
     transform(RECIPE_SEARCH_TEST);
 
-    const content = readRelativeFile('playwright/generated/main.ts');
+    const content = readRelativeFile('playwright/generated/tests.ts');
     expect.soft(content).toContain(`
 // #region src/another-file.spec.ts
 globalThis.anotherExtractedFunction = async () => {
