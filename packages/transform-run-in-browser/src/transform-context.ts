@@ -2,10 +2,10 @@ import type { NodePath } from '@babel/core';
 import * as T from '@babel/types';
 
 export class TransformContext {
-  #imports: NodePath<T.ImportDeclaration>[] = [];
-  #currentRunInBrowserCall: T.CallExpression | null = null;
-  #extractedFunctions: ExtractedFunctions[] = [];
-  #identifiersToExtract: Array<{
+  private _imports: NodePath<T.ImportDeclaration>[] = [];
+  private _currentRunInBrowserCall: T.CallExpression | null = null;
+  private _extractedFunctions: ExtractedFunctions[] = [];
+  private _identifiersToExtract: Array<{
     source: string;
     specifier: T.ImportSpecifier;
   }> = [];
@@ -13,26 +13,26 @@ export class TransformContext {
   constructor(public readonly relativeFilePath: string) {}
 
   get currentRunInBrowserCall() {
-    return this.#currentRunInBrowserCall;
+    return this._currentRunInBrowserCall;
   }
 
   get extractedFunctions(): ReadonlyArray<ExtractedFunctions> {
-    return this.#extractedFunctions;
+    return this._extractedFunctions;
   }
 
   get identifiersToExtract(): ReadonlyArray<{
     source: string;
     specifier: T.ImportSpecifier;
   }> {
-    return this.#identifiersToExtract;
+    return this._identifiersToExtract;
   }
 
   get imports(): ReadonlyArray<NodePath<T.ImportDeclaration>> {
-    return this.#imports;
+    return this._imports;
   }
 
   addExtractedFunction(extractedFunction: ExtractedFunctions) {
-    this.#extractedFunctions.push(extractedFunction);
+    this._extractedFunctions.push(extractedFunction);
   }
 
   addIdentifierUsedInRunInBrowser({
@@ -42,32 +42,32 @@ export class TransformContext {
     source: string;
     specifier: T.ImportSpecifier;
   }) {
-    this.#identifiersToExtract.push({
+    this._identifiersToExtract.push({
       source,
       specifier,
     });
   }
 
   isSpecifierUsedInRunInBrowser(specifier: T.ImportSpecifier) {
-    return this.#identifiersToExtract.some(
+    return this._identifiersToExtract.some(
       (item) => item.specifier === specifier,
     );
   }
 
   addImport(importPath: NodePath<T.ImportDeclaration>) {
-    this.#imports.push(importPath);
+    this._imports.push(importPath);
   }
 
   isInRunInBrowserCall() {
-    return this.#currentRunInBrowserCall != null;
+    return this._currentRunInBrowserCall != null;
   }
 
   enterInRunInBrowser(call: T.CallExpression) {
-    this.#currentRunInBrowserCall = call;
+    this._currentRunInBrowserCall = call;
   }
 
   exitRunInBrowserCall() {
-    this.#currentRunInBrowserCall = null;
+    this._currentRunInBrowserCall = null;
   }
 }
 
