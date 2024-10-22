@@ -1,14 +1,15 @@
-import { join, relative } from 'node:path/posix';
-import type { NodePath, PluginObj } from '@babel/core';
+import { relative } from 'node:path/posix';
+import type { PluginObj } from '@babel/core';
 import generate from '@babel/generator';
 import { declare } from '@babel/helper-plugin-utils';
 import * as T from '@babel/types';
 import {
-  generateUniqueFunctionName,
   FileRepository,
   FileRepositoryImpl,
+  generateUniqueFunctionName,
 } from './utils';
-import { dirname } from 'node:path';
+import { TransformContext } from './transform-context';
+import { ExtractedFunctionsWriter } from './writer';
 
 export default declare<Options>(({ assertVersion, types: t }, options) => {
   assertVersion(7);
@@ -16,7 +17,12 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
   const { projectRoot } = options;
   const { fileRepository = new FileRepositoryImpl() } =
     options as TestingOptions;
-  const generatedDirectoryRoot = join(projectRoot, 'playwright/generated');
+  const writer = new ExtractedFunctionsWriter({
+    fileRepository,
+    generatedDirectoryPath: 'playwright/generated',
+    projectRoot,
+    types: t,
+  });
 
   let ctx: TransformContext | undefined;
 
@@ -27,6 +33,7 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
         enter(_, state) {
           if (state.filename) {
             const relativeFilePath = relative(projectRoot, state.filename);
+
             ctx = new TransformContext(relativeFilePath);
           }
         },
@@ -35,13 +42,7 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
             return;
           }
 
-          writeExtractedFunctions({
-            ctx,
-            fileRepository,
-            projectRoot,
-            generatedDirectoryRoot,
-            types: t,
-          });
+          writer.writeExtractedFunctions(ctx);
 
           removeUnusedImportSpecifiers({
             ctx,
@@ -115,191 +116,6 @@ export interface Options {
 
 export interface TestingOptions extends Options {
   fileRepository: FileRepository;
-}
-
-class TransformContext {
-  #imports: NodePath<T.ImportDeclaration>[] = [];
-  #currentRunInBrowserCall: T.CallExpression | null = null;
-  #extractedFunctions: ExtractedFunctions[] = [];
-  #identifiersToExtract: Array<{
-    source: string;
-    specifier: T.ImportSpecifier;
-  }> = [];
-
-  constructor(public readonly relativePath: string) {}
-
-  get currentRunInBrowserCall() {
-    return this.#currentRunInBrowserCall;
-  }
-
-  get extractedFunctions(): ReadonlyArray<ExtractedFunctions> {
-    return this.#extractedFunctions;
-  }
-
-  get identifiersToExtract(): ReadonlyArray<{
-    source: string;
-    specifier: T.ImportSpecifier;
-  }> {
-    return this.#identifiersToExtract;
-  }
-
-  get imports(): ReadonlyArray<NodePath<T.ImportDeclaration>> {
-    return this.#imports;
-  }
-
-  addExtractedFunction(extractedFunction: ExtractedFunctions) {
-    this.#extractedFunctions.push(extractedFunction);
-  }
-
-  addIdentifierUsedInRunInBrowser({
-    source,
-    specifier,
-  }: {
-    source: string;
-    specifier: T.ImportSpecifier;
-  }) {
-    this.#identifiersToExtract.push({
-      source,
-      specifier,
-    });
-  }
-
-  isSpecifierUsedInRunInBrowser(specifier: T.ImportSpecifier) {
-    return this.#identifiersToExtract.some(
-      (item) => item.specifier === specifier,
-    );
-  }
-
-  addImport(importPath: NodePath<T.ImportDeclaration>) {
-    this.#imports.push(importPath);
-  }
-
-  isInRunInBrowserCall() {
-    return this.#currentRunInBrowserCall != null;
-  }
-
-  enterInRunInBrowser(call: T.CallExpression) {
-    this.#currentRunInBrowserCall = call;
-  }
-
-  exitRunInBrowserCall() {
-    this.#currentRunInBrowserCall = null;
-  }
-}
-
-interface ExtractedFunctions {
-  code: string;
-  functionName: string;
-}
-
-function writeExtractedFunctions({
-  ctx,
-  fileRepository,
-  projectRoot,
-  generatedDirectoryRoot,
-  types,
-}: {
-  ctx: TransformContext;
-  fileRepository: FileRepository;
-  projectRoot: string;
-  generatedDirectoryRoot: string;
-  types: typeof T;
-}) {
-  const { extractedFunctions, relativePath } = ctx;
-  if (extractedFunctions.length === 0) {
-    return;
-  }
-
-  const generatedTestFilePath = join(generatedDirectoryRoot, relativePath);
-  let testContent = '';
-
-  /* Write extracted imports used by the extracted functions. */
-  for (const [source, identifiers] of Object.entries(
-    Object.groupBy(ctx.identifiersToExtract, (item) => item.source),
-  )) {
-    if (identifiers == null) {
-      continue;
-    }
-    const specifiers = identifiers.map((item) => item.specifier);
-    const relativeSource = source.startsWith('.')
-      ? relative(
-          dirname(generatedTestFilePath),
-          join(projectRoot, dirname(relativePath), source),
-        )
-      : source;
-    const importDeclaration = types.importDeclaration(
-      specifiers,
-      types.stringLiteral(relativeSource),
-    );
-    testContent += generate(importDeclaration).code + '\n';
-  }
-
-  /* Write extracted functions. */
-  testContent += extractedFunctions.reduce(
-    (content, { code, functionName }) => {
-      return `${content}
-export const ${functionName} = ${code};`;
-    },
-    '',
-  );
-  fileRepository.writeFile(
-    join(generatedDirectoryRoot, relativePath),
-    testContent,
-  );
-
-  /* Update main file with imports of extracted functions. */
-  const mainContent = extractedFunctions.reduce((content, { functionName }) => {
-    return `${content}
-(globalThis as any).${functionName} = async () => {
-  const { ${functionName} } = await import('./${relativePath.replace(
-    /\.ts$/,
-    '',
-  )}');
-  return ${functionName}();
-};`;
-  }, '');
-  updateRegion({
-    fileRepository,
-    filePath: join(generatedDirectoryRoot, 'tests.ts'),
-    region: 'src/recipe-search.spec.ts',
-    content: `
-// #region src/recipe-search.spec.ts
-${mainContent}
-// #endregion
-`,
-  });
-}
-
-function updateRegion({
-  fileRepository,
-  filePath,
-  region,
-  content,
-}: {
-  fileRepository: FileRepository;
-  filePath: string;
-  region: string;
-  content: string;
-}) {
-  let fileContent = fileRepository.tryReadFile(filePath);
-
-  if (fileContent) {
-    const regionStart = `// #region ${region}`;
-    const regionEnd = `// #endregion`;
-
-    const startIndex = fileContent.indexOf(regionStart);
-    const endIndex = fileContent.indexOf(regionEnd, startIndex);
-
-    if (startIndex !== -1 && endIndex !== -1) {
-      fileContent =
-        fileContent.slice(0, startIndex + regionStart.length) +
-        fileContent.slice(endIndex + regionEnd.length);
-    }
-  }
-
-  const updatedContent = `${fileContent}\n${content}`;
-
-  fileRepository.writeFile(filePath, updatedContent);
 }
 
 function removeUnusedImportSpecifiers({
