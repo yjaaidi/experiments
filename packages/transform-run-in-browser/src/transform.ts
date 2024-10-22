@@ -34,63 +34,16 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
             return;
           }
 
-          /* Remove imports that were used in extracted functions. */
-          const {
-            extractedFunctions,
-            identifiersUsedInRunInBrowser,
-            relativePath,
-          } = ctx;
-          for (const importPath of ctx.imports) {
-            importPath.node.specifiers = importPath.node.specifiers.filter(
-              (specifier) => {
-                return (
-                  t.isImportSpecifier(specifier) &&
-                  !identifiersUsedInRunInBrowser.has(specifier)
-                );
-              },
-            );
-            if (importPath.node.specifiers.length === 0) {
-              importPath.remove();
-            }
-          }
+          writeExtractedFunctions({
+            ctx,
+            fileRepository,
+            testServerRoot,
+          });
 
-          /* Write extracted functions. */
-          if (extractedFunctions.length > 0) {
-            const mainContent = ctx.extractedFunctions.reduce(
-              (content, { functionName }) => {
-                return `${content}
-globalThis.${functionName} = async () => {
-  const { ${functionName} } = await import('./${relativePath}');
-  return ${functionName}();
-};`;
-              },
-              '',
-            );
-
-            const testContent = extractedFunctions.reduce(
-              (content, { code, functionName }) => {
-                return `${content}
-export const ${functionName} = ${code};`;
-              },
-              '',
-            );
-
-            fileRepository.writeFile(
-              join(testServerRoot, relativePath),
-              testContent,
-            );
-
-            updateRegion({
-              fileRepository,
-              filePath: join(testServerRoot, 'main.ts'),
-              region: 'src/recipe-search.spec.ts',
-              content: `
-// #region src/recipe-search.spec.ts
-${mainContent}
-// #endregion
-`,
-            });
-          }
+          removeUnusedImportSpecifiers({
+            ctx,
+            types: t,
+          });
         },
       },
       ImportDeclaration(path) {
@@ -208,6 +161,49 @@ interface ExtractedFunctions {
   functionName: string;
 }
 
+function writeExtractedFunctions({
+  ctx,
+  fileRepository,
+  testServerRoot,
+}: {
+  ctx: TransformContext;
+  fileRepository: FileRepository;
+  testServerRoot: string;
+}) {
+  const { extractedFunctions, relativePath } = ctx;
+  if (extractedFunctions.length === 0) {
+    return;
+  }
+  const mainContent = extractedFunctions.reduce((content, { functionName }) => {
+    return `${content}
+globalThis.${functionName} = async () => {
+  const { ${functionName} } = await import('./${relativePath}');
+  return ${functionName}();
+};`;
+  }, '');
+
+  const testContent = extractedFunctions.reduce(
+    (content, { code, functionName }) => {
+      return `${content}
+export const ${functionName} = ${code};`;
+    },
+    '',
+  );
+
+  fileRepository.writeFile(join(testServerRoot, relativePath), testContent);
+
+  updateRegion({
+    fileRepository,
+    filePath: join(testServerRoot, 'main.ts'),
+    region: 'src/recipe-search.spec.ts',
+    content: `
+// #region src/recipe-search.spec.ts
+${mainContent}
+// #endregion
+`,
+  });
+}
+
 function updateRegion({
   fileRepository,
   filePath,
@@ -238,4 +234,27 @@ function updateRegion({
   const updatedContent = `${fileContent}\n${content}`;
 
   fileRepository.writeFile(filePath, updatedContent);
+}
+
+function removeUnusedImportSpecifiers({
+  ctx,
+  types,
+}: {
+  ctx: TransformContext;
+  types: typeof T;
+}) {
+  const { identifiersUsedInRunInBrowser, imports } = ctx;
+  for (const importPath of imports) {
+    importPath.node.specifiers = importPath.node.specifiers.filter(
+      (specifier) => {
+        return (
+          types.isImportSpecifier(specifier) &&
+          !identifiersUsedInRunInBrowser.has(specifier)
+        );
+      },
+    );
+    if (importPath.node.specifiers.length === 0) {
+      importPath.remove();
+    }
+  }
 }
