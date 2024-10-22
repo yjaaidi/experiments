@@ -49,10 +49,10 @@ describe('code extraction', () => {
 
     transform(RECIPE_SEARCH_TEST);
 
-    expect(readRelativeFile('playwright-test-server/src/recipe-search.spec.ts'))
+    expect(readRelativeFile('playwright/generated/src/recipe-search.spec.ts'))
       .toContain(`\
 import { TestBed } from "@angular/core/testing";
-import { RecipeSearchComponent } from "../../src/recipe-search.component";
+import { RecipeSearchComponent } from "../../../src/recipe-search.component";
 `);
   });
 
@@ -61,26 +61,26 @@ import { RecipeSearchComponent } from "../../src/recipe-search.component";
 
     transform(RECIPE_SEARCH_TEST);
 
-    expect.soft(readRelativeFile('playwright-test-server/main.ts')).toContain(`
+    expect.soft(readRelativeFile('playwright/generated/main.ts')).toContain(`
 // #region src/recipe-search.spec.ts
 
-globalThis.src_recipe_search_spec_ts_mPLWHe = async () => {
-  const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec.ts');
+(globalThis as any).src_recipe_search_spec_ts_mPLWHe = async () => {
+  const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec');
   return src_recipe_search_spec_ts_mPLWHe();
 };
 // #endregion`);
     expect.soft(
-      readRelativeFile('playwright-test-server/src/recipe-search.spec.ts'),
+      readRelativeFile('playwright/generated/src/recipe-search.spec.ts'),
     ).toContain(`export const src_recipe_search_spec_ts_mPLWHe = async () => {
   TestBed.createComponent(RecipeSearchComponent);
 }`);
   });
 
-  test('replace section in main.ts without removing other sections', () => {
+  test('replace section in main.ts without removing other sections', async () => {
     const { transform, readRelativeFile, writeRelativeFile } = setUp();
 
-    writeRelativeFile(
-      'playwright-test-server/main.ts',
+    await writeRelativeFile(
+      'playwright/generated/main.ts',
       `
 // #region src/another-file.spec.ts
 globalThis.anotherExtractedFunction = async () => {
@@ -104,7 +104,7 @@ globalThis.yetAotherExtractedFunction = async () => {
 
     transform(RECIPE_SEARCH_TEST);
 
-    const content = readRelativeFile('playwright-test-server/main.ts');
+    const content = readRelativeFile('playwright/generated/main.ts');
     expect.soft(content).toContain(`
 // #region src/another-file.spec.ts
 globalThis.anotherExtractedFunction = async () => {
@@ -139,7 +139,7 @@ globalThis.yetAotherExtractedFunction = async () => {
     });
 
     const content = readRelativeFile(
-      'playwright-test-server/src/another-file.spec.ts',
+      'playwright/generated/src/another-file.spec.ts',
     );
     expect.soft(content).toContain(`console.log('another-file');`);
     expect.soft(content).not.toContain(`RecipeSearchComponent`);
@@ -158,7 +158,7 @@ globalThis.yetAotherExtractedFunction = async () => {
     });
 
     expect(
-      readRelativeFile('playwright-test-server/src/no-run-in-browser.spec.ts'),
+      readRelativeFile('playwright/generated/src/no-run-in-browser.spec.ts'),
     ).toBeNull();
   });
 });
@@ -199,8 +199,11 @@ function setUp() {
     readRelativeFile(relativeFilePath: string) {
       return fileRepository.tryReadFile(join(projectRoot, relativeFilePath));
     },
-    writeRelativeFile(relativeFilePath: string, content: string) {
-      fileRepository.writeFile(join(projectRoot, relativeFilePath), content);
+    async writeRelativeFile(relativeFilePath: string, content: string) {
+      await fileRepository.writeFile(
+        join(projectRoot, relativeFilePath),
+        content,
+      );
     },
     transform({
       relativeFilePath,

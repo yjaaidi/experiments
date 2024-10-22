@@ -16,7 +16,7 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
   const { projectRoot } = options;
   const { fileRepository = new FileRepositoryImpl() } =
     options as TestingOptions;
-  const testServerRoot = join(projectRoot, 'playwright-test-server');
+  const generatedDirectoryRoot = join(projectRoot, 'playwright/generated');
 
   let ctx: TransformContext | undefined;
 
@@ -39,7 +39,7 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
             ctx,
             fileRepository,
             projectRoot,
-            testServerRoot,
+            generatedDirectoryRoot,
             types: t,
           });
 
@@ -196,13 +196,13 @@ function writeExtractedFunctions({
   ctx,
   fileRepository,
   projectRoot,
-  testServerRoot,
+  generatedDirectoryRoot,
   types,
 }: {
   ctx: TransformContext;
   fileRepository: FileRepository;
   projectRoot: string;
-  testServerRoot: string;
+  generatedDirectoryRoot: string;
   types: typeof T;
 }) {
   const { extractedFunctions, relativePath } = ctx;
@@ -210,7 +210,7 @@ function writeExtractedFunctions({
     return;
   }
 
-  const generatedTestFilePath = join(testServerRoot, relativePath);
+  const generatedTestFilePath = join(generatedDirectoryRoot, relativePath);
   let testContent = '';
 
   /* Write extracted imports used by the extracted functions. */
@@ -242,19 +242,25 @@ export const ${functionName} = ${code};`;
     },
     '',
   );
-  fileRepository.writeFile(join(testServerRoot, relativePath), testContent);
+  fileRepository.writeFile(
+    join(generatedDirectoryRoot, relativePath),
+    testContent,
+  );
 
   /* Update main file with imports of extracted functions. */
   const mainContent = extractedFunctions.reduce((content, { functionName }) => {
     return `${content}
-globalThis.${functionName} = async () => {
-  const { ${functionName} } = await import('./${relativePath}');
+(globalThis as any).${functionName} = async () => {
+  const { ${functionName} } = await import('./${relativePath.replace(
+    /\.ts$/,
+    '',
+  )}');
   return ${functionName}();
 };`;
   }, '');
   updateRegion({
     fileRepository,
-    filePath: join(testServerRoot, 'main.ts'),
+    filePath: join(generatedDirectoryRoot, 'main.ts'),
     region: 'src/recipe-search.spec.ts',
     content: `
 // #region src/recipe-search.spec.ts
