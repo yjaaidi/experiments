@@ -32,7 +32,13 @@ export class TransformContext {
   }
 
   addExtractedFunction(extractedFunction: ExtractedFunctions) {
-    this._extractedFunctions.push(extractedFunction);
+    if (
+      this._extractedFunctions.every(
+        ({ functionName }) => extractedFunction.functionName !== functionName,
+      )
+    ) {
+      this._extractedFunctions.push(extractedFunction);
+    }
   }
 
   addIdentifierUsedInRunInBrowser({

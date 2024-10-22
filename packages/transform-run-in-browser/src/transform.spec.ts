@@ -109,7 +109,7 @@ import { a } from "../../../src/a";
 }`);
   });
 
-  test.fails('extract identical `runInBrowser` calls once', () => {
+  test('extract identical `runInBrowser` calls once', () => {
     const { transform, readRelativeFile } = setUp();
 
     transform({
