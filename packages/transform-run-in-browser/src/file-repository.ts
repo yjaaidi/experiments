@@ -1,24 +1,9 @@
-import { createHash } from 'node:crypto';
-import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-
-export function generateUniqueFunctionName({
-  code,
-  path,
-}: {
-  code: string;
-  path: string;
-}) {
-  const slug = path.replaceAll(/[^\w]/g, '_').replace(/^_/, '');
-  const hash = createHash('sha256')
-    .update(code)
-    .digest('base64')
-    .substring(0, 6);
-  return `${slug}_${hash}`;
-}
 
 export interface FileRepository {
   tryReadFile(filePath: string): string | null;
+
   writeFile(filePath: string, content: string): void;
 }
 

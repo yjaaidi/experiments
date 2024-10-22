@@ -3,13 +3,10 @@ import type { PluginObj } from '@babel/core';
 import generate from '@babel/generator';
 import { declare } from '@babel/helper-plugin-utils';
 import * as T from '@babel/types';
-import {
-  FileRepository,
-  FileRepositoryImpl,
-  generateUniqueFunctionName,
-} from './utils';
 import { TransformContext } from './transform-context';
 import { ExtractedFunctionsWriter } from './writer';
+import { FileRepository, FileRepositoryImpl } from './file-repository';
+import { generateUniqueFunctionName } from './utils/generate-unique-function-name';
 
 export default declare<Options>(({ assertVersion, types: t }, options) => {
   assertVersion(7);

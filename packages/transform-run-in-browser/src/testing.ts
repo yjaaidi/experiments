@@ -1,4 +1,4 @@
-import { FileRepository } from './utils';
+import { FileRepository } from './file-repository';
 
 export class FileRepositoryFake implements FileRepository {
   private files = new Map<string, string>();

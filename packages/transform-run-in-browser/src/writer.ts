@@ -2,7 +2,9 @@ import { dirname, join, relative } from 'node:path/posix';
 import * as T from '@babel/types';
 import generate from '@babel/generator';
 import { TransformContext } from './transform-context';
-import { FileRepository } from './utils';
+
+import { FileRepository } from './file-repository';
+import { updateRegion } from './utils/update-region';
 
 export class ExtractedFunctionsWriter {
   private _fileRepository: FileRepository;
@@ -119,32 +121,4 @@ export const ${functionName} = ${code};`;
       regionContent: regionContent,
     });
   }
-}
-
-function updateRegion({
-  fileContent,
-  region,
-  regionContent,
-}: {
-  fileContent: string;
-  region: string;
-  regionContent: string;
-}): string {
-  const regionStart = `// #region ${region}`;
-  const regionEnd = `// #endregion`;
-
-  const startIndex = fileContent.indexOf(regionStart);
-  const endIndex = fileContent.indexOf(regionEnd, startIndex);
-
-  if (startIndex !== -1 && endIndex !== -1) {
-    fileContent =
-      fileContent.slice(0, startIndex + regionStart.length) +
-      fileContent.slice(endIndex + regionEnd.length);
-  }
-
-  return `${fileContent}
-${regionStart}
-${regionContent}
-${regionEnd}
-`;
 }
