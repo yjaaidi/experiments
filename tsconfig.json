@@ -16,12 +16,7 @@
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022",
-    "paths": {
-      "@test-bear/playwright": [
-        "./src/testing/playwright.ts"
-      ]
-    }
+    "module": "ES2022"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
