@@ -5,10 +5,10 @@ import { TransformContext } from './transform-context';
 import { FileRepository } from './utils';
 
 export class ExtractedFunctionsWriter {
-  #fileRepository: FileRepository;
-  #generatedDirectoryRoot: string;
-  #projectRoot: string;
-  #types: typeof T;
+  private _fileRepository: FileRepository;
+  private _generatedDirectoryRoot: string;
+  private _projectRoot: string;
+  private _types: typeof T;
 
   constructor({
     fileRepository,
@@ -21,58 +21,39 @@ export class ExtractedFunctionsWriter {
     projectRoot: string;
     types: typeof T;
   }) {
-    this.#fileRepository = fileRepository;
-    this.#generatedDirectoryRoot = join(projectRoot, generatedDirectoryPath);
-    this.#projectRoot = projectRoot;
-    this.#types = types;
+    this._fileRepository = fileRepository;
+    this._generatedDirectoryRoot = join(projectRoot, generatedDirectoryPath);
+    this._projectRoot = projectRoot;
+    this._types = types;
   }
 
   writeExtractedFunctions(ctx: TransformContext) {
-    const { extractedFunctions, relativePath } = ctx;
+    const { extractedFunctions, relativeFilePath } = ctx;
     if (extractedFunctions.length === 0) {
       return;
     }
 
-    this.#fileRepository.writeFile(
-      join(this.#generatedDirectoryRoot, relativePath),
-      this.#generateTestContent(ctx),
+    this._fileRepository.writeFile(
+      join(this._generatedDirectoryRoot, relativeFilePath),
+      this._generateTestContent(ctx),
     );
 
-    /* Update main file with imports of extracted functions. */
-    const mainContent = extractedFunctions.reduce(
-      (content, { functionName }) => {
-        return `${content}
-(globalThis as any).${functionName} = async () => {
-  const { ${functionName} } = await import('./${relativePath.replace(
-    /\.ts$/,
-    '',
-  )}');
-  return ${functionName}();
-};`;
-      },
-      '',
-    );
-    updateRegion({
-      fileRepository: this.#fileRepository,
-      filePath: join(this.#generatedDirectoryRoot, 'tests.ts'),
-      region: 'src/recipe-search.spec.ts',
-      content: `
-// #region src/recipe-search.spec.ts
-${mainContent}
-// #endregion
-`,
-    });
+    const entryPointPath = join(this._generatedDirectoryRoot, 'tests.ts');
+    // TODO create a lock file to avoid concurrent updates
+    let entryPointContent = this._fileRepository.tryReadFile(entryPointPath);
+    entryPointContent = this._updateEntryPoint({ ctx, entryPointContent });
+    this._fileRepository.writeFile(entryPointPath, entryPointContent);
   }
 
-  #generateTestContent(ctx: TransformContext) {
-    const t = this.#types;
-    const { relativePath, extractedFunctions } = ctx;
+  private _generateTestContent(ctx: TransformContext) {
+    const t = this._types;
+    const { relativeFilePath, extractedFunctions } = ctx;
 
     let testContent = '';
 
     const generatedTestFilePath = join(
-      this.#generatedDirectoryRoot,
-      relativePath,
+      this._generatedDirectoryRoot,
+      relativeFilePath,
     );
 
     for (const [source, identifiers] of Object.entries(
@@ -85,7 +66,7 @@ ${mainContent}
       const relativeSource = source.startsWith('.')
         ? relative(
             dirname(generatedTestFilePath),
-            join(this.#projectRoot, dirname(relativePath), source),
+            join(this._projectRoot, dirname(relativeFilePath), source),
           )
         : source;
       const importDeclaration = t.importDeclaration(
@@ -106,36 +87,64 @@ export const ${functionName} = ${code};`;
 
     return testContent;
   }
+
+  private _updateEntryPoint({
+    ctx,
+    entryPointContent,
+  }: {
+    ctx: TransformContext;
+    entryPointContent: string | null;
+  }) {
+    const { extractedFunctions, relativeFilePath } = ctx;
+
+    entryPointContent ??= '';
+
+    const regionContent = extractedFunctions.reduce(
+      (content, { functionName }) => {
+        return `${content}
+(globalThis as any).${functionName} = async () => {
+  const { ${functionName} } = await import('./${relativeFilePath.replace(
+    /\.ts$/,
+    '',
+  )}');
+  return ${functionName}();
+};`;
+      },
+      '',
+    );
+
+    return updateRegion({
+      fileContent: entryPointContent,
+      region: 'src/recipe-search.spec.ts',
+      regionContent: regionContent,
+    });
+  }
 }
 
 function updateRegion({
-  fileRepository,
-  filePath,
+  fileContent,
   region,
-  content,
+  regionContent,
 }: {
-  fileRepository: FileRepository;
-  filePath: string;
+  fileContent: string;
   region: string;
-  content: string;
-}) {
-  let fileContent = fileRepository.tryReadFile(filePath);
+  regionContent: string;
+}): string {
+  const regionStart = `// #region ${region}`;
+  const regionEnd = `// #endregion`;
 
-  if (fileContent) {
-    const regionStart = `// #region ${region}`;
-    const regionEnd = `// #endregion`;
+  const startIndex = fileContent.indexOf(regionStart);
+  const endIndex = fileContent.indexOf(regionEnd, startIndex);
 
-    const startIndex = fileContent.indexOf(regionStart);
-    const endIndex = fileContent.indexOf(regionEnd, startIndex);
-
-    if (startIndex !== -1 && endIndex !== -1) {
-      fileContent =
-        fileContent.slice(0, startIndex + regionStart.length) +
-        fileContent.slice(endIndex + regionEnd.length);
-    }
+  if (startIndex !== -1 && endIndex !== -1) {
+    fileContent =
+      fileContent.slice(0, startIndex + regionStart.length) +
+      fileContent.slice(endIndex + regionEnd.length);
   }
 
-  const updatedContent = `${fileContent}\n${content}`;
-
-  fileRepository.writeFile(filePath, updatedContent);
+  return `${fileContent}
+${regionStart}
+${regionContent}
+${regionEnd}
+`;
 }

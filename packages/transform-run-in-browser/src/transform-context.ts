@@ -10,7 +10,7 @@ export class TransformContext {
     specifier: T.ImportSpecifier;
   }> = [];
 
-  constructor(public readonly relativePath: string) {}
+  constructor(public readonly relativeFilePath: string) {}
 
   get currentRunInBrowserCall() {
     return this.#currentRunInBrowserCall;

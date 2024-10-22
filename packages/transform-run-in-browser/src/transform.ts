@@ -76,7 +76,7 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
           const code = generate(path.node.arguments[0]).code;
           const functionName = generateUniqueFunctionName({
             code,
-            path: ctx.relativePath,
+            path: ctx.relativeFilePath,
           });
           ctx.addExtractedFunction({
             code,
