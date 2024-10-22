@@ -9,15 +9,18 @@ export function updateRegion({
 }): string {
   const regionStart = `// #region ${region}`;
   const regionEnd = `// #endregion`;
+  const endPattern = `${regionEnd}\n`;
 
   const startIndex = fileContent.indexOf(regionStart);
-  const endIndex = fileContent.indexOf(regionEnd, startIndex);
+  const endIndex = fileContent.indexOf(endPattern, startIndex);
 
   if (startIndex !== -1 && endIndex !== -1) {
     fileContent =
-      fileContent.slice(0, startIndex + regionStart.length) +
-      fileContent.slice(endIndex + regionEnd.length);
+      fileContent.slice(0, startIndex) +
+      fileContent.slice(endIndex + endPattern.length);
   }
+
+  fileContent = fileContent.trim();
 
   return `${fileContent}
 ${regionStart}

@@ -76,7 +76,7 @@ import { RecipeSearchComponent } from "../../../src/recipe-search.component";
 }`);
   });
 
-  test('replace section in tests.ts without removing other sections', async () => {
+  test('replace regions in tests.ts without removing other sections', async () => {
     const { transform, readRelativeFile, writeRelativeFile } = setUp();
 
     await writeRelativeFile(
@@ -87,15 +87,13 @@ globalThis.anotherExtractedFunction = async () => {
   console.log('another');
 });
 // #endregion
-
 // #region src/recipe-search.spec.ts
 globalThis.oldExtractedFuntion = async () => {
   console.log('old');
 };
 // #endregion
-
 // #region src/yet-another-file.spec.ts
-globalThis.yetAotherExtractedFunction = async () => {
+globalThis.yetAnotherExtractedFunction = async () => {
   console.log('yet another');
 });
 // #endregion
@@ -105,16 +103,16 @@ globalThis.yetAotherExtractedFunction = async () => {
     transform(RECIPE_SEARCH_TEST);
 
     const content = readRelativeFile('playwright/generated/tests.ts');
-    expect.soft(content).toContain(`
+    expect.soft(content).toContain(`\
 // #region src/another-file.spec.ts
 globalThis.anotherExtractedFunction = async () => {
   console.log('another');
 });
 // #endregion
 `);
-    expect.soft(content).toContain(`
+    expect.soft(content).toContain(`\
 // #region src/yet-another-file.spec.ts
-globalThis.yetAotherExtractedFunction = async () => {
+globalThis.yetAnotherExtractedFunction = async () => {
   console.log('yet another');
 });
 // #endregion

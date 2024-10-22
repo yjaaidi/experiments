@@ -19,16 +19,14 @@ globalThis.myTest = () => console.log('my test');
 `);
   });
 
-  it.fails('replaces region', () => {
+  it('replaces region', () => {
     const fileContent = `\
 // #region my-old.spec.ts
 globalThis.myOldTest = () => console.log('my old test');
 // #endregion
-
 // #region my-test.spec.ts
 globalThis.myTest = () => console.log('❌ my test ❌');
 // #endregion
-
 // #region my-other.spec.ts
 globalThis.myOtherTest = () => console.log('my other test');
 // #endregion
@@ -44,13 +42,11 @@ globalThis.myOtherTest = () => console.log('my other test');
 // #region my-old.spec.ts
 globalThis.myOldTest = () => console.log('my old test');
 // #endregion
-
-// #region my-test.spec.ts
-globalThis.myUpdatedTest = () => console.log('✨ my UPDATED test ✨');
-// #endregion
-
 // #region my-other.spec.ts
 globalThis.myOtherTest = () => console.log('my other test');
+// #endregion
+// #region my-test.spec.ts
+globalThis.myUpdatedTest = () => console.log('✨my UPDATED test ✨');
 // #endregion
 `);
   });
