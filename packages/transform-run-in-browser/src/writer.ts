@@ -64,7 +64,7 @@ export class ExtractedFunctionsWriter {
       if (identifiers == null) {
         continue;
       }
-      const specifiers = identifiers.map((item) => item.specifier);
+      const specifiers = new Set(identifiers.map((item) => item.specifier));
       const relativeSource = source.startsWith('.')
         ? relative(
             dirname(generatedTestFilePath),
@@ -72,7 +72,7 @@ export class ExtractedFunctionsWriter {
           )
         : source;
       const importDeclaration = t.importDeclaration(
-        specifiers,
+        Array.from(specifiers),
         t.stringLiteral(relativeSource),
       );
       testContent += generate(importDeclaration).code + '\n';

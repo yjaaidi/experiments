@@ -56,6 +56,40 @@ import { RecipeSearchComponent } from "../../../src/recipe-search.component";
 `);
   });
 
+  test('extract imports without duplicates', () => {
+    const { transform, readRelativeFile } = setUp();
+
+    transform({
+      relativeFilePath: 'src/recipe-search.spec.ts',
+      code: `\
+import { a } from './a';
+import { unused } from './unused';
+
+test('...', async ({page, expect}) => {
+  unused();
+
+  await runInBrowser(async () => {
+    a();
+  });
+});
+
+test('...', async ({page, expect}) => {
+  unused();
+
+  await runInBrowser(async () => {
+    console.log(a);
+  });
+});
+      `,
+    });
+
+    expect(readRelativeFile('playwright/generated/src/recipe-search.spec.ts'))
+      .toContain(`\
+import { a } from "../../../src/a";
+
+`);
+  });
+
   test('extract `runInBrowser` function', () => {
     const { transform, readRelativeFile } = setUp();
 
@@ -173,17 +207,17 @@ globalThis.yetAnotherExtractedFunction = async () => {
 const RECIPE_SEARCH_TEST = {
   relativeFilePath: 'src/recipe-search.spec.ts',
   code: `
-  import { TestBed } from '@angular/core/testing';
-  import { expect, test } from '@playwright/test';
-  import { RecipeSearchComponent } from './recipe-search.component';
+import { TestBed } from '@angular/core/testing';
+import { expect, test } from '@playwright/test';
+import { RecipeSearchComponent } from './recipe-search.component';
 
-  test('...', async ({page, expect}) => {
-    await runInBrowser(async () => {
-      TestBed.createComponent(RecipeSearchComponent);
-    });
-
-    await expect(page.getByRole('listitem')).toHaveText(['Burger', 'Salad']);
+test('...', async ({page, expect, runInBrowser}) => {
+  await runInBrowser(async () => {
+    TestBed.createComponent(RecipeSearchComponent);
   });
+
+  await expect(page.getByRole('listitem')).toHaveText(['Burger', 'Salad']);
+});
 `,
 };
 
