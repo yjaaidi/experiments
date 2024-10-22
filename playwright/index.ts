@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, ComponentFixtureAutoDetect } from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
@@ -13,6 +13,10 @@ TestBed.initTestEnvironment(
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting(),
 );
+
+TestBed.configureTestingModule({
+  providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
+});
 
 globalThis.pwMount = async (cmpType: Type<unknown>) => {
   TestBed.createComponent(cmpType);
