@@ -10,9 +10,11 @@
   },
   "scripts": {
     "build:transform-run-in-browser": "bun run --filter transform-run-in-browser build",
+    "reset": "playwright clear-cache",
     "test": "playwright test",
     "test:transform-run-in-browser": "bun run --filter transform-run-in-browser test --watch false",
-    "postinstall": "bun run build:transform-run-in-browser"
+    "postinstall": "bun run build:transform-run-in-browser",
+    "debug": "bun build:transform-run-in-browser && bun reset && bun run test --reporter list"
   },
   "dependencies": {
     "@angular/animations": "^19.0.0-next.0",
