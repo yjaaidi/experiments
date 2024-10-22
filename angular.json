@@ -54,6 +54,10 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "testing": {
+              "browser": "playwright/index.ts",
+              "tsConfig": "playwright/tsconfig.json"
             }
           },
           "defaultConfiguration": "production"
@@ -66,6 +70,9 @@
             },
             "development": {
               "buildTarget": "test-bear:build:development"
+            },
+            "testing": {
+              "buildTarget": "test-bear:build:testing"
             }
           },
           "defaultConfiguration": "development"

@@ -7,7 +7,7 @@ test('should search recipes without filtering', async ({
   runInBrowser,
 }) => {
   await runInBrowser(async () => {
-    // TestBed.createComponent(AppComponent);
+    TestBed.createComponent(AppComponent);
   });
 
   await expect(page.getByRole('listitem')).toHaveText(['Burger', 'Salad']);

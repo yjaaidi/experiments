@@ -4,8 +4,10 @@ import { HelloComponent } from './hello.component';
 
 test('says hello', async ({ page, runInBrowser }) => {
   await runInBrowser(async () => {
-    // TestBed.createComponent(HelloComponent);
+    TestBed.createComponent(HelloComponent);
   });
+
+  await page.pause();
 
   await expect(page.getByRole('heading')).toHaveText('Hello!');
 });
