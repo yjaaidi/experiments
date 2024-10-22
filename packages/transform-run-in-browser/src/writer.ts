@@ -98,6 +98,7 @@ export const ${functionName} = ${code};`;
     entryPointContent: string | null;
   }) {
     const { extractedFunctions, relativeFilePath } = ctx;
+    const importPath = './' + relativeFilePath.replace(/\.ts$/, '');
 
     entryPointContent ??= 'export {};';
 
@@ -105,10 +106,7 @@ export const ${functionName} = ${code};`;
       .map(({ functionName }) => {
         return `\
 (globalThis as any).${functionName} = async () => {
-  const { ${functionName} } = await import('./${relativeFilePath.replace(
-    /\.ts$/,
-    '',
-  )}');
+  const { ${functionName} } = await import('${importPath}');
   return ${functionName}();
 };`;
       })
@@ -116,7 +114,7 @@ export const ${functionName} = ${code};`;
 
     return updateRegion({
       fileContent: entryPointContent,
-      region: 'src/recipe-search.spec.ts',
+      region: relativeFilePath,
       regionContent: regionContent,
     });
   }
