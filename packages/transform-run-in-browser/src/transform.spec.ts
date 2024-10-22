@@ -76,7 +76,17 @@ import { RecipeSearchComponent } from "../../../src/recipe-search.component";
 }`);
   });
 
-  test('replace regions in tests.ts without removing other sections', async () => {
+  test('add export statement in tests.ts to make it a valid ESM module', () => {
+    const { transform, readRelativeFile } = setUp();
+
+    transform(RECIPE_SEARCH_TEST);
+
+    expect
+      .soft(readRelativeFile('playwright/generated/tests.ts'))
+      .toContain(`export {};`);
+  });
+
+  test('update entrypoints in tests.ts without breaking existing regions', async () => {
     const { transform, readRelativeFile, writeRelativeFile } = setUp();
 
     await writeRelativeFile(

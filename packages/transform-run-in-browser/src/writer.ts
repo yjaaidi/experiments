@@ -99,7 +99,7 @@ export const ${functionName} = ${code};`;
   }) {
     const { extractedFunctions, relativeFilePath } = ctx;
 
-    entryPointContent ??= '';
+    entryPointContent ??= 'export {};';
 
     const regionContent = extractedFunctions.reduce(
       (content, { functionName }) => {
