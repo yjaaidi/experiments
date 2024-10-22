@@ -28,19 +28,53 @@ export class ExtractedFunctionsWriter {
   }
 
   writeExtractedFunctions(ctx: TransformContext) {
-    const t = this.#types;
     const { extractedFunctions, relativePath } = ctx;
     if (extractedFunctions.length === 0) {
       return;
     }
 
+    this.#fileRepository.writeFile(
+      join(this.#generatedDirectoryRoot, relativePath),
+      this.#generateTestContent(ctx),
+    );
+
+    /* Update main file with imports of extracted functions. */
+    const mainContent = extractedFunctions.reduce(
+      (content, { functionName }) => {
+        return `${content}
+(globalThis as any).${functionName} = async () => {
+  const { ${functionName} } = await import('./${relativePath.replace(
+    /\.ts$/,
+    '',
+  )}');
+  return ${functionName}();
+};`;
+      },
+      '',
+    );
+    updateRegion({
+      fileRepository: this.#fileRepository,
+      filePath: join(this.#generatedDirectoryRoot, 'tests.ts'),
+      region: 'src/recipe-search.spec.ts',
+      content: `
+// #region src/recipe-search.spec.ts
+${mainContent}
+// #endregion
+`,
+    });
+  }
+
+  #generateTestContent(ctx: TransformContext) {
+    const t = this.#types;
+    const { relativePath, extractedFunctions } = ctx;
+
+    let testContent = '';
+
     const generatedTestFilePath = join(
       this.#generatedDirectoryRoot,
       relativePath,
     );
-    let testContent = '';
 
-    /* Write extracted imports used by the extracted functions. */
     for (const [source, identifiers] of Object.entries(
       Object.groupBy(ctx.identifiersToExtract, (item) => item.source),
     )) {
@@ -69,35 +103,8 @@ export const ${functionName} = ${code};`;
       },
       '',
     );
-    this.#fileRepository.writeFile(
-      join(this.#generatedDirectoryRoot, relativePath),
-      testContent,
-    );
 
-    /* Update main file with imports of extracted functions. */
-    const mainContent = extractedFunctions.reduce(
-      (content, { functionName }) => {
-        return `${content}
-(globalThis as any).${functionName} = async () => {
-  const { ${functionName} } = await import('./${relativePath.replace(
-    /\.ts$/,
-    '',
-  )}');
-  return ${functionName}();
-};`;
-      },
-      '',
-    );
-    updateRegion({
-      fileRepository: this.#fileRepository,
-      filePath: join(this.#generatedDirectoryRoot, 'tests.ts'),
-      region: 'src/recipe-search.spec.ts',
-      content: `
-// #region src/recipe-search.spec.ts
-${mainContent}
-// #endregion
-`,
-    });
+    return testContent;
   }
 }
 
