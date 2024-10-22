@@ -109,6 +109,38 @@ import { a } from "../../../src/a";
 }`);
   });
 
+  test.fails('extract identical `runInBrowser` calls once', () => {
+    const { transform, readRelativeFile } = setUp();
+
+    transform({
+      relativeFilePath: 'src/recipe-search.spec.ts',
+      code: `
+      await runInBrowser(async () => {
+        console.log('IDENTICAL_CALL');
+      });
+
+      await runInBrowser(async () => {
+        console.log('IDENTICAL_CALL');
+      });
+      `,
+    });
+
+    expect.soft(readRelativeFile('playwright/generated/tests.ts')).toContain(`\
+// #region src/recipe-search.spec.ts
+(globalThis as any).src_recipe_search_spec_ts_kayOHk = async () => {
+  const { src_recipe_search_spec_ts_kayOHk } = await import('./src/recipe-search.spec');
+  return src_recipe_search_spec_ts_kayOHk();
+};
+// #endregion
+`);
+    expect.soft(
+      readRelativeFile('playwright/generated/src/recipe-search.spec.ts'),
+    ).toBe(`
+export const src_recipe_search_spec_ts_kayOHk = async () => {
+  console.log('IDENTICAL_CALL');
+};`);
+  });
+
   test('add export statement in tests.ts to make it a valid ESM module', () => {
     const { transform, readRelativeFile } = setUp();
 
