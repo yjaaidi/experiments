@@ -90,7 +90,7 @@ import { a } from "../../../src/a";
 `);
   });
 
-  test('extract `runInBrowser` function', () => {
+  test('extract `runInBrowser` call', () => {
     const { transform, readRelativeFile } = setUp();
 
     transform(RECIPE_SEARCH_TEST);
@@ -151,7 +151,7 @@ export const src_recipe_search_spec_ts_kayOHk = async () => {
       .toContain(`export {};`);
   });
 
-  test('update entrypoints in tests.ts without breaking existing regions', async () => {
+  test('update entry points in tests.ts without breaking existing regions', async () => {
     const { transform, readRelativeFile, writeRelativeFile } = setUp();
 
     await writeRelativeFile(
@@ -194,8 +194,6 @@ globalThis.yetAnotherExtractedFunction = async () => {
 `);
     expect.soft(content).not.toContain('oldExtractedFuntion');
   });
-
-  test.todo('do not inject the same function (same hash) twice');
 
   test('reset context between files', () => {
     const { transform, readRelativeFile } = setUp();
