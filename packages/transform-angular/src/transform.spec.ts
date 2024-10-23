@@ -21,7 +21,7 @@ test('...', async ({
 `);
   });
 
-  test.fails('do not add runInBrowser twice if already used', () => {
+  test('do not add runInBrowser twice if already used', () => {
     const { transform } = setUp();
 
     const result = transform({

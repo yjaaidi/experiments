@@ -23,19 +23,36 @@ export default declare(({ assertVersion, types: t }) => {
           return;
         }
 
-        /* Replace fixture `{mount}` with `{runInBrowser}`. */
-        for (const property of binding.path.node.properties) {
-          if (
+        /* Remove fixture `{mount}`. */
+        const properties = binding.path.node.properties;
+        const mountIndex = properties.findIndex(
+          (property) =>
             t.isObjectProperty(property) &&
             t.isIdentifier(property.key) &&
-            property.key.name === MOUNT_FUNCTION_NAME
-          ) {
-            property.key = t.identifier('runInBrowser');
-            property.value = t.identifier('runInBrowser');
-          }
+            property.key.name === MOUNT_FUNCTION_NAME,
+        );
+        properties.splice(mountIndex, 1);
+
+        /* Add `runInBrowser` to the fixture if not already present. */
+        if (
+          !properties.some(
+            (property) =>
+              t.isObjectProperty(property) &&
+              t.isIdentifier(property.key) &&
+              property.key.name === 'runInBrowser',
+          )
+        ) {
+          properties.push(
+            t.objectProperty(
+              t.identifier('runInBrowser'),
+              t.identifier('runInBrowser'),
+              false,
+              true,
+            ),
+          );
         }
 
-        /* Replace `mount` with `runInBrowser`. */
+        /* Replace `mount` call with `runInBrowser`. */
         path.node.callee = t.identifier('runInBrowser');
         path.node.arguments = [
           t.arrowFunctionExpression(
