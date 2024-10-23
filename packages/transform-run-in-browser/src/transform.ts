@@ -1,8 +1,8 @@
-import { dirname, join, relative } from 'node:path/posix';
+import { relative } from 'node:path/posix';
 import type { PluginObj } from '@babel/core';
+import type * as T from '@babel/types';
 import generate from '@babel/generator';
 import { declare } from '@babel/helper-plugin-utils';
-import * as T from '@babel/types';
 import { TransformContext } from './transform-context';
 import { ExtractedFunctionsWriter } from './writer';
 import { FileRepository, FileRepositoryImpl } from './file-repository';
