@@ -141,6 +141,29 @@ export const src_recipe_search_spec_ts_kayOHk = async () => {
 };`);
   });
 
+  test.fails('fix async import path in `runInBrowser` call', () => {
+    const { transform, readRelativeFile } = setUp();
+
+    transform({
+      relativeFilePath: 'src/recipe-search.spec.ts',
+      code: `\
+      await runInBrowser(async () => {
+        const { TestBed } = await import('@angular/core/testing');
+        const { RecipeSearchComponent } = await import('./recipe-search.component');
+      });
+      `,
+    });
+
+    expect.soft(
+      readRelativeFile('playwright/generated/src/recipe-search.spec.ts'),
+    ).toContain(`\
+      await runInBrowser(async () => {
+        const { TestBed } = await import('@angular/core/testing');
+        const { RecipeSearchComponent } = await import('../../../src/recipe-search.component');
+      });
+      `);
+  });
+
   test('add export statement in tests.ts to make it a valid ESM module', () => {
     const { transform, readRelativeFile } = setUp();
 
