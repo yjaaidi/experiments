@@ -20,6 +20,29 @@ test('...', async ({
   });
 `);
   });
+
+  test.fails('do not add runInBrowser twice if already used', () => {
+    const { transform } = setUp();
+
+    const result = transform({
+      relativeFilePath: `src/recipe-search.spec.ts`,
+      code: `\
+import { RecipeSearchComponent } from './recipe-search.component';
+
+test('...', async ({page, expect, mount, runInBrowser}) => {
+  await mount(RecipeSearchComponent);
+
+  await runInBrowser(async () => {});
+});`,
+    });
+
+    expect.soft(result).toContain(`\
+test('...', async ({
+  page,
+  expect,
+  runInBrowser
+}) => {`);
+  });
 });
 
 const RECIPE_SEARCH_TEST = {
