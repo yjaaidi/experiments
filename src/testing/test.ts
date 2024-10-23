@@ -3,7 +3,13 @@ import { Type } from '@angular/core';
 export { expect } from '@playwright/test';
 
 interface Fixtures {
-  mount(cmpType: Type<unknown>): Promise<void>;
+  mount(
+    cmpType: Type<unknown>,
+    args?: {
+      props?: Record<string, unknown>;
+      on?: Record<string, (...args: any[]) => void>;
+    },
+  ): Promise<void>;
   runInBrowser<
     DATA extends Record<string, unknown> = {},
     CALLBACKS extends Record<string, (...args: any[]) => void> = {},

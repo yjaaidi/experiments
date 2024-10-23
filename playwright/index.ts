@@ -3,11 +3,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
-import { Type } from '@angular/core';
-
-declare global {
-  function pwMount(cmpType: Type<unknown>): Promise<void>;
-}
+import './playwright-ct-angular';
 
 TestBed.initTestEnvironment(
   BrowserDynamicTestingModule,
@@ -17,10 +13,6 @@ TestBed.initTestEnvironment(
 TestBed.configureTestingModule({
   providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
 });
-
-globalThis.pwMount = (async (cmpType) => {
-  TestBed.createComponent(cmpType);
-}) satisfies typeof pwMount;
 
 // @ts-ignore
 import('./generated');
