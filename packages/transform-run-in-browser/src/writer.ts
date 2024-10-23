@@ -105,9 +105,9 @@ export class ExtractedFunctionsWriter {
     const regionContent = extractedFunctions
       .map(({ functionName }) => {
         return `\
-(globalThis as any).${functionName} = async () => {
+(globalThis as any).${functionName} = async (args) => {
   const { ${functionName} } = await import('${importPath}');
-  return ${functionName}();
+  return ${functionName}(args);
 };`;
       })
       .join('\n');

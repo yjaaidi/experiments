@@ -120,9 +120,9 @@ import { a } from "../../../src/a";
 
     expect.soft(readRelativeFile('playwright/generated/index.ts')).toContain(`
 // #region src/recipe-search.spec.ts
-(globalThis as any).src_recipe_search_spec_ts_mPLWHe = async () => {
+(globalThis as any).src_recipe_search_spec_ts_mPLWHe = async (args) => {
   const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec');
-  return src_recipe_search_spec_ts_mPLWHe();
+  return src_recipe_search_spec_ts_mPLWHe(args);
 };
 // #endregion`);
     expect.soft(
@@ -150,9 +150,9 @@ import { a } from "../../../src/a";
 
     expect.soft(readRelativeFile('playwright/generated/index.ts')).toContain(`\
 // #region src/recipe-search.spec.ts
-(globalThis as any).src_recipe_search_spec_ts_kayOHk = async () => {
+(globalThis as any).src_recipe_search_spec_ts_kayOHk = async (args) => {
   const { src_recipe_search_spec_ts_kayOHk } = await import('./src/recipe-search.spec');
-  return src_recipe_search_spec_ts_kayOHk();
+  return src_recipe_search_spec_ts_kayOHk(args);
 };
 // #endregion
 `);
