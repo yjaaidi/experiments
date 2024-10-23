@@ -3,8 +3,11 @@ import { Type } from '@angular/core';
 export { expect } from '@playwright/test';
 
 export const test = base.extend<{
-  mount: (cmpType: Type<unknown>) => Promise<void>;
-  runInBrowser: RunInBrowser<any>;
+  mount(cmpType: Type<unknown>): Promise<void>;
+  runInBrowser<ARGS extends Record<string, unknown>>(
+    fn: (args: ARGS) => Promise<void>,
+    args: ARGS,
+  ): Promise<void>;
 }>({
   mount: async ({}, use, testInfo) => {
     await use(() => {
@@ -18,23 +21,22 @@ export const test = base.extend<{
     await use(page);
   },
   runInBrowser: async ({ page }, use) => {
-    const runInBrowser: any = async (functionId: string) => {
+    const runInBrowser: any = async (
+      functionId: string,
+      args: Record<string, unknown>,
+    ) => {
       await page.waitForFunction(
-        ({ functionId }) => (globalThis as any)[functionId],
-        { functionId },
+        (functionId) => (globalThis as any)[functionId],
+        functionId,
       );
 
       return await page.evaluate(
-        ({ functionId }) => {
-          (globalThis as any)[functionId]();
+        ({ functionId, args }) => {
+          (globalThis as any)[functionId](args);
         },
-        { functionId },
+        { functionId, args },
       );
     };
     await use(runInBrowser);
   },
 });
-
-interface RunInBrowser<T> {
-  (fn: () => Promise<T>): Promise<T>;
-}
