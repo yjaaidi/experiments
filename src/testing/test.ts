@@ -2,13 +2,18 @@ import { test as base } from '@playwright/test';
 import { Type } from '@angular/core';
 export { expect } from '@playwright/test';
 
-export const test = base.extend<{
+interface Fixtures {
   mount(cmpType: Type<unknown>): Promise<void>;
-  runInBrowser<ARGS extends Record<string, unknown>>(
-    fn: (args: ARGS) => Promise<void>,
-    args?: ARGS,
+  runInBrowser<
+    DATA extends Record<string, unknown> = {},
+    CALLBACKS extends Record<string, (...args: any[]) => void> = {},
+  >(
+    fn: (args: { data: DATA; callbacks: CALLBACKS }) => Promise<void>,
+    args?: { data?: DATA; callbacks?: CALLBACKS },
   ): Promise<void>;
-}>({
+}
+
+export const test = base.extend<Fixtures>({
   mount: async ({}, use, testInfo) => {
     await use(() => {
       throw new Error(`test file ${testInfo.file} was not transformed.
@@ -21,59 +26,48 @@ export const test = base.extend<{
     await use(page);
   },
   runInBrowser: async ({ page }, use) => {
-    const runInBrowser: any = async (
-      runInBrowserFunctionId: string,
-      args: Record<string, unknown> = {},
+    const runInBrowser: Fixtures['runInBrowser'] = async (
+      fn,
+      { data = {}, callbacks = {} } = {},
     ) => {
+      /* Function is replaced by functionId by babel transform. */
+      const functionId: string = fn as any;
+
       try {
         await page.waitForFunction(
           (functionId) => (globalThis as any)[functionId],
-          runInBrowserFunctionId,
+          functionId,
         );
       } catch (e) {
         console.error(
-          `Function "${runInBrowserFunctionId}" not found in the browser context.`,
+          `Function "${functionId}" not found in the browser context.`,
         );
         throw e;
       }
 
-      const normalizedArgs: NormalizedValue[] = await Promise.all(
-        Object.entries(args).map(async ([prop, value]) => {
-          if (typeof value === 'function') {
-            const functionId = `${runInBrowserFunctionId}_${prop}`;
-            await page.exposeFunction(functionId, value);
-            return { prop, type: 'function', functionId };
-          }
-          return { prop, type: 'value', value };
+      const exposedCallbacks = await Promise.all(
+        Object.entries(callbacks).map(async ([prop, callback]) => {
+          const callbackId = `${functionId}_${prop}`;
+          await page.exposeFunction(callbackId, callback);
+          return { prop, callbackId };
         }),
       );
 
       return await page.evaluate(
-        ({ runInBrowserFunctionId, normalizedArgs }) => {
-          const args = normalizedArgs.reduce(
-            (acc, normalizedValue) => {
-              if (normalizedValue.type === 'function') {
-                acc[normalizedValue.prop] = (globalThis as any)[
-                  normalizedValue.functionId
-                ];
-              } else {
-                acc[normalizedValue.prop] = normalizedValue.value;
-              }
-
+        ({ functionId, data, exposedCallbacks }) => {
+          const callbacks = exposedCallbacks.reduce(
+            (acc, { prop, callbackId }) => {
+              acc[prop] = (globalThis as any)[callbackId];
               return acc;
             },
             {} as Record<string, unknown>,
           );
-          (globalThis as any)[runInBrowserFunctionId](args);
+
+          (globalThis as any)[functionId]({ data, callbacks });
         },
-        { runInBrowserFunctionId, normalizedArgs },
+        { functionId, data, exposedCallbacks },
       );
     };
     await use(runInBrowser);
   },
 });
-
-type NormalizedValue = { prop: string } & (
-  | { type: 'value'; value: unknown }
-  | { type: 'function'; functionId: string }
-);

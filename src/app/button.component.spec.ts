@@ -4,11 +4,13 @@ import { ButtonComponent } from './button.component';
 
 test('forward properties to browser', async ({ page, runInBrowser }) => {
   await runInBrowser(
-    async ({ label }) => {
+    async ({ data: { label } }) => {
       const fixture = TestBed.createComponent(ButtonComponent);
       fixture.componentRef.setInput('label', label);
     },
-    { label: 'MY LABEL' },
+    {
+      data: { label: 'MY LABEL' },
+    },
   );
 
   await expect(page.getByRole('button')).toHaveText('MY LABEL');
@@ -17,13 +19,15 @@ test('forward properties to browser', async ({ page, runInBrowser }) => {
 test('expose callbacks to browser', async ({ page, runInBrowser }) => {
   let clickMessages: string[] = [];
   await runInBrowser(
-    async ({ onClick }) => {
+    async ({ callbacks: { onClick } }) => {
       const fixture = TestBed.createComponent(ButtonComponent);
       fixture.componentInstance.click.subscribe(onClick);
     },
     {
-      onClick: (message: string) => {
-        clickMessages.push(message);
+      callbacks: {
+        onClick: (message: string) => {
+          clickMessages.push(message);
+        },
       },
     },
   );
