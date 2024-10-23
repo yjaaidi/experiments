@@ -33,8 +33,31 @@ describe('test transform', () => {
 
     const result = transform(RECIPE_SEARCH_TEST);
 
-    expect(result).toMatch(
-      /await runInBrowser\("src_recipe_search_spec_ts_mPLWHe"\)/,
+    expect(result).toContain(
+      'await runInBrowser("src_recipe_search_spec_ts_mPLWHe")',
+    );
+  });
+
+  test.fails('keep extra arguments', () => {
+    const { transform } = setUp();
+
+    const result = transform({
+      relativeFilePath: 'src/recipe-search.spec.ts',
+      code: `
+import { TestBed } from '@angular/core/testing';
+import { expect, test } from '@playwright/test';
+import { RecipeSearchComponent } from './recipe-search.component';
+
+test('...', async ({page, expect, runInBrowser}) => {
+  await runInBrowser(async ({recipes}) => {
+    TestBed.createComponent(RecipeSearchComponent);
+  }, {recipes: ['Burger', 'Salad']});
+});
+      `,
+    });
+
+    expect(result).toContain(
+      `await runInBrowser("src_recipe_search_spec_ts_pfQioj", {recipes: ['Burger', 'Salad']})`,
     );
   });
 
