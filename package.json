@@ -14,8 +14,8 @@
     "build:transform-angular": "bun run --filter transform-angular build",
     "build:transform-run-in-browser": "bun run --filter transform-run-in-browser build",
     "debug": "bun reset && bun run test",
-    "dev:testing": "tools/start-test-server.sh",
-    "reset": "playwright clear-cache && rm -rf playwright/generated && bun run build",
+    "dev:testing": "ng dev --configuration testing",
+    "reset": "playwright clear-cache && tools/reset-generated.sh && bun run build",
     "test": "concurrently --kill-others --success first \"wait-on http://localhost:7357 && playwright test --reporter list\" \"bun dev:testing\"",
     "test:transform-angular": "bun run --filter transform-angular test --watch false",
     "test:transform-run-in-browser": "bun run --filter transform-run-in-browser test --watch false"
