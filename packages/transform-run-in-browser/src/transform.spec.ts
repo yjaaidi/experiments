@@ -86,7 +86,6 @@ test('...', async ({page, expect}) => {
     expect(readRelativeFile('playwright/generated/src/recipe-search.spec.ts'))
       .toContain(`\
 import { a } from "../../../src/a";
-
 `);
   });
 
@@ -135,7 +134,7 @@ import { a } from "../../../src/a";
 `);
     expect.soft(
       readRelativeFile('playwright/generated/src/recipe-search.spec.ts'),
-    ).toBe(`
+    ).toBe(`\
 export const src_recipe_search_spec_ts_kayOHk = async () => {
   console.log('IDENTICAL_CALL');
 };`);

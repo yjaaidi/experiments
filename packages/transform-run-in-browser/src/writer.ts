@@ -72,18 +72,16 @@ export class ExtractedFunctionsWriter {
     }
 
     /* Write extracted functions. */
-    testContent += ctx.extractedFunctions.reduce(
-      (content, { code, functionName }) => {
+    testContent += ctx.extractedFunctions
+      .map(({ code, functionName }) => {
         code = this._fixAsyncImportRelativePath({
           ctx,
           code,
         });
 
-        return `${content}
-export const ${functionName} = ${code}`;
-      },
-      '',
-    );
+        return `export const ${functionName} = ${code}`;
+      })
+      .join('\n');
 
     return testContent;
   }
