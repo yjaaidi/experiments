@@ -7,9 +7,11 @@ import {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<button (click)="click.emit()">{{ label() }}</button>`,
+  template: `<button (click)="click.emit('🙏 thanks for clicking ❤️')">
+    {{ label() }}
+  </button>`,
 })
 export class ButtonComponent {
-  label = input.required();
-  click = output<void>();
+  label = input('CLICK ME');
+  click = output<string>();
 }

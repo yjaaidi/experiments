@@ -22,21 +22,58 @@ export const test = base.extend<{
   },
   runInBrowser: async ({ page }, use) => {
     const runInBrowser: any = async (
-      functionId: string,
-      args: Record<string, unknown>,
+      runInBrowserFunctionId: string,
+      args: Record<string, unknown> = {},
     ) => {
-      await page.waitForFunction(
-        (functionId) => (globalThis as any)[functionId],
-        functionId,
+      try {
+        await page.waitForFunction(
+          (functionId) => (globalThis as any)[functionId],
+          runInBrowserFunctionId,
+        );
+      } catch (e) {
+        console.error(
+          `Function "${runInBrowserFunctionId}" not found in the browser context.`,
+        );
+        throw e;
+      }
+
+      const normalizedArgs: NormalizedValue[] = await Promise.all(
+        Object.entries(args).map(async ([prop, value]) => {
+          if (typeof value === 'function') {
+            const functionId = `${runInBrowserFunctionId}_${prop}`;
+            await page.exposeFunction(functionId, value);
+            return { prop, type: 'function', functionId };
+          }
+          return { prop, type: 'value', value };
+        }),
       );
 
       return await page.evaluate(
-        ({ functionId, args }) => {
-          (globalThis as any)[functionId](args);
+        ({ runInBrowserFunctionId, normalizedArgs }) => {
+          const args = normalizedArgs.reduce(
+            (acc, normalizedValue) => {
+              if (normalizedValue.type === 'function') {
+                acc[normalizedValue.prop] = (globalThis as any)[
+                  normalizedValue.functionId
+                ];
+              } else {
+                acc[normalizedValue.prop] = normalizedValue.value;
+              }
+
+              return acc;
+            },
+            {} as Record<string, unknown>,
+          );
+          (globalThis as any)[runInBrowserFunctionId](args);
         },
-        { functionId, args },
+        { runInBrowserFunctionId, normalizedArgs },
       );
     };
     await use(runInBrowser);
   },
 });
+
+type NormalizedValue = { prop: string } & (
+  | { type: 'value'; value: unknown }
+  | { type: 'function'; functionId: string }
+);
