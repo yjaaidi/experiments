@@ -6,7 +6,7 @@ export const test = base.extend<{
   mount(cmpType: Type<unknown>): Promise<void>;
   runInBrowser<ARGS extends Record<string, unknown>>(
     fn: (args: ARGS) => Promise<void>,
-    args: ARGS,
+    args?: ARGS,
   ): Promise<void>;
 }>({
   mount: async ({}, use, testInfo) => {
