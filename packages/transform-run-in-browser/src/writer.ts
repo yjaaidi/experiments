@@ -5,6 +5,7 @@ import { TransformContext } from './transform-context';
 
 import { FileRepository } from './file-repository';
 import { updateRegion } from './utils/update-region';
+import { parse, traverse } from '@babel/core';
 
 export class ExtractedFunctionsWriter {
   private _fileRepository: FileRepository;
@@ -81,8 +82,14 @@ export class ExtractedFunctionsWriter {
     /* Write extracted functions. */
     testContent += extractedFunctions.reduce(
       (content, { code, functionName }) => {
+        code = this._fixAsyncImportRelativePath({
+          code,
+          generatedTestFilePath,
+          relativeFilePath,
+        });
+
         return `${content}
-export const ${functionName} = ${code};`;
+export const ${functionName} = ${code}`;
       },
       '',
     );
@@ -117,5 +124,43 @@ export const ${functionName} = ${code};`;
       region: relativeFilePath,
       regionContent: regionContent,
     });
+  }
+
+  private _fixAsyncImportRelativePath({
+    code,
+    generatedTestFilePath,
+    relativeFilePath,
+  }: {
+    code: string;
+    generatedTestFilePath: string;
+    relativeFilePath: string;
+  }) {
+    const t = this._types;
+
+    const ast = parse(code);
+
+    if (!ast) {
+      return code;
+    }
+
+    traverse(ast, {
+      CallExpression: (path) => {
+        if (
+          t.isImport(path.node.callee) &&
+          t.isStringLiteral(path.node.arguments[0]) &&
+          path.node.arguments[0].value.startsWith('.')
+        ) {
+          path.node.arguments[0].value = relative(
+            dirname(generatedTestFilePath),
+            join(
+              this._projectRoot,
+              dirname(relativeFilePath),
+              path.node.arguments[0].value,
+            ),
+          );
+        }
+      },
+    });
+    return generate(ast).code;
   }
 }

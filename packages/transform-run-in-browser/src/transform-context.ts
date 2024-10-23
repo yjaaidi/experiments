@@ -68,7 +68,7 @@ export class TransformContext {
     return this._currentRunInBrowserCall != null;
   }
 
-  enterInRunInBrowser(call: T.CallExpression) {
+  enterRunInBrowserCall(call: T.CallExpression) {
     this._currentRunInBrowserCall = call;
   }
 

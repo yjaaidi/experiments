@@ -1,4 +1,4 @@
-import { relative } from 'node:path/posix';
+import { dirname, join, relative } from 'node:path/posix';
 import type { PluginObj } from '@babel/core';
 import generate from '@babel/generator';
 import { declare } from '@babel/helper-plugin-utils';
@@ -56,12 +56,12 @@ export default declare<Options>(({ assertVersion, types: t }, options) => {
             return;
           }
 
-          /* Skip if we are already in a `runInBrowserCall`. */
+          /* Note that we are entering a `runInBrowserCall`. */
           if (
             t.isIdentifier(path.node.callee, { name: 'runInBrowser' }) &&
             !ctx.isInRunInBrowserCall()
           ) {
-            ctx.enterInRunInBrowser(path.node);
+            ctx.enterRunInBrowserCall(path.node);
           }
         },
         exit(path) {
