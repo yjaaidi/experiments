@@ -18,9 +18,9 @@ TestBed.configureTestingModule({
   providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
 });
 
-globalThis.pwMount = async (cmpType: Type<unknown>) => {
+globalThis.pwMount = (async (cmpType) => {
   TestBed.createComponent(cmpType);
-};
+}) satisfies typeof pwMount;
 
 // @ts-ignore
 import('./generated');
