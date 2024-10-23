@@ -49,10 +49,11 @@ test('...', async ({
     });
 
     expect.soft(result).toContain(`\
-  await runInBrowser(async ({data}) => {
-    await pwMount(ButtonComponent, {props: data});
+  await runInBrowser(async ({data, callbacks}) => {
+    await pwMount(ButtonComponent, {props: data, on: callbacks});
   }, {
-    data: {recipe: 'Burger'}
+    data: {recipe: 'Burger'},
+    callbacks: {}
   });
 `);
   });
@@ -73,9 +74,10 @@ test('...', async ({
     });
 
     expect.soft(result).toContain(`\
-  await runInBrowser(async ({callbacks}) => {
-    await pwMount(ButtonComponent, {on: callbacks});
+  await runInBrowser(async ({data, callbacks}) => {
+    await pwMount(ButtonComponent, {props: data, on: callbacks});
   }, {
+    data: {},
     callbacks: {add: () => count++}
   });
 `);
