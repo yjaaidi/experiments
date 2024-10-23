@@ -82,9 +82,9 @@ export default declare<Options>(
               functionName,
             });
 
-            /* Replace arguments with a string that will be forwarded to the browser. */
+            /* Replace first argument with a string that will be forwarded to the browser. */
             const identifier = t.stringLiteral(functionName);
-            path.node.arguments = [identifier];
+            path.node.arguments[0] = identifier;
 
             ctx.exitRunInBrowserCall();
           },

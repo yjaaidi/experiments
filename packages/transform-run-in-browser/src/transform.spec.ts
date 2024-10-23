@@ -38,7 +38,7 @@ describe('test transform', () => {
     );
   });
 
-  test.fails('keep extra arguments', () => {
+  test('keep extra arguments', () => {
     const { transform } = setUp();
 
     const result = transform({
@@ -56,9 +56,10 @@ test('...', async ({page, expect, runInBrowser}) => {
       `,
     });
 
-    expect(result).toContain(
-      `await runInBrowser("src_recipe_search_spec_ts_pfQioj", {recipes: ['Burger', 'Salad']})`,
-    );
+    expect(result).toContain(`\
+  await runInBrowser("src_recipe_search_spec_ts_pfQioj", {
+    recipes: ['Burger', 'Salad']
+  });`);
   });
 
   test.todo(
