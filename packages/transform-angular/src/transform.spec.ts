@@ -28,13 +28,13 @@ test('...', async ({
   expect,
   runInBrowser
 }) => {
-  await runInBrowser(async () => {
-    await pwMount(RecipeSearchComponent);
-  });
+  await runInBrowser(async ({}) => {
+    await pwMount(RecipeSearchComponent, {});
+  }, {});
 `);
   });
 
-  test.fails('replace mount with runInBrowser and forward props', () => {
+  test('replace mount with runInBrowser and forward props', () => {
     const { transform } = setUp();
 
     const result = transform({
@@ -49,16 +49,21 @@ test('...', async ({
     });
 
     expect.soft(result).toContain(`\
-  await runInBrowser(async ({data, callbacks}) => {
-    await pwMount(ButtonComponent, {props: data, on: callbacks});
+  await runInBrowser(async ({
+    data
+  }) => {
+    await pwMount(RecipePreviewCmp, {
+      props: data
+    });
   }, {
-    data: {recipe: 'Burger'},
-    callbacks: {}
+    data: {
+      recipe: 'Burger'
+    }
   });
 `);
   });
 
-  test.fails('replace mount with runInBrowser and forward callbacks', () => {
+  test('replace mount with runInBrowser and forward callbacks', () => {
     const { transform } = setUp();
 
     const result = transform({
@@ -74,11 +79,16 @@ test('...', async ({
     });
 
     expect.soft(result).toContain(`\
-  await runInBrowser(async ({data, callbacks}) => {
-    await pwMount(ButtonComponent, {props: data, on: callbacks});
+  await runInBrowser(async ({
+    callbacks
+  }) => {
+    await pwMount(RecipePreviewCmp, {
+      on: callbacks
+    });
   }, {
-    data: {},
-    callbacks: {add: () => count++}
+    callbacks: {
+      add: () => count++
+    }
   });
 `);
   });
