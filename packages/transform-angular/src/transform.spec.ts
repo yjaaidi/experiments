@@ -7,7 +7,20 @@ describe('test transform', () => {
   test('replace mount with runInBrowser', () => {
     const { transform } = setUp();
 
-    const result = transform(RECIPE_SEARCH_TEST);
+    const result = transform({
+      relativeFilePath: 'src/recipe-search.spec.ts',
+      code: `
+  import { TestBed } from '@angular/core/testing';
+  import { expect, test } from '@playwright/test';
+  import { RecipeSearchComponent } from './recipe-search.component';
+
+  test('...', async ({page, expect, mount}) => {
+    await mount(RecipeSearchComponent);
+
+    await expect(page.getByRole('listitem')).toHaveText(['Burger', 'Salad']);
+  });
+`,
+    });
 
     expect.soft(result).toContain(`\
 test('...', async ({
@@ -17,6 +30,53 @@ test('...', async ({
 }) => {
   await runInBrowser(async () => {
     await pwMount(RecipeSearchComponent);
+  });
+`);
+  });
+
+  test.fails('replace mount with runInBrowser and forward props', () => {
+    const { transform } = setUp();
+
+    const result = transform({
+      relativeFilePath: 'src/recipe-preview.spec.ts',
+      code: `
+  test('...', async ({page, expect, mount}) => {
+    await mount(RecipePreviewCmp, {
+      props: {recipe: 'Burger'}
+    });
+  });
+`,
+    });
+
+    expect.soft(result).toContain(`\
+  await runInBrowser(async ({data}) => {
+    await pwMount(ButtonComponent, {props: data});
+  }, {
+    data: {recipe: 'Burger'}
+  });
+`);
+  });
+
+  test.fails('replace mount with runInBrowser and forward callbacks', () => {
+    const { transform } = setUp();
+
+    const result = transform({
+      relativeFilePath: 'src/recipe-preview.spec.ts',
+      code: `
+  test('...', async ({page, expect, mount}) => {
+    let count = 0;
+    await mount(RecipePreviewCmp, {
+      on: {add: () => count++}
+    });
+  });
+`,
+    });
+
+    expect.soft(result).toContain(`\
+  await runInBrowser(async ({callbacks}) => {
+    await pwMount(ButtonComponent, {on: callbacks});
+  }, {
+    callbacks: {add: () => count++}
   });
 `);
   });
@@ -44,21 +104,6 @@ test('...', async ({
 }) => {`);
   });
 });
-
-const RECIPE_SEARCH_TEST = {
-  relativeFilePath: 'src/recipe-search.spec.ts',
-  code: `
-  import { TestBed } from '@angular/core/testing';
-  import { expect, test } from '@playwright/test';
-  import { RecipeSearchComponent } from './recipe-search.component';
-
-  test('...', async ({page, expect, mount}) => {
-    await mount(RecipeSearchComponent);
-
-    await expect(page.getByRole('listitem')).toHaveText(['Burger', 'Salad']);
-  });
-`,
-};
 
 function setUp() {
   const projectRoot = '/path/to/project';
