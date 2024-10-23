@@ -51,14 +51,18 @@ import { RecipeSearchComponent } from './recipe-search.component';
 test('...', async ({page, expect, runInBrowser}) => {
   await runInBrowser(async ({recipes}) => {
     TestBed.createComponent(RecipeSearchComponent);
-  }, {recipes: ['Burger', 'Salad']});
+  }, {
+    props: {recipes: ['Burger', 'Salad']}
+  });
 });
       `,
     });
 
     expect(result).toContain(`\
   await runInBrowser("src_recipe_search_spec_ts_pfQioj", {
-    recipes: ['Burger', 'Salad']
+    props: {
+      recipes: ['Burger', 'Salad']
+    }
   });`);
   });
 
