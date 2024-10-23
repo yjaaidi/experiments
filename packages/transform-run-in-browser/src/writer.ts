@@ -50,14 +50,8 @@ export class ExtractedFunctionsWriter {
 
   private _generateTestContent(ctx: TransformContext) {
     const t = this._types;
-    const { relativeFilePath, extractedFunctions } = ctx;
 
     let testContent = '';
-
-    const generatedTestFilePath = join(
-      this._generatedDirectoryRoot,
-      relativeFilePath,
-    );
 
     for (const [source, identifiers] of Object.entries(
       Object.groupBy(ctx.identifiersToExtract, (item) => item.source),
@@ -66,26 +60,23 @@ export class ExtractedFunctionsWriter {
         continue;
       }
       const specifiers = new Set(identifiers.map((item) => item.specifier));
-      const relativeSource = source.startsWith('.')
-        ? relative(
-            dirname(generatedTestFilePath),
-            join(this._projectRoot, dirname(relativeFilePath), source),
-          )
-        : source;
+      const newImportSource = this._computeNewImportSource({
+        ctx,
+        importSource: source,
+      });
       const importDeclaration = t.importDeclaration(
         Array.from(specifiers),
-        t.stringLiteral(relativeSource),
+        t.stringLiteral(newImportSource),
       );
       testContent += generate(importDeclaration).code + '\n';
     }
 
     /* Write extracted functions. */
-    testContent += extractedFunctions.reduce(
+    testContent += ctx.extractedFunctions.reduce(
       (content, { code, functionName }) => {
         code = this._fixAsyncImportRelativePath({
+          ctx,
           code,
-          generatedTestFilePath,
-          relativeFilePath,
         });
 
         return `${content}
@@ -127,13 +118,11 @@ export const ${functionName} = ${code}`;
   }
 
   private _fixAsyncImportRelativePath({
+    ctx,
     code,
-    generatedTestFilePath,
-    relativeFilePath,
   }: {
+    ctx: TransformContext;
     code: string;
-    generatedTestFilePath: string;
-    relativeFilePath: string;
   }) {
     const t = this._types;
 
@@ -147,20 +136,37 @@ export const ${functionName} = ${code}`;
       CallExpression: (path) => {
         if (
           t.isImport(path.node.callee) &&
-          t.isStringLiteral(path.node.arguments[0]) &&
-          path.node.arguments[0].value.startsWith('.')
+          t.isStringLiteral(path.node.arguments[0])
         ) {
-          path.node.arguments[0].value = relative(
-            dirname(generatedTestFilePath),
-            join(
-              this._projectRoot,
-              dirname(relativeFilePath),
-              path.node.arguments[0].value,
-            ),
-          );
+          path.node.arguments[0].value = this._computeNewImportSource({
+            ctx,
+            importSource: path.node.arguments[0].value,
+          });
         }
       },
     });
     return generate(ast).code;
+  }
+
+  private _computeNewImportSource({
+    ctx,
+    importSource,
+  }: {
+    ctx: TransformContext;
+    importSource: string;
+  }) {
+    if (!importSource.startsWith('.')) {
+      return importSource;
+    }
+
+    const generatedTestFilePath = join(
+      this._generatedDirectoryRoot,
+      ctx.relativeFilePath,
+    );
+
+    return relative(
+      dirname(generatedTestFilePath),
+      join(this._projectRoot, dirname(ctx.relativeFilePath), importSource),
+    );
   }
 }
