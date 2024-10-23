@@ -5,25 +5,29 @@ import { TransformContext } from './transform-context';
 
 import { FileRepository } from './file-repository';
 import { updateRegion } from './utils/update-region';
-import { parse, traverse } from '@babel/core';
+import { ParseResult, traverse } from '@babel/core';
 
 export class ExtractedFunctionsWriter {
+  private _babelParse: (code: string) => ParseResult | null;
   private _fileRepository: FileRepository;
   private _generatedDirectoryRoot: string;
   private _projectRoot: string;
   private _types: typeof T;
 
   constructor({
+    babelParse,
     fileRepository,
     generatedDirectoryPath,
     projectRoot,
     types,
   }: {
+    babelParse: (code: string) => ParseResult | null;
     fileRepository: FileRepository;
     generatedDirectoryPath: string;
     projectRoot: string;
     types: typeof T;
   }) {
+    this._babelParse = babelParse;
     this._fileRepository = fileRepository;
     this._generatedDirectoryRoot = join(projectRoot, generatedDirectoryPath);
     this._projectRoot = projectRoot;
@@ -124,7 +128,7 @@ export class ExtractedFunctionsWriter {
   }) {
     const t = this._types;
 
-    const ast = parse(code);
+    const ast = this._babelParse(code);
 
     if (!ast) {
       return code;
