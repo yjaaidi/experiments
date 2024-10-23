@@ -107,7 +107,7 @@ export class ExtractedFunctionsWriter {
         return `\
 (globalThis as any).${functionName} = async (args) => {
   const { ${functionName} } = await import('${importPath}');
-  return ${functionName}(args);
+  return (${functionName} as any)(args);
 };`;
       })
       .join('\n');

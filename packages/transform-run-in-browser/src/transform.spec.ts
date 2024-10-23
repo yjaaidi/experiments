@@ -122,7 +122,7 @@ import { a } from "../../../src/a";
 // #region src/recipe-search.spec.ts
 (globalThis as any).src_recipe_search_spec_ts_mPLWHe = async (args) => {
   const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec');
-  return src_recipe_search_spec_ts_mPLWHe(args);
+  return (src_recipe_search_spec_ts_mPLWHe as any)(args);
 };
 // #endregion`);
     expect.soft(
@@ -148,20 +148,22 @@ import { a } from "../../../src/a";
       `,
     });
 
-    expect.soft(readRelativeFile('playwright/generated/index.ts')).toContain(`\
-// #region src/recipe-search.spec.ts
-(globalThis as any).src_recipe_search_spec_ts_kayOHk = async (args) => {
-  const { src_recipe_search_spec_ts_kayOHk } = await import('./src/recipe-search.spec');
-  return src_recipe_search_spec_ts_kayOHk(args);
-};
-// #endregion
-`);
-    expect.soft(
-      readRelativeFile('playwright/generated/src/recipe-search.spec.ts'),
-    ).toBe(`\
-export const src_recipe_search_spec_ts_kayOHk = async () => {
-  console.log('IDENTICAL_CALL');
-};`);
+    expect
+      .soft(
+        occurrences(
+          readRelativeFile('playwright/generated/index.ts'),
+          `import('./src/recipe-search.spec')`,
+        ),
+      )
+      .toBe(1);
+    expect
+      .soft(
+        occurrences(
+          readRelativeFile('playwright/generated/src/recipe-search.spec.ts'),
+          `console.log('IDENTICAL_CALL')`,
+        ),
+      )
+      .toBe(1);
   });
 
   test('fix async import path in `runInBrowser` call', () => {
@@ -337,4 +339,11 @@ function setUp() {
       })?.code;
     },
   };
+}
+
+function occurrences(text: string | null, substring: string) {
+  if (text === null) {
+    return null;
+  }
+  return text.split(substring).length - 1;
 }
