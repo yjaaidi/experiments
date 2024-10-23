@@ -94,7 +94,7 @@ import { a } from "../../../src/a";
 
     transform(RECIPE_SEARCH_TEST);
 
-    expect.soft(readRelativeFile('playwright/generated/tests.ts')).toContain(`
+    expect.soft(readRelativeFile('playwright/generated/index.ts')).toContain(`
 // #region src/recipe-search.spec.ts
 (globalThis as any).src_recipe_search_spec_ts_mPLWHe = async () => {
   const { src_recipe_search_spec_ts_mPLWHe } = await import('./src/recipe-search.spec');
@@ -124,7 +124,7 @@ import { a } from "../../../src/a";
       `,
     });
 
-    expect.soft(readRelativeFile('playwright/generated/tests.ts')).toContain(`\
+    expect.soft(readRelativeFile('playwright/generated/index.ts')).toContain(`\
 // #region src/recipe-search.spec.ts
 (globalThis as any).src_recipe_search_spec_ts_kayOHk = async () => {
   const { src_recipe_search_spec_ts_kayOHk } = await import('./src/recipe-search.spec');
@@ -165,21 +165,21 @@ export const src_recipe_search_spec_ts_kayOHk = async () => {
 };`);
   });
 
-  test('add export statement in tests.ts to make it a valid ESM module', () => {
+  test('add export statement in generated/index.ts to make it a valid ESM module', () => {
     const { transform, readRelativeFile } = setUp();
 
     transform(RECIPE_SEARCH_TEST);
 
     expect
-      .soft(readRelativeFile('playwright/generated/tests.ts'))
+      .soft(readRelativeFile('playwright/generated/index.ts'))
       .toContain(`export {};`);
   });
 
-  test('update entry points in tests.ts without breaking existing regions', async () => {
+  test('update entry points in generated/index.ts without breaking existing regions', async () => {
     const { transform, readRelativeFile, writeRelativeFile } = setUp();
 
     await writeRelativeFile(
-      'playwright/generated/tests.ts',
+      'playwright/generated/index.ts',
       `
 // #region src/another-file.spec.ts
 globalThis.anotherExtractedFunction = async () => {
@@ -201,7 +201,7 @@ globalThis.yetAnotherExtractedFunction = async () => {
 
     transform(RECIPE_SEARCH_TEST);
 
-    const content = readRelativeFile('playwright/generated/tests.ts');
+    const content = readRelativeFile('playwright/generated/index.ts');
     expect.soft(content).toContain(`\
 // #region src/another-file.spec.ts
 globalThis.anotherExtractedFunction = async () => {

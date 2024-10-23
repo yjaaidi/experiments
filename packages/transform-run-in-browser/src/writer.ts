@@ -45,7 +45,7 @@ export class ExtractedFunctionsWriter {
       this._generateTestContent(ctx),
     );
 
-    const entryPointPath = join(this._generatedDirectoryRoot, 'tests.ts');
+    const entryPointPath = join(this._generatedDirectoryRoot, 'index.ts');
     // TODO create a lock file to avoid concurrent updates
     let entryPointContent = this._fileRepository.tryReadFile(entryPointPath);
     entryPointContent = this._updateEntryPoint({ ctx, entryPointContent });

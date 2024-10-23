@@ -23,4 +23,4 @@ globalThis.pwMount = async (cmpType: Type<unknown>) => {
 };
 
 // @ts-ignore
-import('./generated/tests');
+import('./generated');

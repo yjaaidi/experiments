@@ -7,8 +7,8 @@ GENERATED_DIR=$PROJECT_ROOT/playwright/generated
 
 mkdir -p $GENERATED_DIR
 
-if [ ! -f $GENERATED_DIR/tests.ts ]; then
-  echo 'export {};' > $GENERATED_DIR/tests.ts
+if [ ! -f $GENERATED_DIR/index.ts ]; then
+  echo 'export {};' > $GENERATED_DIR/index.ts
 fi
 
 ng dev -c testing
