@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'wm-app',
+  standalone: true,
+  selector: 'app-root',
   template: `<ul>
     <li>Burger</li>
     <li>Salad</li>
