@@ -1,19 +1,18 @@
-import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
   inject,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
+import { ActivatedRoute } from '@angular/router';
+import { pending, suspensify } from '@jscutlery/operators';
+import { rxComputed } from '@jscutlery/rx-computed';
+import { catchError, defer, of } from 'rxjs';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { GridComponent } from '../shared/grid.component';
 import { RecipeAddButtonComponent } from './recipe-add-button.component';
-import { ActivatedRoute } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, defer, of } from 'rxjs';
-import { rxComputed } from '@jscutlery/rx-computed';
-import { pending, suspensify } from '@jscutlery/operators';
 import { MessageComponent } from '../shared/message.component';
 
 @Component({
@@ -21,7 +20,6 @@ import { MessageComponent } from '../shared/message.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-recipe-suggestions',
   imports: [
-    AsyncPipe,
     GridComponent,
     MatButtonModule,
     RecipePreviewComponent,
@@ -32,7 +30,7 @@ import { MessageComponent } from '../shared/message.component';
     <h2>Suggestions d'Ottolenghi</h2>
 
     @if (suggestionsSuspense().hasError) {
-      <wm-message> 💥 Something went wrong </wm-message>
+      <wm-message> 💥 Something went wrong</wm-message>
     }
 
     <wm-grid>
