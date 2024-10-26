@@ -31,10 +31,10 @@ export interface Link {
     MatListModule,
     MatToolbarModule,
     RouterLink,
-    RouterLinkActive
-],
+    RouterLinkActive,
+  ],
   template: `
-    <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav-container>
       <mat-sidenav
         #drawer
         class="sidenav"
@@ -42,8 +42,8 @@ export interface Link {
         [attr.role]="isHandset() ? 'dialog' : 'navigation'"
         [mode]="isHandset() ? 'over' : 'side'"
         [opened]="!isHandset()"
-        >
-        <mat-nav-list>
+      >
+        <mat-nav-list [style.width.px]="200">
           @for (link of links; track link) {
             <a
               #routerLinkActive="routerLinkActive"
@@ -54,39 +54,28 @@ export interface Link {
               mat-list-item
               routerLinkActive
               >{{ link.name }}</a
-              >
-            }
-          </mat-nav-list>
-        </mat-sidenav>
-        <mat-sidenav-content>
-          <mat-toolbar color="primary">
-            @if (isHandset()) {
-              <button
-                type="button"
-                aria-label="Toggle sidenav"
-                mat-icon-button
-                (click)="drawer.toggle()"
-                >
-                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-              </button>
-            }
-            <span>{{ title }}</span>
-          </mat-toolbar>
-          <ng-content />
-        </mat-sidenav-content>
-      </mat-sidenav-container>
-      `,
-  styles: [
-    `
-      .sidenav-container {
-        height: 100%;
-      }
-
-      .sidenav {
-        width: 200px;
-      }
-    `,
-  ],
+            >
+          }
+        </mat-nav-list>
+      </mat-sidenav>
+      <mat-sidenav-content class="content">
+        <mat-toolbar color="primary">
+          @if (isHandset()) {
+            <button
+              type="button"
+              aria-label="Toggle sidenav"
+              mat-icon-button
+              (click)="drawer.toggle()"
+            >
+              <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+            </button>
+          }
+          <span>{{ title }}</span>
+        </mat-toolbar>
+        <ng-content />
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  `,
 })
 export class NavComponent {
   @Input({ required: true }) links!: Link[];
@@ -94,7 +83,9 @@ export class NavComponent {
 
   private _breakpointObserver = inject(BreakpointObserver);
 
-  isHandset = toSignal(this._breakpointObserver
-    .observe(Breakpoints.Handset)
-    .pipe(map((result) => result.matches)));
+  isHandset = toSignal(
+    this._breakpointObserver
+      .observe(Breakpoints.Handset)
+      .pipe(map((result) => result.matches)),
+  );
 }
