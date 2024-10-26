@@ -21,7 +21,10 @@
             "input": "apps/whiskmate/public"
           }
         ],
-        "styles": ["apps/whiskmate/src/styles.css"],
+        "styles": [
+          "@angular/material/prebuilt-themes/deeppurple-amber.css",
+          "apps/whiskmate/src/styles.css"
+        ],
         "scripts": []
       },
       "configurations": {

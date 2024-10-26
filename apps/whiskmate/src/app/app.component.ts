@@ -1,14 +1,20 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { RouterOutlet } from '@angular/router';
+import { NavComponent } from './shared/nav.component';
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  imports: [RouterOutlet, NavComponent],
+  selector: 'wm-app',
+  template: `
+    <wm-nav [links]="links" title="👨🏻‍🍳 Whiskmate">
+      <router-outlet />
+    </wm-nav>
+  `,
 })
 export class AppComponent {
-  title = 'whiskmate';
+  links = [
+    { name: 'Search', route: ['/search'], queryParams: { country: 'fr' } },
+    { name: 'My Meals', route: ['/meals'] },
+  ];
 }
