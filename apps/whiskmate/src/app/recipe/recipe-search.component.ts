@@ -28,27 +28,24 @@ import { MessageComponent } from '../shared/message.component';
   template: `
     <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
 
-    @if(recipesSuspense().pending) {
-    <wm-message>⏳ Searching...</wm-message>
+    @if (recipesSuspense().pending) {
+      <wm-message>⏳ Searching...</wm-message>
     }
 
-    <!-- prettier-ignore -->
     @if (recipesSuspense().hasError) {
-    <wm-message> 💥 Something went wrong </wm-message>
+      <wm-message> 💥 Something went wrong</wm-message>
     }
 
-    <!-- prettier-ignore -->
     @if (recipesSuspense().hasValue && recipes().length === 0) {
-    <wm-message> 😿 no results </wm-message>
+      <wm-message> 😿 no results</wm-message>
     }
 
-    <!-- prettier-ignore -->
-    @if(recipesSuspense().hasValue && recipes().length > 0) {
-    <wm-recipe-list [recipes]="recipes()">
-      <ng-template #actions let-recipe>
-        <wm-recipe-add-button [recipe]="recipe" />
-      </ng-template>
-    </wm-recipe-list>
+    @if (recipesSuspense().hasValue && recipes().length > 0) {
+      <wm-recipe-list [recipes]="recipes()">
+        <ng-template #actions let-recipe>
+          <wm-recipe-add-button [recipe]="recipe" />
+        </ng-template>
+      </wm-recipe-list>
     }
   `,
 })
@@ -56,7 +53,7 @@ export class RecipeSearchComponent {
   filter = signal<RecipeFilter>({});
   recipesSuspense = rxComputed(
     () => this._recipeRepository.search(this.filter()).pipe(suspensify()),
-    { initialValue: pending }
+    { initialValue: pending },
   );
   recipes = () => {
     const suspense = this.recipesSuspense();
