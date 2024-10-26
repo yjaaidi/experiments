@@ -33,12 +33,12 @@ describe(RecipeSearchComponent.name, () => {
     });
 
     const fixture = TestBed.createComponent(RecipeSearchComponent);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     return {
       harness: await TestbedHarnessEnvironment.harnessForFixture(
         fixture,
-        RecipeSearchHarness
+        RecipeSearchHarness,
       ),
     };
   }

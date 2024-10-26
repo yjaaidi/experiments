@@ -30,6 +30,7 @@ describe(RecipeFilterComponent.name, () => {
   async function renderComponent() {
     TestBed.configureTestingModule({ imports: [NoopAnimationsModule] });
     const fixture = TestBed.createComponent(RecipeFilterComponent);
+    await fixture.whenStable();
 
     return {
       component: fixture.componentInstance,
