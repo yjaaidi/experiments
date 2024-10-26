@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
+  input
 } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -44,7 +44,7 @@ export interface Link {
         [opened]="!isHandset()"
       >
         <mat-nav-list [style.width.px]="200">
-          @for (link of links; track link) {
+          @for (link of links(); track link) {
             <a
               #routerLinkActive="routerLinkActive"
               [activated]="routerLinkActive.isActive"
@@ -70,7 +70,7 @@ export interface Link {
               <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
             </button>
           }
-          <span>{{ title }}</span>
+          <span>{{ title() }}</span>
         </mat-toolbar>
         <ng-content />
       </mat-sidenav-content>
@@ -78,8 +78,8 @@ export interface Link {
   `,
 })
 export class NavComponent {
-  @Input({ required: true }) links!: Link[];
-  @Input({ required: true }) title!: string;
+  readonly links = input.required<Link[]>();
+  readonly title = input.required<string>();
 
   private _breakpointObserver = inject(BreakpointObserver);
 

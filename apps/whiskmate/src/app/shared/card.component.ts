@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'wm-card',
-  template: `@if (pictureUri) {
-    <img class="picture" [src]="pictureUri" />
+  template: `@if (pictureUri()) {
+    <img class="picture" [src]="pictureUri()" />
     }
     <div class="content">
       <ng-content></ng-content>
@@ -34,5 +34,5 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   ],
 })
 export class CardComponent {
-  @Input() pictureUri?: string;
+  readonly pictureUri = input<string>();
 }

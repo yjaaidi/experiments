@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Recipe } from './recipe';
 import { CardComponent } from '../shared/card.component';
 
@@ -7,8 +7,8 @@ import { CardComponent } from '../shared/card.component';
   standalone: true,
   selector: 'wm-recipe-preview',
   imports: [CardComponent],
-  template: ` <wm-card [pictureUri]="recipe.pictureUri">
-    <h2 data-role="recipe-name">{{ recipe.name }}</h2>
+  template: ` <wm-card [pictureUri]="recipe().pictureUri">
+    <h2 data-role="recipe-name">{{ recipe().name }}</h2>
     <div class="actions">
       <ng-content />
     </div>
@@ -31,5 +31,5 @@ import { CardComponent } from '../shared/card.component';
   ],
 })
 export class RecipePreviewComponent {
-  @Input({ required: true }) recipe!: Recipe;
+  readonly recipe = input.required<Recipe>();
 }
