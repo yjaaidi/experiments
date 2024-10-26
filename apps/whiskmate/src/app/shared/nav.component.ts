@@ -11,9 +11,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { map } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
-import { rxComputed } from '@jscutlery/rx-computed';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 export interface Link {
   name: string;
@@ -26,7 +25,6 @@ export interface Link {
   standalone: true,
   selector: 'wm-nav',
   imports: [
-    AsyncPipe,
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
@@ -94,11 +92,9 @@ export class NavComponent {
   @Input({ required: true }) links!: Link[];
   @Input({ required: true }) title!: string;
 
-  isHandset = rxComputed(() =>
-    this._breakpointObserver
-      .observe(Breakpoints.Handset)
-      .pipe(map((result) => result.matches))
-  );
-
   private _breakpointObserver = inject(BreakpointObserver);
+
+  isHandset = toSignal(this._breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(map((result) => result.matches)));
 }
