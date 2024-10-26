@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  input
+  input,
 } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -37,7 +37,6 @@ export interface Link {
     <mat-sidenav-container>
       <mat-sidenav
         #drawer
-        class="sidenav"
         fixedInViewport
         [attr.role]="isHandset() ? 'dialog' : 'navigation'"
         [mode]="isHandset() ? 'over' : 'side'"
@@ -75,6 +74,11 @@ export interface Link {
         <ng-content />
       </mat-sidenav-content>
     </mat-sidenav-container>
+  `,
+  styles: `
+    .content {
+      min-height: 100vh;
+    }
   `,
 })
 export class NavComponent {
