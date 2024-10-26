@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
-import { createObserver } from '../../testing/observer';
+import { createObserver } from '../testing/observer';
 import { recipeMother } from '../testing/recipe.mother';
 import { MealPlanner } from './meal-planner.service';
 import { MealRepositoryFake } from './meal-repository.fake';
@@ -27,7 +27,7 @@ describe(MealPlanner.name, () => {
     const { mealPlanner } = createMealPlannerWithBurger();
 
     expect(() => mealPlanner.addRecipe(burger)).toThrowError(
-      `Can't add recipe.`
+      `Can't add recipe.`,
     );
   });
 

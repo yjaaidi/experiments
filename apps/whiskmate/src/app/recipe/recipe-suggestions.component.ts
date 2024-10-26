@@ -30,14 +30,16 @@ import { MessageComponent } from '../shared/message.component';
   ],
   template: `
     <h2>Suggestions d'Ottolenghi</h2>
+
     @if (suggestionsSuspense().hasError) {
-    <wm-message> 💥 Something went wrong </wm-message>
+      <wm-message> 💥 Something went wrong </wm-message>
     }
+
     <wm-grid>
       @for (recipe of suggestions(); track recipe.id) {
-      <wm-recipe-preview [recipe]="recipe">
-        <wm-recipe-add-button [recipe]="recipe" />
-      </wm-recipe-preview>
+        <wm-recipe-preview [recipe]="recipe">
+          <wm-recipe-add-button [recipe]="recipe" />
+        </wm-recipe-preview>
       }
     </wm-grid>
   `,
@@ -57,9 +59,9 @@ export class RecipeSuggestionsComponent {
           console.error(error);
           throw error;
         }),
-        suspensify()
+        suspensify(),
       ),
-    { initialValue: pending }
+    { initialValue: pending },
   );
   suggestions = () => {
     const suspense = this.suggestionsSuspense();

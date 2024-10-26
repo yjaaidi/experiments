@@ -1,10 +1,10 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { createObserver } from '../../testing/observer';
 import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
 import { RecipeFilterHarness } from './recipe-filter.harness';
+import { createObserver } from '../testing/observer';
 
 describe(RecipeFilterComponent.name, () => {
   const { observe } = createObserver();
@@ -20,7 +20,7 @@ describe(RecipeFilterComponent.name, () => {
       maxStepCount: 10,
     });
 
-    expect(observer.next).lastCalledWith({
+    expect(observer.next).toHaveBeenLastCalledWith({
       keywords: 'Cauliflower',
       maxIngredientCount: 3,
       maxStepCount: 10,
@@ -35,7 +35,7 @@ describe(RecipeFilterComponent.name, () => {
       component: fixture.componentInstance,
       harness: await TestbedHarnessEnvironment.harnessForFixture(
         fixture,
-        RecipeFilterHarness
+        RecipeFilterHarness,
       ),
     };
   }
