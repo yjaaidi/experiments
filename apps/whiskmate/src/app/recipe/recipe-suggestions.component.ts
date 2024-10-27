@@ -8,12 +8,12 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
 import { pending, suspensify } from '@jscutlery/operators';
-import { rxComputed } from '@jscutlery/rx-computed';
 import { catchError, defer, of } from 'rxjs';
 import { RecipePreviewComponent } from './recipe-preview.component';
 import { GridComponent } from '../shared/grid.component';
 import { RecipeAddButtonComponent } from './recipe-add-button.component';
 import { MessageComponent } from '../shared/message.component';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
   standalone: true,
@@ -30,14 +30,14 @@ import { MessageComponent } from '../shared/message.component';
     <h2>Suggestions d'Ottolenghi</h2>
 
     @if (suggestionsSuspense().hasError) {
-      <wm-message> 💥 Something went wrong</wm-message>
+    <wm-message> 💥 Something went wrong</wm-message>
     }
 
     <wm-grid>
       @for (recipe of suggestions(); track recipe.id) {
-        <wm-recipe-preview [recipe]="recipe">
-          <wm-recipe-add-button [recipe]="recipe" />
-        </wm-recipe-preview>
+      <wm-recipe-preview [recipe]="recipe">
+        <wm-recipe-add-button [recipe]="recipe" />
+      </wm-recipe-preview>
       }
     </wm-grid>
   `,
@@ -50,16 +50,16 @@ import { MessageComponent } from '../shared/message.component';
   ],
 })
 export class RecipeSuggestionsComponent {
-  suggestionsSuspense = rxComputed(
+  suggestionsSuspense = derivedAsync(
     () =>
       this._getSuggestions().pipe(
         catchError((error) => {
           console.error(error);
           throw error;
         }),
-        suspensify(),
+        suspensify()
       ),
-    { initialValue: pending },
+    { initialValue: pending }
   );
   suggestions = () => {
     const suspense = this.suggestionsSuspense();

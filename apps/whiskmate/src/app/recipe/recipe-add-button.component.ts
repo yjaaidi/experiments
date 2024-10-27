@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { Recipe } from './recipe';
 import { MatButtonModule } from '@angular/material/button';
-import { rxComputed } from '@jscutlery/rx-computed';
 import { MealPlanner } from '../meal-planner/meal-planner.service';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +31,7 @@ export class RecipeAddButtonComponent {
     this._recipe.set(recipe);
   }
 
-  canAddRecipe = rxComputed(() =>
+  canAddRecipe = derivedAsync(() =>
     this._mealPlanner.watchCanAddRecipe(this._notNullRecipe())
   );
 
