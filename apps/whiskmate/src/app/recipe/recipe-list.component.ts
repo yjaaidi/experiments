@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ContentChild,
+  contentChild,
   input,
   TemplateRef,
 } from '@angular/core';
@@ -17,14 +17,14 @@ import { RecipePreviewComponent } from './recipe-preview.component';
   template: `
     <wm-grid>
       @for (recipe of recipes(); track recipe.id) {
-        <wm-recipe-preview [recipe]="recipe">
-          <ng-container
-            *ngTemplateOutlet="
-              actionsTemplateRef;
-              context: { $implicit: recipe }
-            "
-          ></ng-container>
-        </wm-recipe-preview>
+      <wm-recipe-preview [recipe]="recipe">
+        <ng-container
+          *ngTemplateOutlet="
+            actionsTemplateRef();
+            context: { $implicit: recipe }
+          "
+        ></ng-container>
+      </wm-recipe-preview>
       }
     </wm-grid>
   `,
@@ -33,7 +33,6 @@ import { RecipePreviewComponent } from './recipe-preview.component';
 export class RecipeListComponent {
   recipes = input.required<Recipe[]>();
 
-  @ContentChild('actions') actionsTemplateRef!: TemplateRef<{
-    $implicit: Recipe;
-  }>;
+  actionsTemplateRef =
+    contentChild.required<TemplateRef<{ $implicit: Recipe }>>('actions');
 }
