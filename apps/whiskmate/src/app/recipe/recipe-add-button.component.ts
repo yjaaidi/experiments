@@ -2,8 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Input,
-  signal,
+  input,
 } from '@angular/core';
 import { Recipe } from './recipe';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,27 +26,15 @@ import { derivedAsync } from 'ngxtension/derived-async';
   </button>`,
 })
 export class RecipeAddButtonComponent {
-  @Input({ required: true }) set recipe(recipe: Recipe) {
-    this._recipe.set(recipe);
-  }
+  recipe = input.required<Recipe>();
 
   canAddRecipe = derivedAsync(() =>
-    this._mealPlanner.watchCanAddRecipe(this._notNullRecipe())
+    this._mealPlanner.watchCanAddRecipe(this.recipe())
   );
 
   private _mealPlanner = inject(MealPlanner);
-  private _recipe = signal<Recipe | null>(null);
-  /* @hack: derivate a not-null signal from original signal
-   * until signal inputs are implemented in Angular. */
-  private _notNullRecipe = () => {
-    const recipe = this._recipe();
-    if (recipe == null) {
-      throw new Error('RecipeAddButtonComponent.recipe is null');
-    }
-    return recipe;
-  };
 
   addRecipe() {
-    this._mealPlanner.addRecipe(this._notNullRecipe());
+    this._mealPlanner.addRecipe(this.recipe());
   }
 }
