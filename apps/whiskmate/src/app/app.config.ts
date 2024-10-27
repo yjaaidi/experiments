@@ -1,4 +1,7 @@
-import { ApplicationConfig } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideExperimentalZonelessChangeDetection,
+} from '@angular/core';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
@@ -10,6 +13,7 @@ import { provideHttpClient } from '@angular/common/http';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
+    provideExperimentalZonelessChangeDetection(),
     provideHttpClient(),
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
   ],
