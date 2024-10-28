@@ -14,7 +14,34 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@whiskmate/meal-planner/domain": [
+        "libs/meal-planner/domain/src/index.ts"
+      ],
+      "@whiskmate/meal-planner/feature-add-button": [
+        "libs/meal-planner/feature-add-button/src/index.ts"
+      ],
+      "@whiskmate/meal-planner/feature-meals": [
+        "libs/meal-planner/feature-meals/src/index.ts"
+      ],
+      "@whiskmate/meal-planner/infra": ["libs/meal-planner/infra/src/index.ts"],
+      "@whiskmate/recipe-shared/core": ["libs/recipe-shared/core/src/index.ts"],
+      "@whiskmate/recipe-shared/ui": ["libs/recipe-shared/ui/src/index.ts"],
+      "@whiskmate/recipe/core": ["libs/recipe/core/src/index.ts"],
+      "@whiskmate/recipe/feature-search": [
+        "libs/recipe/feature-search/src/index.ts"
+      ],
+      "@whiskmate/recipe/feature-suggestions": [
+        "libs/recipe/feature-suggestions/src/index.ts"
+      ],
+      "@whiskmate/recipe/infra": ["libs/recipe/infra/src/index.ts"],
+      "@whiskmate/recipe/ui": ["libs/recipe/ui/src/index.ts"],
+      "@whiskmate/shared/infra": ["libs/shared/infra/src/index.ts"],
+      "@whiskmate/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@whiskmate/shared/util-testing": [
+        "libs/shared/util-testing/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
