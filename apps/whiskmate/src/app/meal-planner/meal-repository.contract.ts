@@ -1,5 +1,6 @@
 import { MealRepositoryDef } from './meal-repository.service';
 import { recipeMother } from '../testing/recipe.mother';
+import { firstValueFrom } from 'rxjs';
 
 export const verifyMealRepositoryContract = (
   createMealRepository: CreateMealRepository,
@@ -13,7 +14,7 @@ export const verifyMealRepositoryContract = (
     await mealRepo.addMeal(burger);
     await mealRepo.addMeal(salad);
 
-    expect(await mealRepo.getMeals()).toEqual([
+    expect(await firstValueFrom(mealRepo.getMeals())).toEqual([
       expect.objectContaining({ name: 'Burger' }),
       expect.objectContaining({ name: 'Salad' }),
     ]);
@@ -22,7 +23,7 @@ export const verifyMealRepositoryContract = (
   it('should return empty array initially', async () => {
     const { mealRepo } = createMealRepository();
 
-    expect(await mealRepo.getMeals()).toEqual([]);
+    expect(await firstValueFrom(mealRepo.getMeals())).toEqual([]);
   });
 };
 

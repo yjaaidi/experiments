@@ -10,7 +10,7 @@ export class MealRepositoryFake implements MealRepositoryDef {
   private _meals: Recipe[] = [];
 
   getMeals(): Observable<Recipe[]> {
-    return defer(() => of(this._meals));
+    return defer(() => of(this.getMealsSync()));
   }
 
   async addMeal(meal: Recipe): Promise<void> {

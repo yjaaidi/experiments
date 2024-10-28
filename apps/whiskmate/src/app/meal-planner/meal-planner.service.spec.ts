@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { firstValueFrom } from 'rxjs';
-import { createObserver } from '../testing/observer';
 import { recipeMother } from '../testing/recipe.mother';
 import { MealPlanner } from './meal-planner.service';
 import { MealRepositoryFake } from './meal-repository.fake';
 import { MealRepository } from './meal-repository.service';
+import { effect, Injector } from '@angular/core';
+import { Recipe } from '../recipe/recipe';
 
 describe(MealPlanner.name, () => {
-  const { observe } = createObserver();
   const burger = recipeMother.withBasicInfo('Burger').build();
   const salad = recipeMother.withBasicInfo('Salad').build();
 
@@ -17,9 +16,9 @@ describe(MealPlanner.name, () => {
     await mealPlanner.addRecipe(burger);
     await mealPlanner.addRecipe(salad);
 
-    expect(await firstValueFrom(mealPlanner.recipes$)).toEqual([
-      expect.objectContaining({ name: 'Burger' }),
-      expect.objectContaining({ name: 'Salad' }),
+    expect(mealPlanner.recipes()).toMatchObject([
+      { name: 'Burger' },
+      { name: 'Salad' },
     ]);
   });
 
@@ -34,9 +33,7 @@ describe(MealPlanner.name, () => {
 
     mealPlanner.addRecipe(burger);
 
-    expect(mealRepoFake.getMealsSync()).toEqual([
-      expect.objectContaining({ name: 'Burger' }),
-    ]);
+    expect(mealRepoFake.getMealsSync()).toMatchObject([{ name: 'Burger' }]);
   });
 
   it('should fetch recipes from meal repository', async () => {
@@ -46,77 +43,45 @@ describe(MealPlanner.name, () => {
 
     const mealPlanner = getMealPlanner();
 
-    expect(await firstValueFrom(mealPlanner.recipes$)).toEqual([
-      expect.objectContaining({ name: 'Burger' }),
-    ]);
+    expect(mealPlanner.recipes()).toMatchObject([{ name: 'Burger' }]);
   });
 
-  describe('recipes$', () => {
-    it('should emit empty array when no recipes', async () => {
-      const { mealPlanner } = createMealPlanner();
+  it('should notify consumer when recipes are added', async () => {
+    const { mealPlanner, createEffect, flushEffects } = createMealPlanner();
 
-      const observer = observe(mealPlanner.recipes$);
-
-      expect(observer.next).toHaveBeenCalledTimes(1);
-      expect(observer.next).toHaveBeenCalledWith([]);
+    let recipes: Recipe[] | null = null;
+    createEffect(() => {
+      recipes = mealPlanner.recipes();
     });
 
-    it('should emit recipes when added', async () => {
-      const { mealPlanner } = createMealPlanner();
+    await mealPlanner.addRecipe(burger);
+    await mealPlanner.addRecipe(salad);
 
-      const observer = observe(mealPlanner.recipes$);
+    flushEffects();
 
-      observer.mockClear();
-
-      await mealPlanner.addRecipe(burger);
-      await mealPlanner.addRecipe(salad);
-
-      expect(observer.next).toHaveBeenCalledTimes(2);
-      expect(observer.next).toHaveBeenNthCalledWith(1, [
-        expect.objectContaining({ name: 'Burger' }),
-      ]);
-      expect(observer.next).toHaveBeenNthCalledWith(2, [
-        expect.objectContaining({ name: 'Burger' }),
-        expect.objectContaining({ name: 'Salad' }),
-      ]);
-    });
+    expect(recipes).toMatchObject([{ name: 'Burger' }, { name: 'Salad' }]);
   });
 
-  describe('watchCanAddRecipe()', () => {
-    it('should instantly emit if recipe can be added', () => {
+  describe('canAddRecipe()', () => {
+    it('should tell if recipe can be added', () => {
       const { mealPlanner } = createMealPlanner();
 
-      const observer = observe(mealPlanner.watchCanAddRecipe(burger));
-
-      expect(observer.next).toHaveBeenCalledTimes(1);
-      expect(observer.next).toHaveBeenCalledWith(true);
+      expect(mealPlanner.canAddRecipe(burger)).toBe(true);
     });
 
-    it(`should emit false when recipe is added and can't be added anymore`, async () => {
-      const { mealPlanner } = createMealPlanner();
+    it(`should notify with false when recipe is added and can't be added anymore`, async () => {
+      const { mealPlanner, createEffect, flushEffects } = createMealPlanner();
 
-      const observer = observe(mealPlanner.watchCanAddRecipe(burger));
-
-      observer.mockClear();
+      let canBeAdded: boolean | null = null;
+      createEffect(() => {
+        canBeAdded = mealPlanner.canAddRecipe(burger);
+      });
 
       await mealPlanner.addRecipe(burger);
 
-      expect(observer.next).toHaveBeenCalledTimes(1);
-      expect(observer.next).toHaveBeenCalledWith(false);
-    });
+      flushEffects();
 
-    it(`should not emit if result didn't change`, () => {
-      const { mealPlanner } = createMealPlanner();
-
-      const observer = observe(mealPlanner.watchCanAddRecipe(burger));
-
-      mealPlanner.addRecipe(burger);
-
-      observer.mockClear();
-
-      mealPlanner.addRecipe(salad);
-
-      expect(observer.next).not.toBeCalled();
+      expect(canBeAdded).toBe(false);
     });
   });
 
@@ -153,6 +118,12 @@ describe(MealPlanner.name, () => {
     });
 
     return {
+      createEffect(fn: () => void) {
+        effect(fn, { injector: TestBed.inject(Injector) });
+      },
+      flushEffects() {
+        TestBed.flushEffects();
+      },
       getMealPlanner() {
         return TestBed.inject(MealPlanner);
       },

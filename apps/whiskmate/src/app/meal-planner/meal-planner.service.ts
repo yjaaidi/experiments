@@ -1,6 +1,4 @@
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { inject, Injectable, signal, untracked } from '@angular/core';
 import { Recipe } from '../recipe/recipe';
 import { MealRepository } from './meal-repository.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -9,51 +7,37 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providedIn: 'root',
 })
 export class MealPlanner {
-  recipes$: Observable<Recipe[]>;
+  private _recipes = signal<Recipe[]>([]);
+
+  recipes = this._recipes.asReadonly();
 
   private _mealRepository = inject(MealRepository);
-  private _recipes$ = new BehaviorSubject<Recipe[]>([]);
 
   constructor() {
-    this.recipes$ = this._recipes$.asObservable();
-
     this._mealRepository
       .getMeals()
       .pipe(takeUntilDestroyed())
       .subscribe((recipes) =>
-        this._recipes$.next([...recipes, ...this._recipes$.value]),
+        this._recipes.set([...recipes, ...this._recipes()]),
       );
   }
 
+  canAddRecipe(recipe: Recipe): boolean {
+    return this._recipes().find((r) => r.id === recipe.id) == null;
+  }
+
   async addRecipe(recipe: Recipe) {
-    if (!this._canAddRecipe({ recipe, recipes: this._recipes$.value })) {
+    if (!untracked(() => this.canAddRecipe(recipe))) {
       throw new Error(`Can't add recipe.`);
     }
     await this._mealRepository.addMeal(recipe);
-    this._recipes$.next([...this._recipes$.value, recipe]);
-  }
-
-  watchCanAddRecipe(recipe: Recipe): Observable<boolean> {
-    return this._recipes$.pipe(
-      map((recipes) => this._canAddRecipe({ recipe, recipes })),
-      distinctUntilChanged(),
-    );
+    this._recipes.update((recipes) => [...recipes, recipe]);
   }
 
   async removeMeal(recipeId: string) {
     await this._mealRepository.removeMeal(recipeId);
-    this._recipes$.next(
-      this._recipes$.value.filter((recipe) => recipe.id !== recipeId),
+    this._recipes.update((recipes) =>
+      recipes.filter(({ id }) => id !== recipeId),
     );
-  }
-
-  private _canAddRecipe({
-    recipes,
-    recipe,
-  }: {
-    recipes: Recipe[];
-    recipe: Recipe;
-  }) {
-    return !recipes.find((_recipe) => _recipe.id === recipe.id);
   }
 }

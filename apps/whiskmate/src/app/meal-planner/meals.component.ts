@@ -28,19 +28,15 @@ import { MessageComponent } from '../shared/message.component';
         </button>
       </ng-template>
     </wm-recipe-list>
-    `,
+  `,
 })
 export class MealsComponent {
-  recipes: Signal<Recipe[]>;
-
   private _mealPlanner = inject(MealPlanner);
 
-  constructor() {
-    this.recipes = toSignal(this._mealPlanner.recipes$, { initialValue: [] });
-  }
+  recipes = this._mealPlanner.recipes;
 
-  removeMeal(recipe: Recipe) {
-    this._mealPlanner.removeMeal(recipe.id);
+  async removeMeal(recipe: Recipe) {
+    await this._mealPlanner.removeMeal(recipe.id);
   }
 }
 

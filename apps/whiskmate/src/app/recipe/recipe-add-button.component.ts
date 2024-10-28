@@ -1,13 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
 } from '@angular/core';
 import { Recipe } from './recipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MealPlanner } from '../meal-planner/meal-planner.service';
-import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,13 +28,11 @@ import { derivedAsync } from 'ngxtension/derived-async';
 export class RecipeAddButtonComponent {
   recipe = input.required<Recipe>();
 
-  canAddRecipe = derivedAsync(() =>
-    this._mealPlanner.watchCanAddRecipe(this.recipe())
-  );
+  canAddRecipe = computed(() => this._mealPlanner.canAddRecipe(this.recipe()));
 
   private _mealPlanner = inject(MealPlanner);
 
-  addRecipe() {
-    this._mealPlanner.addRecipe(this.recipe());
+  async addRecipe() {
+    await this._mealPlanner.addRecipe(this.recipe());
   }
 }

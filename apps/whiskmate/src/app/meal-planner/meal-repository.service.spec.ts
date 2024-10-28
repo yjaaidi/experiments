@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { LocalStorage } from '../shared/local-storage';
 import { provideLocalStorageFake } from '../shared/local-storage.fake';
 import { verifyMealRepositoryContract } from './meal-repository.contract';
+import { firstValueFrom } from 'rxjs';
 
 describe(MealRepository.name, () => {
   verifyMealRepositoryContract(createMealRepository);
@@ -12,7 +13,7 @@ describe(MealRepository.name, () => {
 
     setStorageValue('invalid-value');
 
-    expect(await mealRepo.getMeals()).toEqual([]);
+    expect(await firstValueFrom(mealRepo.getMeals())).toEqual([]);
   });
 
   function createMealRepository() {
