@@ -2,9 +2,9 @@
   "name": "meal-planner-infra",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/meal-planner/infra/src",
-  "prefix": "lib",
+  "prefix": "wm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:meal-planner", "type:infra"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

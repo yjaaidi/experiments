@@ -2,9 +2,9 @@
   "name": "shared-ui",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/ui/src",
-  "prefix": "lib",
+  "prefix": "wm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:shared", "type:ui"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

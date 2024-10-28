@@ -2,9 +2,9 @@
   "name": "recipe-shared-core",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/recipe-shared/core/src",
-  "prefix": "lib",
+  "prefix": "wm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:recipe-shared", "type:core"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

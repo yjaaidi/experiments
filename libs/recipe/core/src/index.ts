@@ -1,1 +1,2 @@
-export * from './lib/recipe-core/recipe-core.component';
+export * from './recipe-filter';
+export * from './recipe-repository';

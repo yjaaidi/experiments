@@ -2,9 +2,9 @@
   "name": "meal-planner-feature-add-button",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/meal-planner/feature-add-button/src",
-  "prefix": "lib",
+  "prefix": "wm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:meal-planner", "type:feature"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

@@ -1,1 +1,1 @@
-export * from './lib/meal-planner-domain/meal-planner-domain.component';
+export * from './meal-planner.service';

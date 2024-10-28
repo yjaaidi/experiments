@@ -1,1 +1,1 @@
-export * from './lib/recipe-ui/recipe-ui.component';
+export * from './recipe-filter.component';

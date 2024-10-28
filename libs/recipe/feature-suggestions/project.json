@@ -2,9 +2,9 @@
   "name": "recipe-feature-suggestions",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/recipe/feature-suggestions/src",
-  "prefix": "lib",
+  "prefix": "wm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:recipe", "type:feature"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

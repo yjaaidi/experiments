@@ -1,1 +1,2 @@
-export * from './lib/recipe-shared-ui/recipe-shared-ui.component';
+export * from './recipe-list.component';
+export * from './recipe-preview.component';

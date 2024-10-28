@@ -1,1 +1,1 @@
-export * from './lib/shared-infra/shared-infra.component';
+export * from './local-storage.service';

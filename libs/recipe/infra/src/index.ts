@@ -1,1 +1,1 @@
-export * from './lib/recipe-infra/recipe-infra.component';
+export * from './recipe-repository.service';

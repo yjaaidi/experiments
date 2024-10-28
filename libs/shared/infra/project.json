@@ -2,9 +2,9 @@
   "name": "shared-infra",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/infra/src",
-  "prefix": "lib",
+  "prefix": "wm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:shared", "type:infra"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

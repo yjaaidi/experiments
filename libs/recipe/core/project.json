@@ -2,9 +2,9 @@
   "name": "recipe-core",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/recipe/core/src",
-  "prefix": "lib",
+  "prefix": "wm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:recipe", "type:core"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

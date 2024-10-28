@@ -2,9 +2,9 @@
   "name": "meal-planner-domain",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/meal-planner/domain/src",
-  "prefix": "lib",
+  "prefix": "wm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:meal-planner", "type:domain"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

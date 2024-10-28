@@ -1,1 +1,3 @@
-export * from './lib/recipe-feature-search/recipe-feature-search.component';
+import { RecipeSearchComponent } from './recipe-search.component';
+
+export default RecipeSearchComponent;

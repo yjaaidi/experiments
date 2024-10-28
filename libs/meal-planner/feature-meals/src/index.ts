@@ -1,1 +1,3 @@
-export * from './lib/meal-planner-feature-meals/meal-planner-feature-meals.component';
+import MealsComponent from './meals.component';
+
+export default MealsComponent;
