@@ -14,8 +14,8 @@ describe(MealPlanner.name, () => {
   it('should add recipe', async () => {
     const { mealPlanner } = createMealPlanner();
 
-    mealPlanner.addRecipe(burger);
-    mealPlanner.addRecipe(salad);
+    await mealPlanner.addRecipe(burger);
+    await mealPlanner.addRecipe(salad);
 
     expect(await firstValueFrom(mealPlanner.recipes$)).toEqual([
       expect.objectContaining({ name: 'Burger' }),
@@ -26,9 +26,7 @@ describe(MealPlanner.name, () => {
   it('should throw error if recipe is already present', () => {
     const { mealPlanner } = createMealPlannerWithBurger();
 
-    expect(() => mealPlanner.addRecipe(burger)).toThrowError(
-      `Can't add recipe.`,
-    );
+    expect(mealPlanner.addRecipe(burger)).rejects.toThrow(`Can't add recipe.`);
   });
 
   it('should add recipe to meal repository', () => {
@@ -44,9 +42,10 @@ describe(MealPlanner.name, () => {
   it('should fetch recipes from meal repository', async () => {
     const { getMealPlanner, mealRepoFake } = setUpMealPlanner();
 
-    mealRepoFake.addMeal(burger);
+    await mealRepoFake.addMeal(burger);
 
     const mealPlanner = getMealPlanner();
+
     expect(await firstValueFrom(mealPlanner.recipes$)).toEqual([
       expect.objectContaining({ name: 'Burger' }),
     ]);
@@ -58,25 +57,25 @@ describe(MealPlanner.name, () => {
 
       const observer = observe(mealPlanner.recipes$);
 
-      expect(observer.next).toBeCalledTimes(1);
-      expect(observer.next).toBeCalledWith([]);
+      expect(observer.next).toHaveBeenCalledTimes(1);
+      expect(observer.next).toHaveBeenCalledWith([]);
     });
 
-    it('should emit recipes when added', () => {
+    it('should emit recipes when added', async () => {
       const { mealPlanner } = createMealPlanner();
 
       const observer = observe(mealPlanner.recipes$);
 
       observer.mockClear();
 
-      mealPlanner.addRecipe(burger);
-      mealPlanner.addRecipe(salad);
+      await mealPlanner.addRecipe(burger);
+      await mealPlanner.addRecipe(salad);
 
-      expect(observer.next).toBeCalledTimes(2);
-      expect(observer.next).nthCalledWith(1, [
+      expect(observer.next).toHaveBeenCalledTimes(2);
+      expect(observer.next).toHaveBeenNthCalledWith(1, [
         expect.objectContaining({ name: 'Burger' }),
       ]);
-      expect(observer.next).nthCalledWith(2, [
+      expect(observer.next).toHaveBeenNthCalledWith(2, [
         expect.objectContaining({ name: 'Burger' }),
         expect.objectContaining({ name: 'Salad' }),
       ]);
@@ -89,21 +88,21 @@ describe(MealPlanner.name, () => {
 
       const observer = observe(mealPlanner.watchCanAddRecipe(burger));
 
-      expect(observer.next).toBeCalledTimes(1);
-      expect(observer.next).toBeCalledWith(true);
+      expect(observer.next).toHaveBeenCalledTimes(1);
+      expect(observer.next).toHaveBeenCalledWith(true);
     });
 
-    it(`should emit false when recipe is added and can't be added anymore`, () => {
+    it(`should emit false when recipe is added and can't be added anymore`, async () => {
       const { mealPlanner } = createMealPlanner();
 
       const observer = observe(mealPlanner.watchCanAddRecipe(burger));
 
       observer.mockClear();
 
-      mealPlanner.addRecipe(burger);
+      await mealPlanner.addRecipe(burger);
 
-      expect(observer.next).toBeCalledTimes(1);
-      expect(observer.next).toBeCalledWith(false);
+      expect(observer.next).toHaveBeenCalledTimes(1);
+      expect(observer.next).toHaveBeenCalledWith(false);
     });
 
     it(`should not emit if result didn't change`, () => {

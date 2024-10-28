@@ -1,12 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  merge,
-  mergeMap,
-  Observable,
-  Subject,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Recipe } from '../recipe/recipe';
 import { MealRepository } from './meal-repository.service';
@@ -20,64 +13,38 @@ export class MealPlanner {
 
   private _mealRepository = inject(MealRepository);
   private _recipes$ = new BehaviorSubject<Recipe[]>([]);
-  private _addMeal$ = new Subject<Recipe>();
-  private _removeMeal$ = new Subject<string>();
 
   constructor() {
     this.recipes$ = this._recipes$.asObservable();
 
-    const effects = [
-      /* Fetch meals from repository. */
-      this._mealRepository
-        .getMeals()
-        .pipe(tap((recipes) => this._recipes$.next(recipes))),
-      /* Add meals to repository. */
-      this._addMeal$.pipe(
-        mergeMap((recipe) =>
-          this._mealRepository
-            .addMeal(recipe)
-            .pipe(
-              tap(() => this._recipes$.next([...this._recipes$.value, recipe]))
-            )
-        )
-      ),
-      /* Remove meals from repository. */
-      this._removeMeal$.pipe(
-        mergeMap((recipeId) =>
-          this._mealRepository
-            .removeMeal(recipeId)
-            .pipe(
-              tap(() =>
-                this._recipes$.next(
-                  this._recipes$.value.filter(({ id }) => id !== recipeId)
-                )
-              )
-            )
-        )
-      ),
-    ];
-
-    merge(...effects)
+    this._mealRepository
+      .getMeals()
       .pipe(takeUntilDestroyed())
-      .subscribe();
+      .subscribe((recipes) =>
+        this._recipes$.next([...recipes, ...this._recipes$.value]),
+      );
   }
 
-  addRecipe(recipe: Recipe) {
+  async addRecipe(recipe: Recipe) {
     if (!this._canAddRecipe({ recipe, recipes: this._recipes$.value })) {
       throw new Error(`Can't add recipe.`);
     }
-    this._addMeal$.next(recipe);
+    await this._mealRepository.addMeal(recipe);
+    this._recipes$.next([...this._recipes$.value, recipe]);
   }
 
   watchCanAddRecipe(recipe: Recipe): Observable<boolean> {
     return this._recipes$.pipe(
       map((recipes) => this._canAddRecipe({ recipe, recipes })),
-      distinctUntilChanged()
+      distinctUntilChanged(),
     );
   }
 
-  removeMeal(recipeId: string) {
-    this._removeMeal$.next(recipeId);
+  async removeMeal(recipeId: string) {
+    await this._mealRepository.removeMeal(recipeId);
+    this._recipes$.next(
+      this._recipes$.value.filter((recipe) => recipe.id !== recipeId),
+    );
   }
 
   private _canAddRecipe({

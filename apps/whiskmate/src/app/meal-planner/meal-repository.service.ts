@@ -1,14 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { Recipe } from '../recipe/recipe';
 import { LocalStorage } from '../shared/local-storage';
+import { defer, Observable, of } from 'rxjs';
 
 export interface MealRepositoryDef {
-  addMeal(recipe: Recipe): Observable<void>;
-
   getMeals(): Observable<Recipe[]>;
 
-  removeMeal(mealId: string): Observable<void>;
+  addMeal(recipe: Recipe): Promise<void>;
+
+  removeMeal(mealId: string): Promise<void>;
 }
 
 @Injectable({
@@ -22,18 +22,16 @@ export class MealRepository implements MealRepositoryDef {
     this._meals = this._loadMeals();
   }
 
-  addMeal(meal: Recipe): Observable<void> {
-    this._updateMeals([...this._meals, meal]);
-    return of(undefined);
-  }
-
   getMeals(): Observable<Recipe[]> {
-    return of(this._meals);
+    return defer(() => of(this._meals));
   }
 
-  removeMeal(mealId: string): Observable<void> {
+  async addMeal(meal: Recipe): Promise<void> {
+    this._updateMeals([...this._meals, meal]);
+  }
+
+  async removeMeal(mealId: string): Promise<void> {
     this._updateMeals(this._meals.filter(({ id }) => id !== mealId));
-    return of(undefined);
   }
 
   private _loadMeals(): Recipe[] {
@@ -45,7 +43,7 @@ export class MealRepository implements MealRepositoryDef {
 
     try {
       return JSON.parse(rawValue);
-    } catch (error) {
+    } catch {
       return [];
     }
   }
