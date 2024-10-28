@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   standalone: true,
   selector: 'wm-card',
   template: `@if (pictureUri()) {
-    <img class="picture" [src]="pictureUri()" />
+      <img class="picture" [src]="pictureUri()" alt="Recipe Picture" />
     }
     <div class="content">
       <ng-content></ng-content>

@@ -1,11 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RecipeListComponent } from '../recipe/recipe-list.component';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MealPlanner } from './meal-planner.service';
 import { Recipe } from '../recipe/recipe';
 import { MatButtonModule } from '@angular/material/button';
