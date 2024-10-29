@@ -4,7 +4,7 @@
   "sourceRoot": "libs/meal-planner/feature-add-button/src",
   "prefix": "wm",
   "projectType": "library",
-  "tags": ["scope:meal-planner", "type:feature"],
+  "tags": ["scope:meal-planner", "type:feature", "name:meal-planner-feature-add-button"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

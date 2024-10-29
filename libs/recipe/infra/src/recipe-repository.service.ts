@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, map } from 'rxjs';
 import { RecipeFilter, RecipeRepositoryDef } from '@whiskmate/recipe/core';
 import { createRecipe, Recipe } from '@whiskmate/recipe-shared/core';
 

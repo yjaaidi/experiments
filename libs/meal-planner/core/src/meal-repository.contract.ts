@@ -1,6 +1,6 @@
-import { recipeMother } from '@whiskmate/recipe/core/testing';
 import { firstValueFrom } from 'rxjs';
 import { MealRepositoryDef } from './meal-repository';
+import { recipeMother } from '@whiskmate/recipe-shared/core/testing';
 
 export const verifyMealRepositoryContract = (
   createMealRepository: CreateMealRepository,

@@ -1,10 +1,13 @@
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { recipeMother } from '@whiskmate/recipe/core/testing';
 import { RecipeSearchComponent } from './recipe-search.component';
 import { RecipeSearchHarness } from './recipe-search.harness';
-import { provideRecipeRepositoryFake, RecipeRepositoryFake } from '@whiskmate/recipe/infra/testing';
+import {
+  provideRecipeRepositoryFake,
+  RecipeRepositoryFake,
+} from '@whiskmate/recipe/infra/testing';
+import { recipeMother } from '@whiskmate/recipe-shared/core/testing';
 
 describe(RecipeSearchComponent.name, () => {
   it('should search recipes without filtering', async () => {

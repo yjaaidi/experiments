@@ -1,9 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { recipeMother } from '@whiskmate/recipe/core/testing';
 import { MealPlanner } from './meal-planner.service';
 import { effect, Injector } from '@angular/core';
 import { Recipe } from '@whiskmate/recipe-shared/core';
-import { MealRepositoryFake, provideMealRepositoryFake } from '@whiskmate/meal-planner/infra/testing';
+import {
+  MealRepositoryFake,
+  provideMealRepositoryFake,
+} from '@whiskmate/meal-planner/infra/testing';
+import { recipeMother } from '@whiskmate/recipe-shared/core/testing';
 
 describe(MealPlanner.name, () => {
   const burger = recipeMother.withBasicInfo('Burger').build();

@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, Component, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, Observable } from 'rxjs';
 import { createRecipeFilter, RecipeFilter } from '@whiskmate/recipe/core';
 
 @Component({
