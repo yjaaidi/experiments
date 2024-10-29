@@ -49,7 +49,20 @@
       "e2eTestRunner": "none",
       "linter": "eslint",
       "style": "css",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "vitest"
     }
-  }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "testTargetName": "test",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "serveStaticTargetName": "serve-static",
+        "typecheckTargetName": "typecheck"
+      }
+    }
+  ]
 }
