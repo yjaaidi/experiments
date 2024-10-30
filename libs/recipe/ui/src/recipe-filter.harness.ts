@@ -1,6 +1,5 @@
-import { MatInputHarness } from '@angular/material/input/testing';
+import { RecipeFilter } from './recipe-filter';
 import { ComponentHarness } from '@angular/cdk/testing';
-import { RecipeFilter } from '@whiskmate/recipe/core';
 
 export class RecipeFilterHarness extends ComponentHarness {
   static hostSelector = 'wm-recipe-filter';
@@ -21,7 +20,8 @@ export class RecipeFilterHarness extends ComponentHarness {
     if (value == null) {
       return;
     }
-    const harness = await this.locatorFor(MatInputHarness.with({ selector }))();
-    await harness.setValue(value);
+    const element = await this.locatorFor(selector)();
+    await element.setInputValue(value);
+    await element.dispatchEvent('input');
   }
 }
