@@ -31,9 +31,9 @@ export const createNodesV2 = createImplicitLibNode({
 });
 
 function createImplicitLibNode({
-  pattern,
-  createNode,
-}: {
+                                 pattern,
+                                 createNode,
+                               }: {
   pattern: string;
   createNode: (node: {
     projectRoot: string;
