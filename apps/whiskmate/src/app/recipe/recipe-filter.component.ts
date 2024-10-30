@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { createRecipeFilter, RecipeFilter } from './recipe-filter';
+import { map } from 'rxjs';
+import { createRecipeFilter } from './recipe-filter';
 import { outputFromObservable } from '@angular/core/rxjs-interop';
 
 @Component({
