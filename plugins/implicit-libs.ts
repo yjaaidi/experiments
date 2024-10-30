@@ -1,10 +1,10 @@
 import { CreateNodesV2, ProjectConfiguration } from '@nx/devkit';
-import { dirname } from 'path/posix';
+import { dirname, join } from 'path/posix';
 
 export const createNodesV2 = createImplicitLibNode({
   pattern: 'libs/*/*/index.ts',
   createNode({ projectRoot }) {
-    const [_, scope, shortName] = projectRoot.split('/');
+    const [libsPath, scope, shortName] = projectRoot.split('/');
     const type = shortName.split('-')[0];
     const name = `${scope}-${shortName}`;
     return {
@@ -13,9 +13,10 @@ export const createNodesV2 = createImplicitLibNode({
       tags: [`scope:${scope}`, `type:${type}`, `name:${name}`],
       targets: {
         lint: {
-          command: 'eslint .',
+          executor: '@nx/eslint:lint',
           options: {
-            cwd: projectRoot,
+            eslintConfig: join(libsPath, 'eslint.config.js'),
+            lintFilePatterns: [`${projectRoot}/**/*.ts`],
           },
         },
         test: {
