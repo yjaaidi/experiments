@@ -16,7 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@whiskmate/meal-planner/core": ["libs/meal-planner/core/src/index.ts"],
-      "@whiskmate/meal-planner/core/testing": ["libs/meal-planner/core/src/testing.ts"],
+      "@whiskmate/meal-planner/core/testing": [
+        "libs/meal-planner/core/src/testing.ts"
+      ],
       "@whiskmate/meal-planner/domain": [
         "libs/meal-planner/domain/src/index.ts"
       ],
@@ -27,11 +29,17 @@
         "libs/meal-planner/feature-meals/src/index.ts"
       ],
       "@whiskmate/meal-planner/infra": ["libs/meal-planner/infra/src/index.ts"],
-      "@whiskmate/meal-planner/infra/testing": ["libs/meal-planner/infra/src/testing.ts"],
+      "@whiskmate/meal-planner/infra/testing": [
+        "libs/meal-planner/infra/src/testing.ts"
+      ],
       "@whiskmate/recipe-shared/core": ["libs/recipe-shared/core/src/index.ts"],
-      "@whiskmate/recipe-shared/core/testing": ["libs/recipe-shared/core/src/testing.ts"],
+      "@whiskmate/recipe-shared/core/testing": [
+        "libs/recipe-shared/core/src/testing.ts"
+      ],
       "@whiskmate/recipe-shared/ui": ["libs/recipe-shared/ui/src/index.ts"],
-      "@whiskmate/recipe-shared/ui/testing": ["libs/recipe-shared/ui/src/testing.ts"],
+      "@whiskmate/recipe-shared/ui/testing": [
+        "libs/recipe-shared/ui/src/testing.ts"
+      ],
       "@whiskmate/recipe/core": ["libs/recipe/core/src/index.ts"],
       "@whiskmate/recipe/feature-search": [
         "libs/recipe/feature-search/src/index.ts"
