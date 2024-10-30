@@ -1,16 +1,17 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../dist/out-tsc",
+    "outDir": "../../../dist/out-tsc",
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "types": ["vite/client"]
   },
   "exclude": [
     "**/*.spec.ts",
     "test-setup.ts",
-    "jest.config.ts"
+    "vite.config.mts",
+    "vitest.config.mts",
   ],
   "include": ["**/*.ts"]
 }

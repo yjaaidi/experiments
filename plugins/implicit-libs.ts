@@ -26,10 +26,9 @@ export const createNodesV2: CreateNodesV2 = [
                   },
                 },
                 test: {
-                  command: 'jest',
+                  command: 'vitest',
                   options: {
-                    config: join(libsDir, 'jest.config.ts'),
-                    roots: join(scope, shortName),
+                    cwd: projectRoot,
                   },
                 },
               },
