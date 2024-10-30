@@ -1,4 +1,3 @@
-import { MatInputHarness } from '@angular/material/input/testing';
 import { RecipeFilter } from './recipe-filter';
 import { ComponentHarness } from '@angular/cdk/testing';
 
@@ -9,11 +8,11 @@ export class RecipeFilterHarness extends ComponentHarness {
     await this._setInputValue('[data-role=keywords-input]', filter.keywords);
     await this._setInputValue(
       '[data-role=max-ingredient-count-input]',
-      filter.maxIngredientCount?.toString()
+      filter.maxIngredientCount?.toString(),
     );
     await this._setInputValue(
       '[data-role=max-step-count-input]',
-      filter.maxStepCount?.toString()
+      filter.maxStepCount?.toString(),
     );
   }
 
@@ -21,7 +20,8 @@ export class RecipeFilterHarness extends ComponentHarness {
     if (value == null) {
       return;
     }
-    const harness = await this.locatorFor(MatInputHarness.with({ selector }))();
-    await harness.setValue(value);
+    const element = await this.locatorFor(selector)();
+    await element.setInputValue(value);
+    await element.dispatchEvent('input');
   }
 }

@@ -22,8 +22,8 @@ describe(MealPlanner.name, () => {
     ]);
   });
 
-  it('should throw error if recipe is already present', () => {
-    const { mealPlanner } = createMealPlannerWithBurger();
+  it('should throw error if recipe is already present', async () => {
+    const { mealPlanner } = await createMealPlannerWithBurger();
 
     expect(mealPlanner.addRecipe(burger)).rejects.toThrow(`Can't add recipe.`);
   });
@@ -85,10 +85,10 @@ describe(MealPlanner.name, () => {
     });
   });
 
-  function createMealPlannerWithBurger() {
+  async function createMealPlannerWithBurger() {
     const { mealPlanner, ...rest } = createMealPlanner();
 
-    mealPlanner.addRecipe(burger);
+    await mealPlanner.addRecipe(burger);
 
     return {
       mealPlanner,

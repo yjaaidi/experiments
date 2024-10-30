@@ -27,7 +27,7 @@ export class MealPlanner {
   }
 
   async addRecipe(recipe: Recipe) {
-    if (!untracked(() => this.canAddRecipe(recipe))) {
+    if (!this.canAddRecipe(recipe)) {
       throw new Error(`Can't add recipe.`);
     }
     await this._mealRepository.addMeal(recipe);

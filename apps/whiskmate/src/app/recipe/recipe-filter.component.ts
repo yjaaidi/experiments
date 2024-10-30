@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { createRecipeFilter, RecipeFilter } from './recipe-filter';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,17 +54,15 @@ import { createRecipeFilter, RecipeFilter } from './recipe-filter';
   ],
 })
 export class RecipeFilterComponent {
-  @Output() filterChange: Observable<RecipeFilter>;
-
   filterFormGroup = new FormGroup({
     keywords: new FormControl(),
     maxIngredientCount: new FormControl(),
     maxStepCount: new FormControl(),
   });
 
-  constructor() {
-    this.filterChange = this.filterFormGroup.valueChanges.pipe(
-      map((value) => createRecipeFilter(value))
-    );
-  }
+  filterChange = outputFromObservable(
+    this.filterFormGroup.valueChanges.pipe(
+      map((value) => createRecipeFilter(value)),
+    ),
+  );
 }
