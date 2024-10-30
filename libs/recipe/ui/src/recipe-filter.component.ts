@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { map, Observable } from 'rxjs';
-import { createRecipeFilter, RecipeFilter } from '@whiskmate/recipe/core';
+import { map } from 'rxjs';
+import { outputFromObservable } from '@angular/core/rxjs-interop';
+import { createRecipeFilter } from '@whiskmate/recipe/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,17 +53,15 @@ import { createRecipeFilter, RecipeFilter } from '@whiskmate/recipe/core';
   ],
 })
 export class RecipeFilterComponent {
-  @Output() filterChange: Observable<RecipeFilter>;
-
   filterFormGroup = new FormGroup({
     keywords: new FormControl(),
     maxIngredientCount: new FormControl(),
     maxStepCount: new FormControl(),
   });
 
-  constructor() {
-    this.filterChange = this.filterFormGroup.valueChanges.pipe(
+  filterChange = outputFromObservable(
+    this.filterFormGroup.valueChanges.pipe(
       map((value) => createRecipeFilter(value)),
-    );
-  }
+    ),
+  );
 }

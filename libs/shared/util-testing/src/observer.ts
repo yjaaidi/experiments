@@ -1,4 +1,6 @@
 import { Observable, Observer, Subscription } from 'rxjs';
+import { type Mocked, vi } from 'vitest';
+import { OutputRef } from '@angular/core';
 
 export function createObserver() {
   let subscription: Subscription;
@@ -7,13 +9,17 @@ export function createObserver() {
   afterEach(() => subscription.unsubscribe());
 
   return {
-    observe<T>(observable: Observable<T>) {
-      const observer: jest.Mocked<Observer<T>> = {
-        next: jest.fn<void, [T]>(),
-        error: jest.fn<void, [unknown]>(),
-        complete: jest.fn<void, []>(),
+    observe<T>(observable: Observable<T> | OutputRef<T>) {
+      const observer: Mocked<Observer<T>> = {
+        next: vi.fn<[T], void>(),
+        error: vi.fn<[unknown], void>(),
+        complete: vi.fn<[], void>(),
       };
-      subscription.add(observable.subscribe(observer));
+      if (isObservable(observable)) {
+        subscription.add(observable.subscribe(observer));
+      } else {
+        subscription.add(observable.subscribe(observer.next));
+      }
       return {
         ...observer,
         mockClear() {
@@ -29,4 +35,10 @@ export function createObserver() {
       };
     },
   };
+}
+
+function isObservable<T>(
+  observable: Observable<T> | OutputRef<T>,
+): observable is Observable<T> {
+  return !('destroyRef' in observable);
 }
