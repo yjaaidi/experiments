@@ -5,7 +5,6 @@ import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
 import { RecipeFilterHarness } from './recipe-filter.harness';
 import { createObserver } from '../testing/observer';
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 
 describe(RecipeFilterComponent.name, () => {
   const { observe } = createObserver();
@@ -21,7 +20,6 @@ describe(RecipeFilterComponent.name, () => {
       maxStepCount: 10,
     });
 
-    expect(observer.next).toBeCalled();
     expect(observer.next).toHaveBeenLastCalledWith({
       keywords: 'Cauliflower',
       maxIngredientCount: 3,
