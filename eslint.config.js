@@ -20,8 +20,10 @@ const type = {
 const commonAllowedExternalImports = [
   '@angular/core',
   '@angular/core/testing',
-  'jest-preset-angular/*',
+  '@angular/platform-browser-dynamic/testing',
+  '@analogjs/vitest-angular/*',
   'rxjs',
+  'vitest',
 ];
 
 module.exports = [
