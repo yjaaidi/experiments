@@ -5,7 +5,7 @@ export const createNodesV2: CreateNodesV2 = [
   'libs/*/*/index.ts',
   (indexFiles) =>
     indexFiles.map((indexFile) => {
-      const [libsDir, scope, shortName] = indexFile.split('/');
+      const [_, scope, shortName] = indexFile.split('/');
       const type = shortName.split('-')[0];
       const projectRoot = dirname(indexFile);
       const name = `${scope}-${shortName}`;
@@ -32,7 +32,7 @@ export const createNodesV2: CreateNodesV2 = [
                   },
                 },
               },
-            } satisfies Partial<ProjectConfiguration>,
+            } satisfies Omit<ProjectConfiguration, 'root'>,
           },
         },
       ] as const;
