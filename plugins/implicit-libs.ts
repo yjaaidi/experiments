@@ -1,9 +1,9 @@
 import { CreateNodesV2, ProjectConfiguration } from '@nx/devkit';
 import { dirname, join } from 'path/posix';
 
-export const createNodesV2 = createImplicitLibNode({
+export const createNodesV2 = createImplicitNodes({
   pattern: 'libs/*/*/index.ts',
-  createNode({ projectRoot }) {
+  createProjectConfiguration({ projectRoot }) {
     const [libsPath, scope, shortName] = projectRoot.split('/');
     const type = shortName.split('-')[0];
     const name = `${scope}-${shortName}`;
@@ -30,14 +30,15 @@ export const createNodesV2 = createImplicitLibNode({
   },
 });
 
-function createImplicitLibNode({
-                                 pattern,
-                                 createNode,
-                               }: {
+function createImplicitNodes({
+  pattern,
+  createProjectConfiguration,
+}: {
   pattern: string;
-  createNode: (node: {
+  createProjectConfiguration: (node: {
     projectRoot: string;
-  }) => Omit<ProjectConfiguration, 'root'>;
+  }) => Omit<ProjectConfiguration, 'root'> &
+    Required<Pick<ProjectConfiguration, 'name'>>;
 }): CreateNodesV2 {
   return [
     pattern,
@@ -48,8 +49,8 @@ function createImplicitLibNode({
           filePath,
           {
             projects: {
-              [projectRoot]: createNode({
-                projectRoot: projectRoot,
+              [projectRoot]: createProjectConfiguration({
+                projectRoot,
               }),
             },
           },
