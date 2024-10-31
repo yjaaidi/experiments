@@ -3,7 +3,7 @@ import { dirname, join } from 'path/posix';
 
 export const createNodesV2 = createImplicitNodes({
   pattern: 'libs/*/*/index.ts',
-  createNode({ projectRoot }) {
+  createProjectConfiguration({ projectRoot }) {
     return {
       name: 'TODO',
     };
@@ -12,10 +12,10 @@ export const createNodesV2 = createImplicitNodes({
 
 function createImplicitNodes({
   pattern,
-  createNode,
+  createProjectConfiguration,
 }: {
   pattern: string;
-  createNode: (node: {
+  createProjectConfiguration: (node: {
     projectRoot: string;
   }) => Omit<ProjectConfiguration, 'root'> &
     Required<Pick<ProjectConfiguration, 'name'>>;
@@ -29,8 +29,8 @@ function createImplicitNodes({
           filePath,
           {
             projects: {
-              [projectRoot]: createNode({
-                projectRoot: projectRoot,
+              [projectRoot]: createProjectConfiguration({
+                projectRoot,
               }),
             },
           },
