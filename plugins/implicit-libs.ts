@@ -1,21 +1,24 @@
 import { CreateNodesV2, ProjectConfiguration } from '@nx/devkit';
 import { dirname, join } from 'path/posix';
 
-export const createNodesV2 = createImplicitLibNode({
+export const createNodesV2 = createImplicitNodes({
   pattern: 'libs/*/*/index.ts',
   createNode({ projectRoot }) {
-    return {};
+    return {
+      name: 'TODO',
+    };
   },
 });
 
-function createImplicitLibNode({
+function createImplicitNodes({
   pattern,
   createNode,
 }: {
   pattern: string;
   createNode: (node: {
     projectRoot: string;
-  }) => Omit<ProjectConfiguration, 'root'>;
+  }) => Omit<ProjectConfiguration, 'root'> &
+    Required<Pick<ProjectConfiguration, 'name'>>;
 }): CreateNodesV2 {
   return [
     pattern,
