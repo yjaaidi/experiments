@@ -13,22 +13,20 @@ import { CardComponent } from '../shared/card.component';
       <ng-content />
     </div>
   </wm-card>`,
-  styles: [
-    `
-      h2 {
-        font-size: 1.2em;
-        text-align: center;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+  styles: `
+    h2 {
+      font-size: 1.2em;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-      .actions {
-        display: flex;
-        justify-content: center;
-      }
-    `,
-  ],
+    .actions {
+      display: flex;
+      justify-content: center;
+    }
+  `,
 })
 export class RecipePreviewComponent {
   readonly recipe = input.required<Recipe>();

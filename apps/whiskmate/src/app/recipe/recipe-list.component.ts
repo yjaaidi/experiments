@@ -14,21 +14,21 @@ import { RecipePreviewComponent } from './recipe-preview.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'wm-recipe-list',
+  imports: [GridComponent, RecipePreviewComponent, NgTemplateOutlet],
   template: `
     <wm-grid>
       @for (recipe of recipes(); track recipe.id) {
-      <wm-recipe-preview [recipe]="recipe">
-        <ng-container
-          *ngTemplateOutlet="
-            actionsTemplateRef();
-            context: { $implicit: recipe }
-          "
-        ></ng-container>
-      </wm-recipe-preview>
+        <wm-recipe-preview [recipe]="recipe">
+          <ng-container
+            *ngTemplateOutlet="
+              actionsTemplateRef();
+              context: { $implicit: recipe }
+            "
+          ></ng-container>
+        </wm-recipe-preview>
       }
     </wm-grid>
   `,
-  imports: [GridComponent, RecipePreviewComponent, NgTemplateOutlet],
 })
 export class RecipeListComponent {
   recipes = input.required<Recipe[]>();
