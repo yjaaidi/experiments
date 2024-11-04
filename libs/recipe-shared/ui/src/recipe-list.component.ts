@@ -14,6 +14,7 @@ import { RecipePreviewComponent } from './recipe-preview.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'wm-recipe-list',
+  imports: [GridComponent, RecipePreviewComponent, NgTemplateOutlet],
   template: `
     <wm-grid>
       @for (recipe of recipes(); track recipe.id) {
@@ -28,7 +29,6 @@ import { RecipePreviewComponent } from './recipe-preview.component';
       }
     </wm-grid>
   `,
-  imports: [GridComponent, RecipePreviewComponent, NgTemplateOutlet],
 })
 export class RecipeListComponent {
   recipes = input.required<Recipe[]>();
