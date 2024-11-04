@@ -43,11 +43,6 @@
       }
     }
   },
-  "plugins": [
-    {
-      "plugin": "./plugins/implicit-libs.ts"
-    }
-  ],
   "generators": {
     "@nx/angular:application": {
       "e2eTestRunner": "none",
