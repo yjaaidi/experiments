@@ -107,19 +107,29 @@
         "jestConfig": "{projectRoot}/jest-swc.config.ts"
       }
     },
-    "vitest": {
-      "_comment": "override analog's override which is setting the pool to vmThreads",
+    "vitest-forks": {
+      "command": "vitest --config {projectRoot}/vitest.config.ts --pool forks --watch false"
+    },
+    "vitest-threads": {
       "command": "vitest --config {projectRoot}/vitest.config.ts --pool threads --watch false"
     },
+    "vitest": {
+      "command": "vitest --config {projectRoot}/vitest.config.ts --pool vmForks --watch false"
+    },
     "vitest-no-isolate": {
-      "_comment": "override analog's override which is setting the pool to vmThreads",
       "command": "vitest --config {projectRoot}/vitest.config.ts --pool threads --no-isolate --watch false"
     },
     "vitest-swc": {
-      "command": "vitest --config {projectRoot}/vitest-swc.config.ts --watch false"
+      "command": "vitest --config {projectRoot}/vitest-swc.config.ts --pool vmForks --watch false"
     },
     "vitest-swc-no-isolate": {
       "command": "vitest --config {projectRoot}/vitest-swc.config.ts --no-isolate --watch false"
+    },
+    "vitest-aot": {
+      "command": "vitest --config {projectRoot}/vitest-aot.config.ts --pool vmForks --watch false"
+    },
+    "vitest-aot-no-isolate": {
+      "command": "vitest --config {projectRoot}/vitest-aot.config.ts --pool forks --no-isolate --watch false"
     }
   }
 }
