@@ -8,24 +8,15 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/demo",
         "index": "{projectRoot}/src/index.html",
         "browser": "{projectRoot}/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "{projectRoot}/tsconfig.app.json",
-        "assets": [
-          "{projectRoot}/src/favicon.ico",
-          "{projectRoot}/src/assets"
-        ],
-        "styles": [
-          "{projectRoot}/src/styles.css"
-        ],
+        "assets": ["{projectRoot}/src/favicon.ico", "{projectRoot}/src/assets"],
+        "styles": ["{projectRoot}/src/styles.css"],
         "scripts": []
       },
       "configurations": {
@@ -72,71 +63,46 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ]
+      "outputs": ["{options.outputFile}"]
     },
     "angular-cli-jest": {
       "executor": "@angular-devkit/build-angular:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "include": [
-          "{projectRoot}/**/*.spec.ts"
-        ],
-        "polyfills": [
-          "zone.js",
-          "zone.js/testing"
-        ],
+        "include": ["{projectRoot}/**/*.spec.ts"],
+        "polyfills": ["zone.js", "zone.js/testing"],
         "tsConfig": "{projectRoot}/tsconfig.spec.json"
       }
     },
     "angular-cli-karma": {
       "executor": "@angular-devkit/build-angular:karma",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "browsers": "ChromeHeadless",
-        "polyfills": [
-          "zone.js",
-          "zone.js/testing"
-        ],
+        "polyfills": ["zone.js", "zone.js/testing"],
         "tsConfig": "{projectRoot}/tsconfig.spec.json",
         "watch": false
       }
     },
     "angular-cli-web-test-runner": {
       "executor": "@angular-devkit/build-angular:web-test-runner",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "include": [
-          "{projectRoot}/**/*.spec.ts"
-        ],
-        "polyfills": [
-          "zone.js",
-          "zone.js/testing"
-        ],
+        "include": ["{projectRoot}/**/*.spec.ts"],
+        "polyfills": ["zone.js", "zone.js/testing"],
         "tsConfig": "{projectRoot}/tsconfig.spec.json"
       }
     },
     "jest": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "{projectRoot}/jest.config.ts"
       }
     },
     "jest-swc": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "{projectRoot}/jest-swc.config.ts"
       }
