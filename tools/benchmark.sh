@@ -9,7 +9,7 @@ BENCHMARKS_DIR="$WORKSPACE_DIR/dist/benchmarks"
 # Make sure dist folder exists for reports.
 mkdir -p $BENCHMARKS_DIR
 
-HYPERFINE_OPTIONS="--ignore-failure"
+HYPERFINE_OPTIONS="--ignore-failure --sort mean-time"
 for target in $($TOOLS_DIR/list-test-targets.sh); do
   command="nx $target demo --skip-nx-cache"
   HYPERFINE_OPTIONS="$HYPERFINE_OPTIONS --command-name $target '$command'"
