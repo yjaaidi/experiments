@@ -113,23 +113,23 @@
     "vitest-threads": {
       "command": "vitest --config {projectRoot}/vitest.config.ts --pool threads --watch false"
     },
-    "vitest": {
+    "vitest-vmforks": {
       "command": "vitest --config {projectRoot}/vitest.config.ts --pool vmForks --watch false"
     },
-    "vitest-no-isolate": {
+    "vitest-threads-no-isolate": {
       "command": "vitest --config {projectRoot}/vitest.config.ts --pool threads --no-isolate --watch false"
     },
-    "vitest-swc": {
+    "vitest-swc-vmforks": {
       "command": "vitest --config {projectRoot}/vitest-swc.config.ts --pool vmForks --watch false"
     },
-    "vitest-swc-no-isolate": {
-      "command": "vitest --config {projectRoot}/vitest-swc.config.ts --no-isolate --watch false"
+    "vitest-swc-threads-no-isolate": {
+      "command": "vitest --config {projectRoot}/vitest-swc.config.ts --pool threads --no-isolate --watch false"
     },
-    "vitest-aot": {
+    "vitest-aot-vmforks": {
       "command": "vitest --config {projectRoot}/vitest-aot.config.ts --pool vmForks --watch false"
     },
-    "vitest-aot-no-isolate": {
-      "command": "vitest --config {projectRoot}/vitest-aot.config.ts --pool forks --no-isolate --watch false"
+    "vitest-aot-threads-no-isolate": {
+      "command": "vitest --config {projectRoot}/vitest-aot.config.ts --pool threads --no-isolate --watch false"
     }
   }
 }

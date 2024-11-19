@@ -18,10 +18,14 @@ jobs:
           - angular-cli-jest
           - angular-cli-karma
           - angular-cli-web-test-runner
-          - vitest
-          - vitest-no-isolate
-          - vitest-swc
-          - vitest-swc-no-isolate
+          - vitest-forks
+          - vitest-threads
+          - vitest-vmforks
+          - vitest-threads-no-isolate
+          - vitest-swc-vmforks
+          - vitest-swc-threads-no-isolate
+          - vitest-aot-vmforks
+          - vitest-aot-threads-no-isolate
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,10 +49,14 @@ jobs:
           - angular-cli-jest
           - angular-cli-karma
           - angular-cli-web-test-runner
-          - vitest
-          - vitest-no-isolate
-          - vitest-swc
-          - vitest-swc-no-isolate
+          - vitest-forks
+          - vitest-threads
+          - vitest-vmforks
+          - vitest-threads-no-isolate
+          - vitest-swc-vmforks
+          - vitest-swc-threads-no-isolate
+          - vitest-aot-vmforks
+          - vitest-aot-threads-no-isolate
     steps:
       - uses: actions/checkout@v4
         with:
