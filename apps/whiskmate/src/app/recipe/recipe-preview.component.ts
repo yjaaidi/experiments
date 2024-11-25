@@ -5,7 +5,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   selector: 'wm-recipe-preview',
   imports: [CardComponent],
   template: `@if (recipe()) {
