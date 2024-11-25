@@ -8,7 +8,6 @@ import { createRecipeFilter } from './recipe-filter';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   selector: 'wm-recipe-filter',
   imports: [MatFormFieldModule, MatInputModule, ReactiveFormsModule],
   template: `
