@@ -34,8 +34,7 @@ import { MessageComponent } from '../shared/message.component';
       <wm-message> 💥 Something went wrong</wm-message>
     }
 
-    @if (recipesResource.hasValue()) {
-      @let recipes = recipesResource.value();
+    @if (recipesResource.value(); as recipes) {
       @if (recipes && recipes.length > 0) {
         <wm-recipe-list [recipes]="recipes">
           <ng-template #actions let-recipe>
