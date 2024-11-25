@@ -5,12 +5,9 @@ import {
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { rxComputed } from '@jscutlery/rx-computed';
-import { pending, suspensify } from '@jscutlery/operators';
-import { GridComponent } from '../shared/grid.component';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { RecipeFilter } from './recipe-filter';
 import { RecipeFilterComponent } from './recipe-filter.component';
-import { RecipePreviewComponent } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository.service';
 import { RecipeListComponent } from './recipe-list.component';
 import { RecipeAddButtonComponent } from './recipe-add-button.component';
@@ -21,48 +18,42 @@ import { MessageComponent } from '../shared/message.component';
   standalone: true,
   selector: 'wm-recipe-search',
   imports: [
-    GridComponent,
     MessageComponent,
     MatButtonModule,
     RecipeFilterComponent,
-    RecipePreviewComponent,
     RecipeListComponent,
     RecipeAddButtonComponent,
   ],
   template: `
     <wm-recipe-filter (filterChange)="filter.set($event)"></wm-recipe-filter>
 
-    @if (recipesSuspense().pending) {
+    @if (recipesResource.isLoading()) {
       <wm-message>⏳ Searching...</wm-message>
     }
-    @if (recipesSuspense().hasError) {
-      <wm-message> 💥 Something went wrong </wm-message>
+    @if (recipesResource.error()) {
+      <wm-message> 💥 Something went wrong</wm-message>
     }
 
-    @if (recipesSuspense().hasValue) {
-      @if (recipes().length === 0) {
-        <wm-message> 😿 no results </wm-message>
-      } @else {
-        <wm-recipe-list [recipes]="recipes()">
+    @if (recipesResource.hasValue()) {
+      @let recipes = recipesResource.value();
+      @if (recipes && recipes.length > 0) {
+        <wm-recipe-list [recipes]="recipes">
           <ng-template #actions let-recipe>
             <wm-recipe-add-button [recipe]="recipe" />
           </ng-template>
         </wm-recipe-list>
+      } @else {
+        <wm-message> 😿 no results</wm-message>
       }
     }
   `,
 })
 export class RecipeSearchComponent {
   filter = signal<RecipeFilter>({});
-  recipesSuspense = rxComputed(
-    () =>
-      this._recipeRepository.search(this.filter().keywords).pipe(suspensify()),
-    { initialValue: pending },
-  );
-  recipes = () => {
-    const suspense = this.recipesSuspense();
-    return suspense.hasValue ? suspense.value : [];
-  };
+  recipesResource = rxResource({
+    request: this.filter,
+    loader: ({ request }) => this._recipeRepository.search(request.keywords),
+  });
 
   private _recipeRepository = inject(RecipeRepository);
 }
