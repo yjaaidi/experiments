@@ -12,7 +12,6 @@ import { RecipePreviewComponent } from './recipe-preview.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   selector: 'wm-recipe-list',
   template: `
     <wm-grid>
