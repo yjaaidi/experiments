@@ -70,7 +70,7 @@
     "eslint": "8.57.1",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-playwright": "^0.15.3",
-    "jsdom": "^25.0.1",
+    "jsdom": "25.0.1",
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "19.7.3",
     "prettier": "3.3.3",
@@ -80,6 +80,6 @@
     "typescript": "5.5.4",
     "unplugin-swc": "1.5.1",
     "vite": "5.4.6",
-    "vitest": "2.1.1"
+    "vitest": "2.1.5"
   }
 }
