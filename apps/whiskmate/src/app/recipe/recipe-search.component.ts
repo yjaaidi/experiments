@@ -15,7 +15,6 @@ import { MessageComponent } from '../shared/message.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   selector: 'wm-recipe-search',
   imports: [
     MessageComponent,

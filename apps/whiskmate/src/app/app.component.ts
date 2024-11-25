@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { NavComponent } from './shared/nav.component';
 
 @Component({
-  standalone: true,
   imports: [RouterOutlet, NavComponent],
   selector: 'wm-app',
   template: `
