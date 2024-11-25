@@ -22,7 +22,6 @@ export interface Link {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   selector: 'wm-nav',
   imports: [
     MatButtonModule,
