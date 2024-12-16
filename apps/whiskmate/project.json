@@ -8,12 +8,16 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/whiskmate",
         "index": "apps/whiskmate/src/index.html",
         "browser": "apps/whiskmate/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/whiskmate/tsconfig.app.json",
         "assets": [
           {
@@ -21,7 +25,10 @@
             "input": "apps/whiskmate/public"
           }
         ],
-        "styles": ["apps/whiskmate/src/styles.css"],
+        "styles": [
+          "@angular/material/prebuilt-themes/rose-red.css",
+          "apps/whiskmate/src/styles.css"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -71,7 +78,9 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "../../coverage/apps/whiskmate"
       }
