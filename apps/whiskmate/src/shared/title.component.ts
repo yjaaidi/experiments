@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'wm-title',
-  template: `<h1><ng-content/></h1>`,
+  template: `<h1><ng-content /></h1>`,
   styles: [
     `
       :host {
@@ -12,11 +12,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         padding-top: 1em;
         text-align: center;
 
-        background: #380030;
+        background: var(--mat-sys-on-primary-fixed);
         border-bottom: solid 1px #ddd;
         color: #fff;
       }
     `,
   ],
 })
-export class TitleComponent {}
+export class Title {}

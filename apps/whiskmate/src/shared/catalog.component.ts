@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   selector: 'wm-catalog',
-  template: `<ng-content/>`,
+  template: `<ng-content />`,
   styles: [
     `
       :host {
@@ -18,4 +18,4 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     `,
   ],
 })
-export class CatalogComponent {}
+export class Catalog {}

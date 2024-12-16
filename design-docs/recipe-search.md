@@ -31,14 +31,12 @@ flowchart TD
 - User types "burger" in the search box.
 - The recipes are filtered by the keyword "burger".
 
-### Paginator buttons
-
-#### Next page button
+### Next page button
 - Render `Paginator` with `itemsPerPage: 5`, `offset: 0`, and `total: 7`.
 - User clicks on the next page button.
 - `offsetChange` event is emitted with `5`.
 
-#### Previous page button
+### Previous page button
 - Render `Paginator` with `itemsPerPage: 5`, `offset: 5`, and `total: 7`.
 - User clicks on the previous page button.
 - `offsetChange` event is emitted with `0`.
