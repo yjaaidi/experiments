@@ -2,7 +2,7 @@
   "name": "whiskmate",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "app",
+  "prefix": "wm",
   "sourceRoot": "apps/whiskmate/src",
   "tags": [],
   "targets": {
