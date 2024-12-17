@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   input,
-  output
+  model,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 
@@ -39,17 +38,16 @@ import { MatButton } from '@angular/material/button';
 })
 export class Paginator {
   readonly itemsPerPage = input.required<number>();
-  @Input({ required: true }) offset!: number;
+  readonly offset = model.required<number>();
   readonly total = input.required<number>();
-  readonly offsetChange = output<number>();
 
   getNextOffset(): number | null {
-    const nextOffset = this.offset + this.itemsPerPage();
+    const nextOffset = this.offset() + this.itemsPerPage();
     return nextOffset < this.total() ? nextOffset : null;
   }
 
   getPreviousOffset(): number | null {
-    const previousOffset = this.offset - this.itemsPerPage();
+    const previousOffset = this.offset() - this.itemsPerPage();
     return previousOffset >= 0 ? previousOffset : null;
   }
 
@@ -65,7 +63,6 @@ export class Paginator {
     if (offset === null) {
       return;
     }
-    this.offset = offset;
-    this.offsetChange.emit(offset);
+    this.offset.set(offset);
   }
 }

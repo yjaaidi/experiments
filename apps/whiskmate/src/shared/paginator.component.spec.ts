@@ -43,7 +43,7 @@ describe(Paginator.name, () => {
         total: 17,
       },
       on: {
-        offsetChange(o) {
+        offset(o) {
           offset = o;
         },
       },

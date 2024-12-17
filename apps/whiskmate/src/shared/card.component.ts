@@ -1,19 +1,14 @@
-import { ChangeDetectionStrategy, Component, Input, input } from '@angular/core';
-
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-card',
-  template: ` @if (pictureUri) {
-  <img
-    class="picture"
-    [alt]="alt()"
-    [src]="pictureUri"
-    />
-}
-<div class="content">
-  <ng-content />
-</div>`,
+  template: ` @if (pictureUri()) {
+      <img class="picture" [alt]="alt()" [src]="pictureUri()" />
+    }
+    <div class="content">
+      <ng-content />
+    </div>`,
   styles: [
     `
       :host {
@@ -40,5 +35,5 @@ import { ChangeDetectionStrategy, Component, Input, input } from '@angular/core'
 })
 export class Card {
   readonly alt = input.required<string>();
-  @Input() pictureUri?: string;
+  readonly pictureUri = input<string>();
 }
