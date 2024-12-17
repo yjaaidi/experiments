@@ -17,12 +17,7 @@ export abstract class RecipeRepository {
   providedIn: 'root',
 })
 class RecipeRepositoryImpl implements RecipeRepository {
-  search(
-    params: {
-      keywords?: string;
-      offset?: number;
-    } = {}
-  ): Observable<{ items: Recipe[]; total: number }> {
+  search(): Observable<{ items: Recipe[]; total: number }> {
     throw new Error('Method not implemented.');
   }
 }

@@ -11,7 +11,6 @@ import { suspensify } from '@jscutlery/operators';
 import {
   BehaviorSubject,
   combineLatest,
-  filter,
   map,
   shareReplay,
   startWith,

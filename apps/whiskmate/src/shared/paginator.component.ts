@@ -4,7 +4,6 @@ import {
   EventEmitter,
   Input,
   NgModule,
-  OnChanges,
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';

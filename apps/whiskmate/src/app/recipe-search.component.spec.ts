@@ -6,7 +6,6 @@ import {
   RecipeRepositoryFake,
 } from './recipe-repository.fake';
 import { RecipeSearch, RecipeSearchModule } from './recipe-search.component';
-import { ComponentFixtureAutoDetect, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideAutoDetect } from '../testing/provide-auto-detect';
 
