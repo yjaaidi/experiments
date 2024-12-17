@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, input } from '@angular/core';
 
 
 @Component({
@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   template: ` @if (pictureUri) {
   <img
     class="picture"
-    [alt]="alt"
+    [alt]="alt()"
     [src]="pictureUri"
     />
 }
@@ -39,6 +39,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   imports: [],
 })
 export class Card {
-  @Input() alt!: string;
+  readonly alt = input.required<string>();
   @Input() pictureUri?: string;
 }

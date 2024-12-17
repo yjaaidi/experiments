@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
     <mat-form-field class="field">
       <mat-label>Keywords</mat-label>
       <input
-        [ngModel]="keywords"
+        [ngModel]="keywords()"
         (ngModelChange)="keywordsChange.emit($event)"
         matInput
         role="searchbox"
@@ -30,6 +30,6 @@ import { FormsModule } from '@angular/forms';
   imports: [MatFormField, MatLabel, MatInput, FormsModule],
 })
 export class RecipeFilter {
-  @Input() keywords?: string;
-  @Output() keywordsChange = new EventEmitter<string>();
+  readonly keywords = input<string>();
+  readonly keywordsChange = output<string>();
 }

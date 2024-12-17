@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Recipe } from './recipe';
 import { Card } from '../shared/card.component';
 
@@ -6,8 +6,8 @@ import { Card } from '../shared/card.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-recipe-preview',
   template: `
-    <wm-card [alt]="recipe.name" [pictureUri]="recipe.pictureUri">
-      <h2>{{ recipe.name }}</h2>
+    <wm-card [alt]="recipe().name" [pictureUri]="recipe().pictureUri">
+      <h2>{{ recipe().name }}</h2>
     </wm-card>
   `,
   styles: `
@@ -22,5 +22,5 @@ import { Card } from '../shared/card.component';
   imports: [Card],
 })
 export class RecipePreview {
-  @Input({ required: true }) recipe!: Recipe;
+  readonly recipe = input.required<Recipe>();
 }
