@@ -1,18 +1,19 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { NgIf } from '@angular/common';
+
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-card',
-  template: ` <img
-      *ngIf="pictureUri"
-      class="picture"
-      [alt]="alt"
-      [src]="pictureUri"
+  template: ` @if (pictureUri) {
+  <img
+    class="picture"
+    [alt]="alt"
+    [src]="pictureUri"
     />
-    <div class="content">
-      <ng-content />
-    </div>`,
+}
+<div class="content">
+  <ng-content />
+</div>`,
   styles: [
     `
       :host {
@@ -35,7 +36,7 @@ import { NgIf } from '@angular/common';
       }
     `,
   ],
-  imports: [NgIf],
+  imports: [],
 })
 export class Card {
   @Input() alt!: string;

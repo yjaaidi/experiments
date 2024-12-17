@@ -4,7 +4,7 @@ import {
   inject,
   TrackByFunction,
 } from '@angular/core';
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { suspensify } from '@jscutlery/operators';
 import {
@@ -27,33 +27,37 @@ import { Recipe } from './recipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'wm-recipe-search',
   template: `
-    <mat-progress-bar
-      *ngIf="(recipesSuspense$ | async)?.pending"
-      class="progress-bar"
-      mode="indeterminate"
-    />
-
-    <wm-recipe-filter (keywordsChange)="keywords$.next($event)" />
-
-    <wm-catalog *ngIf="recipesSuspense$ | async as recipesSuspense">
-      <ng-container *ngIf="recipesSuspense.hasError">
-        <p>Something went wrong</p>
-      </ng-container>
-      <ng-container *ngIf="recipesSuspense.hasValue">
-        <wm-recipe-preview
-          *ngFor="let recipe of recipesSuspense.value.items; trackBy: trackById"
-          [recipe]="recipe"
+    @if ((recipesSuspense$ | async)?.pending) {
+      <mat-progress-bar
+        class="progress-bar"
+        mode="indeterminate"
         />
-      </ng-container>
-    </wm-catalog>
-
+    }
+    
+    <wm-recipe-filter (keywordsChange)="keywords$.next($event)" />
+    
+    @if (recipesSuspense$ | async; as recipesSuspense) {
+      <wm-catalog>
+        @if (recipesSuspense.hasError) {
+          <p>Something went wrong</p>
+        }
+        @if (recipesSuspense.hasValue) {
+          @for (recipe of recipesSuspense.value.items; track trackById($index, recipe)) {
+            <wm-recipe-preview
+              [recipe]="recipe"
+              />
+          }
+        }
+      </wm-catalog>
+    }
+    
     <wm-paginator
       [itemsPerPage]="(itemsPerPage$ | async) ?? 10"
       [offset]="(computedOffset$ | async) ?? 0"
       [total]="(total$ | async) ?? 0"
       (offsetChange)="offset$.next($event)"
-    />
-  `,
+      />
+    `,
   styles: `
     :host {
       display: block;
@@ -67,15 +71,13 @@ import { Recipe } from './recipe';
     }
   `,
   imports: [
-    NgIf,
     MatProgressBar,
     RecipeFilter,
     Catalog,
-    NgFor,
     RecipePreview,
     Paginator,
-    AsyncPipe,
-  ],
+    AsyncPipe
+],
 })
 export class RecipeSearch {
   keywords$ = new BehaviorSubject<string | undefined>(undefined);
