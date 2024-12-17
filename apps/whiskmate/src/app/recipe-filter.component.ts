@@ -1,4 +1,4 @@
-import { Component, input, model, output } from '@angular/core';
+import { Component, model } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
