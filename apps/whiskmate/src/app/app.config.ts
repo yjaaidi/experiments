@@ -2,7 +2,7 @@ import {
   ApplicationConfig,
   inject,
   provideAppInitializer,
-  provideZoneChangeDetection,
+  provideExperimentalZonelessChangeDetection,
 } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
@@ -30,6 +30,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideRouter(appRoutes),
     provideRecipeRepositoryFake(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideExperimentalZonelessChangeDetection(),
   ],
 };

@@ -9,6 +9,7 @@ import {
 import { RecipeSearch } from './recipe-search.component';
 import { recipeMother } from '../testing/recipe.mother';
 import { provideAutoDetect } from '../testing/provide-auto-detect';
+import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 
 describe(RecipeSearch.name, () => {
   it('should load all recipes initially', async () => {
@@ -49,7 +50,7 @@ describe(RecipeSearch.name, () => {
      * to make tests compatible with both SCAM and standalone. */
     TestBed.configureTestingModule({
       providers: [
-        provideAutoDetect(),
+        provideExperimentalZonelessChangeDetection(),
         provideNoopAnimations(),
         provideRecipeRepositoryFake(),
       ],

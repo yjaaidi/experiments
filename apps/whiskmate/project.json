@@ -15,9 +15,6 @@
         "outputPath": "dist/apps/whiskmate",
         "index": "apps/whiskmate/src/index.html",
         "browser": "apps/whiskmate/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
         "tsConfig": "apps/whiskmate/tsconfig.app.json",
         "assets": [
           {

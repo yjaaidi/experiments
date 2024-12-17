@@ -1,5 +1,6 @@
 import { Paginator } from './paginator.component';
 import { fireEvent, render, screen } from '@testing-library/angular';
+import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 
 describe(Paginator.name, () => {
   it('should increment offset by itemsPerPage when clicking next page', async () => {
@@ -37,6 +38,7 @@ describe(Paginator.name, () => {
   async function renderComponent() {
     let offset: number;
     const { fixture } = await render(Paginator, {
+      providers: [provideExperimentalZonelessChangeDetection()],
       inputs: {
         itemsPerPage: 10,
         offset: 0,

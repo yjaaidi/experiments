@@ -1,4 +1,3 @@
-import '@analogjs/vitest-angular/setup-zone';
 import '@testing-library/jest-dom/vitest';
 
 import {
@@ -11,7 +10,7 @@ import { afterEach, beforeEach } from 'vitest';
 beforeEach(() => {
   getTestBed().initTestEnvironment(
     BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
+    platformBrowserDynamicTesting(),
   );
 });
 
