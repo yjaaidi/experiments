@@ -1,17 +1,21 @@
 import {
   EnvironmentProviders,
+  inject,
   Injectable,
+  Injector,
   makeEnvironmentProviders,
 } from '@angular/core';
 import { defer, delay, Observable, of } from 'rxjs';
 import { RecipeRepository } from './recipe-repository';
 import { Recipe } from './recipe';
+import { pendingUntilEvent } from '@angular/core/rxjs-interop';
 
 @Injectable()
 export class RecipeRepositoryFake implements RecipeRepository {
   private _delay = 0;
   private _pageSize = 3;
   private _recipes: Recipe[] = [];
+  private _injector = inject(Injector);
 
   setRecipes(recipes: Recipe[]): void {
     this._recipes = recipes;
@@ -37,7 +41,7 @@ export class RecipeRepositoryFake implements RecipeRepository {
       return of({
         items: filteredRecipes.slice(offset, offset + this._pageSize),
         total: filteredRecipes.length,
-      }).pipe(delay(this._delay));
+      }).pipe(delay(this._delay), pendingUntilEvent(this._injector));
     });
   }
 
