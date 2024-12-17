@@ -1,12 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  NgModule,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Recipe } from './recipe';
-import { CardModule } from '../shared/card.component';
+import { Card } from '../shared/card.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,15 +19,8 @@ import { CardModule } from '../shared/card.component';
       white-space: nowrap;
     }
   `,
-  standalone: false,
+  imports: [Card],
 })
 export class RecipePreview {
   @Input({ required: true }) recipe!: Recipe;
 }
-
-@NgModule({
-  declarations: [RecipePreview],
-  imports: [CommonModule, CardModule],
-  exports: [RecipePreview],
-})
-export class RecipePreviewModule {}

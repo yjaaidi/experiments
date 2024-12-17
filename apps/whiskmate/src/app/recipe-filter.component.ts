@@ -1,13 +1,6 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  NgModule,
-  Output,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -26,7 +19,7 @@ import { FormsModule } from '@angular/forms';
   `,
   styles: `
     :host {
-      display:block;
+      display: block;
       margin: 1em;
     }
 
@@ -34,16 +27,9 @@ import { FormsModule } from '@angular/forms';
       min-width: 300px;
     }
   `,
-  standalone: false,
+  imports: [MatFormField, MatLabel, MatInput, FormsModule],
 })
 export class RecipeFilter {
   @Input() keywords?: string;
   @Output() keywordsChange = new EventEmitter<string>();
 }
-
-@NgModule({
-  declarations: [RecipeFilter],
-  imports: [CommonModule, MatInputModule, MatFormFieldModule, FormsModule],
-  exports: [RecipeFilter],
-})
-export class RecipeFilterModule {}

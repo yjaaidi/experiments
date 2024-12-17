@@ -2,10 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  NgModule,
   TrackByFunction,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { suspensify } from '@jscutlery/operators';
 import {
@@ -17,9 +16,9 @@ import {
   Subject,
   switchMap,
 } from 'rxjs';
-import { RecipeFilterModule } from './recipe-filter.component';
-import { PaginatorModule } from '../shared/paginator.component';
-import { RecipePreviewModule } from './recipe-preview.component';
+import { RecipeFilter } from './recipe-filter.component';
+import { Paginator } from '../shared/paginator.component';
+import { RecipePreview } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository';
 import { Catalog } from '../shared/catalog.component';
 import { Recipe } from './recipe';
@@ -67,7 +66,16 @@ import { Recipe } from './recipe';
       top: 0;
     }
   `,
-  standalone: false,
+  imports: [
+    NgIf,
+    MatProgressBar,
+    RecipeFilter,
+    Catalog,
+    NgFor,
+    RecipePreview,
+    Paginator,
+    AsyncPipe,
+  ],
 })
 export class RecipeSearch {
   keywords$ = new BehaviorSubject<string | undefined>(undefined);
@@ -100,17 +108,3 @@ export class RecipeSearch {
 
   trackById: TrackByFunction<Recipe> = (_, recipe) => recipe.id;
 }
-
-@NgModule({
-  declarations: [RecipeSearch],
-  imports: [
-    Catalog,
-    CommonModule,
-    PaginatorModule,
-    RecipeFilterModule,
-    RecipePreviewModule,
-    MatProgressBar,
-  ],
-  exports: [RecipeSearch],
-})
-export class RecipeSearchModule {}

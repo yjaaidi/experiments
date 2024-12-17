@@ -3,10 +3,8 @@ import {
   Component,
   EventEmitter,
   Input,
-  NgModule,
   Output,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 
 @Component({
@@ -37,7 +35,7 @@ import { MatButton } from '@angular/material/button';
       }
     `,
   ],
-  standalone: false,
+  imports: [MatButton],
 })
 export class Paginator {
   @Input({ required: true }) itemsPerPage!: number;
@@ -71,10 +69,3 @@ export class Paginator {
     this.offsetChange.emit(offset);
   }
 }
-
-@NgModule({
-  declarations: [Paginator],
-  imports: [CommonModule, MatButton],
-  exports: [Paginator],
-})
-export class PaginatorModule {}

@@ -1,14 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  NgModule,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NgIf } from '@angular/common';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
   selector: 'wm-card',
   template: ` <img
       *ngIf="pictureUri"
@@ -41,15 +35,9 @@ import { NgIf } from '@angular/common';
       }
     `,
   ],
+  imports: [NgIf],
 })
 export class Card {
   @Input() alt!: string;
   @Input() pictureUri?: string;
 }
-
-@NgModule({
-  declarations: [Card],
-  imports: [NgIf],
-  exports: [Card],
-})
-export class CardModule {}
