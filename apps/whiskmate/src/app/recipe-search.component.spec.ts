@@ -8,7 +8,6 @@ import {
 } from './recipe-repository.fake';
 import { RecipeSearch } from './recipe-search.component';
 import { recipeMother } from '../testing/recipe.mother';
-import { provideAutoDetect } from '../testing/provide-auto-detect';
 import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 
 describe(RecipeSearch.name, () => {

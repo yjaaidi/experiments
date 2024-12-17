@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  TrackByFunction,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { suspensify } from '@jscutlery/operators';
@@ -21,7 +16,6 @@ import { Paginator } from '../shared/paginator.component';
 import { RecipePreview } from './recipe-preview.component';
 import { RecipeRepository } from './recipe-repository';
 import { Catalog } from '../shared/catalog.component';
-import { Recipe } from './recipe';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
