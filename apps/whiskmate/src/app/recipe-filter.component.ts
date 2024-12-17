@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, model, output } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
@@ -8,13 +8,7 @@ import { FormsModule } from '@angular/forms';
   template: `
     <mat-form-field class="field">
       <mat-label>Keywords</mat-label>
-      <input
-        [ngModel]="keywords()"
-        (ngModelChange)="keywordsChange.emit($event)"
-        matInput
-        role="searchbox"
-        type="text"
-      />
+      <input [(ngModel)]="keywords" matInput role="searchbox" type="text" />
     </mat-form-field>
   `,
   styles: `
@@ -30,6 +24,5 @@ import { FormsModule } from '@angular/forms';
   imports: [MatFormField, MatLabel, MatInput, FormsModule],
 })
 export class RecipeFilter {
-  readonly keywords = input<string>();
-  readonly keywordsChange = output<string>();
+  readonly keywords = model<string>();
 }
