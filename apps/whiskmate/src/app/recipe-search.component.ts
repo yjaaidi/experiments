@@ -28,36 +28,31 @@ import { Recipe } from './recipe';
   selector: 'wm-recipe-search',
   template: `
     @if ((recipesSuspense$ | async)?.pending) {
-      <mat-progress-bar
-        class="progress-bar"
-        mode="indeterminate"
-        />
+      <mat-progress-bar class="progress-bar" mode="indeterminate" />
     }
-    
+
     <wm-recipe-filter (keywordsChange)="keywords$.next($event)" />
-    
+
     @if (recipesSuspense$ | async; as recipesSuspense) {
       <wm-catalog>
         @if (recipesSuspense.hasError) {
           <p>Something went wrong</p>
         }
         @if (recipesSuspense.hasValue) {
-          @for (recipe of recipesSuspense.value.items; track trackById($index, recipe)) {
-            <wm-recipe-preview
-              [recipe]="recipe"
-              />
+          @for (recipe of recipesSuspense.value.items; track recipe.id) {
+            <wm-recipe-preview [recipe]="recipe" />
           }
         }
       </wm-catalog>
     }
-    
+
     <wm-paginator
       [itemsPerPage]="(itemsPerPage$ | async) ?? 10"
       [offset]="(computedOffset$ | async) ?? 0"
       [total]="(total$ | async) ?? 0"
       (offsetChange)="offset$.next($event)"
-      />
-    `,
+    />
+  `,
   styles: `
     :host {
       display: block;
@@ -76,8 +71,8 @@ import { Recipe } from './recipe';
     Catalog,
     RecipePreview,
     Paginator,
-    AsyncPipe
-],
+    AsyncPipe,
+  ],
 })
 export class RecipeSearch {
   keywords$ = new BehaviorSubject<string | undefined>(undefined);
@@ -107,6 +102,4 @@ export class RecipeSearch {
   );
 
   private _recipeRepository = inject(RecipeRepository);
-
-  trackById: TrackByFunction<Recipe> = (_, recipe) => recipe.id;
 }
