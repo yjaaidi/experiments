@@ -10,7 +10,12 @@ import { NgIf } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
   selector: 'wm-card',
-  template: ` <img *ngIf="pictureUri" class="picture" [src]="pictureUri" />
+  template: ` <img
+      *ngIf="pictureUri"
+      class="picture"
+      [alt]="alt"
+      [src]="pictureUri"
+    />
     <div class="content">
       <ng-content />
     </div>`,
@@ -38,6 +43,7 @@ import { NgIf } from '@angular/common';
   ],
 })
 export class Card {
+  @Input() alt!: string;
   @Input() pictureUri?: string;
 }
 
