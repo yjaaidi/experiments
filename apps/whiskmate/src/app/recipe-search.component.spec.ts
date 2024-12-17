@@ -1,13 +1,14 @@
-import { fireEvent, screen } from '@testing-library/angular';
+import { fireEvent, render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { recipeMother } from '../testing/recipe.mother';
 import {
   provideRecipeRepositoryFake,
   RecipeRepositoryFake,
 } from './recipe-repository.fake';
-import { RecipeSearch } from './recipe-search.component';
+import { RecipeSearch, RecipeSearchModule } from './recipe-search.component';
 import { ComponentFixtureAutoDetect, TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideAutoDetect } from '../testing/provide-auto-detect';
 
 describe(RecipeSearch.name, () => {
   it('should load all recipes initially', async () => {
@@ -44,21 +45,25 @@ describe(RecipeSearch.name, () => {
   });
 
   async function renderComponent() {
-    TestBed.configureTestingModule({
+    const { fixture } = await render(RecipeSearch, {
+      imports: [RecipeSearchModule],
       providers: [
+        provideAutoDetect(),
         provideNoopAnimations(),
         provideRecipeRepositoryFake(),
-        { provide: ComponentFixtureAutoDetect, useValue: true },
       ],
+      configureTestBed(testBed) {
+        testBed
+          .inject(RecipeRepositoryFake)
+          .setRecipes([
+            recipeMother.withBasicInfo('Burger').build(),
+            recipeMother.withBasicInfo('Salad').build(),
+            recipeMother.withBasicInfo('Beer').build(),
+            recipeMother.withBasicInfo('Truffle Burger').build(),
+            recipeMother.withBasicInfo('Greek Salad').build(),
+          ]);
+      },
     });
-    TestBed.inject(RecipeRepositoryFake).setRecipes([
-      recipeMother.withBasicInfo('Burger').build(),
-      recipeMother.withBasicInfo('Salad').build(),
-      recipeMother.withBasicInfo('Beer').build(),
-      recipeMother.withBasicInfo('Truffle Burger').build(),
-      recipeMother.withBasicInfo('Greek Salad').build(),
-    ]);
-    const fixture = TestBed.createComponent(RecipeSearch);
 
     await fixture.whenStable();
 
