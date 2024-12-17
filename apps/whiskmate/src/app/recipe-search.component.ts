@@ -56,27 +56,25 @@ import { Recipe } from './recipe';
       (offsetChange)="offset$.next($event)"
     />
   `,
-  styles: [
-    `
-      :host {
-        display: block;
-        margin: auto;
-        text-align: center;
-      }
+  styles: `
+    :host {
+      display: block;
+      margin: auto;
+      text-align: center;
+    }
 
-      .progress-bar {
-        position: fixed;
-        top: 0;
-      }
-    `,
-  ],
+    .progress-bar {
+      position: fixed;
+      top: 0;
+    }
+  `,
   standalone: false,
 })
 export class RecipeSearch {
   keywords$ = new BehaviorSubject<string | undefined>(undefined);
   offset$ = new Subject<number>();
   computedOffset$ = this.keywords$.pipe(
-    switchMap(() => this.offset$.pipe(startWith(0)))
+    switchMap(() => this.offset$.pipe(startWith(0))),
   );
   recipesSuspense$ = combineLatest({
     keywords: this.keywords$,
@@ -90,13 +88,13 @@ export class RecipeSearch {
     shareReplay({
       bufferSize: 1,
       refCount: true,
-    })
+    }),
   );
   itemsPerPage$ = this.recipesSuspense$.pipe(
-    map((suspense) => (suspense.hasValue ? suspense.value.items.length : 10))
+    map((suspense) => (suspense.hasValue ? suspense.value.items.length : 10)),
   );
   total$ = this.recipesSuspense$.pipe(
-    map((suspense) => (suspense.hasValue ? suspense.value.total : 0))
+    map((suspense) => (suspense.hasValue ? suspense.value.total : 0)),
   );
 
   private _recipeRepository = inject(RecipeRepository);
