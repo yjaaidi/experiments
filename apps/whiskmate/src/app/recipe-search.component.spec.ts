@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { fireEvent, screen } from '@testing-library/angular';
@@ -41,7 +42,7 @@ describe(RecipeSearch.name, () => {
 
     await typeKeywords('burger');
 
-    expect(getPreviousButton()).toBeDisabled();
+    expect(getPreviousButton().getAttribute('disabled')).toBe('true');
   });
 
   async function renderComponent() {

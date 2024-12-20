@@ -8,7 +8,6 @@ export default mergeConfig(
       isolate: false,
       pool: 'threads',
       watch: false,
-      globals: true,
       environment: 'jsdom',
       include: ['src/**/*.{test,spec}.{ts,mts}'],
       setupFiles: ['src/test-setup.ts'],
