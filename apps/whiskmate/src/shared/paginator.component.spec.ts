@@ -24,7 +24,11 @@ describe(Paginator.name, () => {
   it('should disable previous button on first page', async () => {
     await renderComponent();
 
-    expect(screen.getByRole('button', { name: /previous/i })).toBeDisabled();
+    expect(
+      screen
+        .getByRole('button', { name: /previous/i })
+        .getAttribute('disabled'),
+    ).toBe('true');
   });
 
   it('should disable next button on last page', async () => {
@@ -32,7 +36,9 @@ describe(Paginator.name, () => {
 
     await clickNext();
 
-    expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: /next/i }).getAttribute('disabled'),
+    ).toBe('true');
   });
 
   async function renderComponent() {
