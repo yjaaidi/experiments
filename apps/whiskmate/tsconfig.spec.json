@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "types": [
+      "@testing-library/jest-dom/vitest",
       "vitest/globals",
       "vitest/importMeta",
       "vite/client",
@@ -16,13 +17,9 @@
     "vitest.config.ts",
     "vitest.config.mts",
     "src/**/*.test.ts",
+    "src/**/*.test-d.ts",
     "src/**/*.spec.ts",
-    "src/**/*.test.tsx",
-    "src/**/*.spec.tsx",
-    "src/**/*.test.js",
-    "src/**/*.spec.js",
-    "src/**/*.test.jsx",
-    "src/**/*.spec.jsx",
+    "src/**/*.spec-d.ts",
     "src/**/*.d.ts"
   ],
   "files": ["src/test-setup.ts"]
