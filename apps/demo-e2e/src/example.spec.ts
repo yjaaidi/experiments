@@ -3,6 +3,13 @@ import { test, expect } from '@playwright/test';
 test('has title', async ({ page }) => {
   await page.goto('/');
 
-  // Expect h1 to contain a substring.
   expect(await page.locator('h1').innerText()).toContain('Welcome');
+});
+
+test('says goodbye', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'Quit' }).click();
+
+  expect(await page.locator('h1').innerText()).toContain('Bye');
 });

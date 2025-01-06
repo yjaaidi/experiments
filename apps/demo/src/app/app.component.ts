@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { Component, signal } from '@angular/core';
 
 @Component({
-  imports: [NxWelcomeComponent, RouterModule],
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  template: ` @if(isGreeting()) {
+    <h1>Welcome!</h1>
+    <button (click)="isGreeting.set(false)">Quit</button>
+    } @else {
+    <h1>Bye!</h1>
+    }`,
 })
 export class AppComponent {
-  title = 'demo';
+  isGreeting = signal(true);
 }
