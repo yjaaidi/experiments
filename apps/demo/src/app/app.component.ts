@@ -13,4 +13,8 @@ import { Component, signal } from '@angular/core';
 })
 export class AppComponent {
   isGreeting = signal(true);
+
+  never() {
+    console.log('NEVER');
+  }
 }
