@@ -7,7 +7,7 @@
   "// targets": "to see all targets run: nx show project demo-e2e --web",
   "targets": {
     "report-c8": {
-      "command": "c8 report -r html -r text --temp-directory dist/coverage-tmp"
+      "command": "c8 report -r html -r text --temp-directory dist/coverage-c8-tmp --all --src apps"
     },
     "report-istanbul": {
       "command": "node --experimental-strip-types tools/report-istanbul.mts"

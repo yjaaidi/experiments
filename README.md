@@ -1,6 +1,7 @@
 ## 1. Run e2e tests
 
 ```sh
+bun install
 nx e2e
 ```
 
@@ -24,4 +25,5 @@ nx report-istanbul
 nx report-c8
 ```
 
-⚠️ The source code is not mapped properly with this option due to the following issue: https://github.com/bcoe/c8/issues/339
+> ⚠️ The source code is not mapped properly with this option due to the following issue: https://github.com/bcoe/c8/issues/339
+> C8 coverage is possible but requires too many hacks (e.g. copying files from `dist` to a temporary folder and fixing source maps relative paths)

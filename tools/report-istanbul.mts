@@ -1,8 +1,8 @@
+import { join, relative } from 'node:path/posix';
 import { workspaceRoot } from '@nx/devkit';
 import istanbulLibCoverage from 'istanbul-lib-coverage';
 import istanbulLibReport from 'istanbul-lib-report';
 import istanbulReports from 'istanbul-reports';
-import { join, relative } from 'node:path/posix';
 import v8toIstanbul from 'v8-to-istanbul';
 import { loadCoverageEntries } from './load-coverage-entries.mts';
 
@@ -15,8 +15,15 @@ async function main() {
       continue;
     }
 
-    const converter = v8toIstanbul(entry.url, 0, {
+    const scriptPath = join(workspaceRoot, new URL(entry.url).pathname);
+
+    const converter = v8toIstanbul(scriptPath, 0, {
       source: entry.source,
+      sourceMap: entry.sourceMap
+        ? {
+            sourcemap: entry.sourceMap,
+          }
+        : undefined,
     });
     await converter.load();
     converter.applyCoverage(entry.functions);
