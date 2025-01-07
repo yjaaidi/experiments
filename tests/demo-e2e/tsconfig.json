@@ -5,12 +5,14 @@
     "outDir": "../../dist/out-tsc",
     "sourceMap": false,
     "module": "commonjs",
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "lib": ["es2024"]
   },
   "include": [
     "**/*.ts",
