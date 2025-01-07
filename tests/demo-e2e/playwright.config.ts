@@ -2,7 +2,6 @@ import { defineConfig, devices } from '@playwright/test';
 import { nxE2EPreset } from '@nx/playwright/preset';
 
 import { workspaceRoot } from '@nx/devkit';
-import { Options } from './testing';
 
 // For CI, you may want to set BASE_URL to the deployed application.
 const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
@@ -16,7 +15,7 @@ const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-export default defineConfig<Options>({
+export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
   timeout: 5_000,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -24,7 +23,6 @@ export default defineConfig<Options>({
     baseURL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    sourceMapFolder: 'dist/apps/demo/browser',
   },
   /* Run your local dev server before starting the tests */
   webServer: {

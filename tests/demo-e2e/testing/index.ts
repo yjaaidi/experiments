@@ -9,13 +9,14 @@ import v8toIstanbul from 'v8-to-istanbul';
 import istanbulLibCoverage from 'istanbul-lib-coverage';
 import istanbulLibReport from 'istanbul-lib-report';
 import istanbulReports from 'istanbul-reports';
+import type { SourceMapInput } from '@jridgewell/trace-mapping';
 import { workspaceRoot } from '@nx/devkit';
 
 export { expect };
 
 export const test = base.extend<
   { page: Page },
-  { coverageReporter: CoverageReporter } & Options
+  { coverageReporter: CoverageReporter }
 >({
   page: async ({ coverageReporter, page }, use) => {
     await page.coverage.startJSCoverage({
@@ -29,13 +30,7 @@ export const test = base.extend<
   },
   coverageReporter: [
     // eslint-disable-next-line no-empty-pattern
-    async ({ sourceMapFolder }, use) => {
-      if (!sourceMapFolder) {
-        throw new Error(
-          'Please provide `sourceMapFolder` to specify the path to the source maps.',
-        );
-      }
-
+    async ({}, use) => {
       const coverageResults: CoverageResults = [];
 
       await use({
@@ -52,17 +47,12 @@ export const test = base.extend<
           continue;
         }
 
-        /* Fix sourcemap path. */
-        entry.source = entry.source.replace(
-          'sourceMappingURL=',
-          `sourceMappingURL=${join(workspaceRoot, sourceMapFolder)}/`,
-        );
-
         const converter = v8toIstanbul(
           join(workspaceRoot, VIRTUAL_ENTRYPOINT),
           0,
           {
             source: entry.source,
+            sourceMap: await tryFetchSourceMap(entry.url),
           },
         );
         await converter.load();
@@ -94,17 +84,31 @@ export const test = base.extend<
     },
     { scope: 'worker' },
   ],
-  sourceMapFolder: [undefined, { scope: 'worker', option: true }],
 });
 
 const VIRTUAL_ENTRYPOINT = 'VIRTUAL_ENTRYPOINT';
+
+async function tryFetchSourceMap(
+  sourceUrl: string,
+): Promise<{ sourcemap: SourceMapInput } | undefined> {
+  if (!sourceUrl.endsWith('.js')) {
+    return;
+  }
+
+  const response = await fetch(`${sourceUrl}.map`);
+
+  try {
+    return {
+      sourcemap: await response.json(),
+    };
+  } catch {
+    console.warn(`Failed to parse source map for: ${sourceUrl}`);
+    return;
+  }
+}
 
 interface CoverageReporter {
   collect(results: CoverageResults): void;
 }
 
 type CoverageResults = Awaited<ReturnType<Coverage['stopJSCoverage']>>;
-
-export interface Options {
-  sourceMapFolder?: string;
-}
