@@ -5,7 +5,7 @@ import { Component, signal } from '@angular/core';
   template: `
     @if (isGreeting()) {
       <h1>Welcome!</h1>
-      <button (click)="isGreeting.set(false)">Quit</button>
+      <button (click)="quit()">Quit</button>
     } @else {
       <h1>Bye!</h1>
     }
@@ -21,5 +21,9 @@ export class AppComponent {
 
   fail() {
     this.isError.set(true);
+  }
+
+  quit() {
+    this.isGreeting.set(false);
   }
 }
