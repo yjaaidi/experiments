@@ -15,7 +15,12 @@ async function main() {
       continue;
     }
 
-    const scriptPath = join(workspaceRoot, new URL(entry.url).pathname);
+    const filePath = new URL(entry.url).pathname;
+    if (filePath.startsWith('/@')) {
+      continue;
+    }
+
+    const scriptPath = join(workspaceRoot, filePath);
 
     const converter = v8toIstanbul(scriptPath, 0, {
       source: entry.source,

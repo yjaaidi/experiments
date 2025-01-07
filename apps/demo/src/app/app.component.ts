@@ -9,12 +9,17 @@ import { Component, signal } from '@angular/core';
     } @else {
       <h1>Bye!</h1>
     }
+
+    @if (isError()) {
+      <p>There was an error!</p>
+    }
   `,
 })
 export class AppComponent {
   isGreeting = signal(true);
+  isError = signal(false);
 
-  never() {
-    console.log('NEVER');
+  fail() {
+    this.isError.set(true);
   }
 }

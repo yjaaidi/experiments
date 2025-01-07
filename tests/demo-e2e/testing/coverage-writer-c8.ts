@@ -55,7 +55,9 @@ export class CoverageWriterC8 implements CoverageWriter {
         /* Copy scripts and sourcemaps to temporary directory.
          * Otherwise, C8 will not find the sourcemap. */
         await forceWriteFile(scriptPath, entry.source);
-        await forceWriteFile(`${scriptPath}.map`, JSON.stringify(sourceMap));
+        if (sourceMap) {
+          await forceWriteFile(`${scriptPath}.map`, JSON.stringify(sourceMap));
+        }
 
         return {
           ...entry,

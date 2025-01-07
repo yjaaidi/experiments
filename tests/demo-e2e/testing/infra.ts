@@ -1,6 +1,9 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path/posix';
+import { debug } from 'debug';
 import type { SourceMapInput } from '@jridgewell/trace-mapping';
+
+const log = debug('coverage');
 
 export async function tryFetchSourceMap(
   url: string,
@@ -9,7 +12,7 @@ export async function tryFetchSourceMap(
     const response = await fetch(`${url}.map`);
     return await response.json();
   } catch {
-    console.warn(`No source map found for: ${url}`);
+    log(`Failed to fetch source map for ${url}`);
     return;
   }
 }

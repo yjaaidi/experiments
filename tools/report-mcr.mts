@@ -5,6 +5,12 @@ async function main() {
   const mcr = MCR({
     outputDir: 'coverage',
     reports: ['html', 'text'],
+    entryFilter: {
+      '.angular/cache': false,
+      client: false,
+      'env.mjs': false,
+      '**': true,
+    },
     sourceFilter: {
       '**/node_modules/**': false,
       '**': true,
