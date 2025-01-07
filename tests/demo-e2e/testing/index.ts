@@ -1,30 +1,39 @@
 import { test as base, expect, type Page } from '@playwright/test';
-import { CoverageEntry, CoverageReporter } from './coverage-reporter';
+import { CoverageReporterV8ToInstanbul } from './coverage-reporter-v8-to-instanbul';
+import { CoverageCollector, CoverageReporter } from './core';
 
 export { expect };
 
 export const test = base.extend<
   { page: Page },
-  { collectCoverage: (entries: CoverageEntry[]) => void }
+  { _coverageCollector: CoverageCollector; _coverageReporter: CoverageReporter }
 >({
-  page: async ({ collectCoverage, page }, use) => {
+  page: async ({ _coverageCollector, page }, use) => {
     await page.coverage.startJSCoverage({
       resetOnNavigation: false,
     });
 
     await use(page);
 
-    collectCoverage(await page.coverage.stopJSCoverage());
+    _coverageCollector.collect(await page.coverage.stopJSCoverage());
   },
-  collectCoverage: [
+  _coverageCollector: [
     // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
-      const coverageReporter = new CoverageReporter();
-
-      await use((entries) => coverageReporter.collect(entries));
-
-      await coverageReporter.writeReport();
+      await use(new CoverageCollector());
     },
     { scope: 'worker' },
+  ],
+  _coverageReporter: [
+    async ({ _coverageCollector }, use) => {
+      const coverageReporter = new CoverageReporterV8ToInstanbul();
+
+      await use(coverageReporter);
+
+      await coverageReporter.writeReport(
+        _coverageCollector.getCoverageEntries(),
+      );
+    },
+    { scope: 'worker', auto: true },
   ],
 });

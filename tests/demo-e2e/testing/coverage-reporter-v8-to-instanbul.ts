@@ -1,23 +1,17 @@
-import { join, relative } from 'node:path/posix';
-import { type Coverage } from '@playwright/test';
-import v8toIstanbul from 'v8-to-istanbul';
+import type { SourceMapInput } from '@jridgewell/trace-mapping';
+import { workspaceRoot } from '@nx/devkit';
 import istanbulLibCoverage from 'istanbul-lib-coverage';
 import istanbulLibReport from 'istanbul-lib-report';
 import istanbulReports from 'istanbul-reports';
-import type { SourceMapInput } from '@jridgewell/trace-mapping';
-import { workspaceRoot } from '@nx/devkit';
+import { join, relative } from 'node:path/posix';
+import v8toIstanbul from 'v8-to-istanbul';
+import { CoverageEntry, CoverageReporter } from './core';
 
-export class CoverageReporter {
-  private _coverageEntries: CoverageEntry[] = [];
-
-  collect(coverageEntries: CoverageEntry[]) {
-    this._coverageEntries = [...this._coverageEntries, ...coverageEntries];
-  }
-
-  async writeReport() {
+export class CoverageReporterV8ToInstanbul implements CoverageReporter {
+  async writeReport(coverageEntries: CoverageEntry[]): Promise<void> {
     const coverageMap = istanbulLibCoverage.createCoverageMap();
 
-    for (const entry of this._coverageEntries) {
+    for (const entry of coverageEntries) {
       if (entry.source === undefined) {
         console.warn(`No source for entry: ${entry.url}`);
         continue;
@@ -57,10 +51,9 @@ export class CoverageReporter {
       coverageMap,
     });
     istanbulReports.create('html').execute(context);
+    istanbulReports.create('text').execute(context);
   }
 }
-
-export type CoverageEntry = Awaited<ReturnType<Coverage['stopJSCoverage']>>[0];
 
 const VIRTUAL_ENTRYPOINT = 'VIRTUAL_ENTRYPOINT';
 
