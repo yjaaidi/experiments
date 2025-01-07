@@ -1,3 +1,4 @@
+import { join, relative } from 'node:path/posix';
 import {
   expect,
   test as base,
@@ -9,13 +10,12 @@ import istanbulLibCoverage from 'istanbul-lib-coverage';
 import istanbulLibReport from 'istanbul-lib-report';
 import istanbulReports from 'istanbul-reports';
 import { workspaceRoot } from '@nx/devkit';
-import { join } from 'node:path/posix';
 
 export { expect };
 
 export const test = base.extend<
   { page: Page },
-  { coverageReporter: CoverageReporter }
+  { coverageReporter: CoverageReporter } & Options
 >({
   page: async ({ coverageReporter, page }, use) => {
     await page.coverage.startJSCoverage({
@@ -29,7 +29,13 @@ export const test = base.extend<
   },
   coverageReporter: [
     // eslint-disable-next-line no-empty-pattern
-    async ({}, use) => {
+    async ({ sourceMapFolder }, use) => {
+      if (!sourceMapFolder) {
+        throw new Error(
+          'Please provide `sourceMapFolder` to specify the path to the source maps.',
+        );
+      }
+
       const coverageResults: CoverageResults = [];
 
       await use({
@@ -46,31 +52,59 @@ export const test = base.extend<
           continue;
         }
 
-        if (new URL(entry.url).pathname.startsWith('/@fs/')) {
-          continue;
-        }
+        /* Fix sourcemap path. */
+        entry.source = entry.source.replace(
+          'sourceMappingURL=',
+          `sourceMappingURL=${join(workspaceRoot, sourceMapFolder)}/`,
+        );
 
-        const converter = v8toIstanbul('../../..', 0, {
-          source: entry.source,
-        });
+        const converter = v8toIstanbul(
+          join(workspaceRoot, VIRTUAL_ENTRYPOINT),
+          0,
+          {
+            source: entry.source,
+          },
+        );
         await converter.load();
         converter.applyCoverage(entry.functions);
-
         coverageMap.merge(converter.toIstanbul());
+        converter.destroy();
       }
+
+      coverageMap.filter((file) => {
+        const relativePath = relative(workspaceRoot, file);
+
+        if (relativePath === VIRTUAL_ENTRYPOINT) {
+          return false;
+        }
+
+        if (relativePath.startsWith('node_modules')) {
+          return false;
+        }
+
+        return true;
+      });
 
       const context = istanbulLibReport.createContext({
         dir: join(workspaceRoot, 'coverage'),
+        defaultSummarizer: 'nested',
         coverageMap,
       });
       istanbulReports.create('html').execute(context);
     },
     { scope: 'worker' },
   ],
+  sourceMapFolder: [undefined, { scope: 'worker', option: true }],
 });
+
+const VIRTUAL_ENTRYPOINT = 'VIRTUAL_ENTRYPOINT';
 
 interface CoverageReporter {
   collect(results: CoverageResults): void;
 }
 
 type CoverageResults = Awaited<ReturnType<Coverage['stopJSCoverage']>>;
+
+export interface Options {
+  sourceMapFolder?: string;
+}
