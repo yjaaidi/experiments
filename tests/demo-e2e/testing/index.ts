@@ -11,14 +11,17 @@ export const test = base.extend<
     _coverageCollector: CoverageCollector;
   }
 >({
-  page: async ({ _coverageCollector, page }, use) => {
+  page: async ({ _coverageCollector, page }, use, { status }) => {
     await page.coverage.startJSCoverage({
       resetOnNavigation: false,
     });
 
     await use(page);
 
-    _coverageCollector.collect(await page.coverage.stopJSCoverage());
+    const coverageResult = await page.coverage.stopJSCoverage();
+    if (status === 'passed') {
+      _coverageCollector.collect(coverageResult);
+    }
   },
   _coverageCollector: [
     // eslint-disable-next-line no-empty-pattern
